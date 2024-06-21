@@ -1,0 +1,30 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 14,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "windows",
+      "hidden": false,
+      "generator": "Visual Studio 17 2022",
+      "binaryDir": "E:/GithubRepos/Revelation/build",
+      "cacheVariables": {
+        "REVELATION_OUTPUT_DIR": "E:/GithubRepos/Revelation/binary",
+        "CMAKE_PREFIX_PATH": "D:/ProgramFiles/Qt/6.6.3/msvc2019_64/lib/cmake",
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "windows",
+      "hidden": false,
+      "configurePreset": "windows",
+      "configuration": "RelWithDebInfo"
+    }
+  ]
+}
