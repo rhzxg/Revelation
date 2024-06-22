@@ -33,9 +33,35 @@ git clone https://github.com/Codingdogzxg/Revelation.git
 
 ### Edit CMakePresets.json
 
+```json
+"configurePresets": [
+    {
+        "binaryDir": "E:/GithubRepos/Revelation/build", // your build folder
+        "cacheVariables": {
+            "REVELATION_OUTPUT_DIR": "E:/GithubRepos/Revelation/binary", // your binary folder
+            "CMAKE_PREFIX_PATH": "D:/ProgramFiles/Qt/6.6.3/msvc2019_64/lib/cmake" // your qt cmake path
+    	}
+    }
+]
+```
+
 ### Build
 ```bash
 mkdir build
 cd build
 cmake ../SourceCode/ --presets windows
 ```
+
+### Deploy executable 
+
+```bash
+# using qt msvc command line tool
+# cd to build folder
+windeployqt Revelation.exe
+```
+
+### Copy resource files
+
+Copy files from `./resources` to the build folder where `Revelation.exe` is located.
+
+### Open solution and set 'Revelation' as default start up project

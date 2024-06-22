@@ -30,7 +30,7 @@ class RevelationInterface
 
   private:
     std::filesystem::path m_applicationPath = "";
-    std::filesystem::path m_resourcePath = "";
+    std::filesystem::path m_resourcePath    = "";
 
     std::unordered_map<std::string, IExtensionInterface*> m_interfaces;
 };
