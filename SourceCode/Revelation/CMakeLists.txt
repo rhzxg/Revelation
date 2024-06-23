@@ -24,8 +24,12 @@ add_executable(Revelation
                Revelation.ui
 )
 
+if(MSVC)
+set_property(TARGET Revelation PROPERTY RUNTIME_OUTPUT_DIRECTORY "$<1:${REVELATION_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}>") 
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od")
+endif()
+
 target_link_libraries(${PROJECT_NAME} Qt6::Widgets)
 
-set_property(TARGET Revelation PROPERTY RUNTIME_OUTPUT_DIRECTORY "$<1:${REVELATION_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}>") 
 target_include_directories(Revelation PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../Include)
 

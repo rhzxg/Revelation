@@ -14,7 +14,11 @@ add_library(DataPersistence SHARED
 			DataPersistenceInterface.h
 )
 
+if(MSVC)
+set_property(TARGET DataPersistence PROPERTY RUNTIME_OUTPUT_DIRECTORY "$<1:${REVELATION_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}/extensions/${PROJECT_NAME}>") 
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od")
+endif()
+
 target_link_libraries(${PROJECT_NAME} PRIVATE SQLite::SQLite3)
 
-set_property(TARGET DataPersistence PROPERTY RUNTIME_OUTPUT_DIRECTORY "$<1:${REVELATION_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}/extensions/${PROJECT_NAME}>") 
 target_include_directories(DataPersistence PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../Include)

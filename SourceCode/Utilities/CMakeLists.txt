@@ -15,5 +15,9 @@ add_library(Utility SHARED
 			DateTimeFormatter.h
 )
 
+if(MSVC)
 set_property(TARGET Utility PROPERTY RUNTIME_OUTPUT_DIRECTORY "$<1:${REVELATION_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}/extensions/${PROJECT_NAME}>") 
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od")
+endif()
+
 target_include_directories(Utility PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../Include)
