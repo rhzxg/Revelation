@@ -1,6 +1,8 @@
 #pragma once
-#include "IUtilityInterface.h"
+#include "Utility/IUtilityInterface.h"
 #include "IRevelationInterface.h"
+
+class DateTimeFormatter;
 
 class UtilityInterface : public IUtilityInterface
 {
@@ -10,4 +12,9 @@ class UtilityInterface : public IUtilityInterface
 
     virtual void Initialize() override;
     virtual void Uninitialize() override;
+
+    virtual IDateTimeFormatter* GetDateTimeFormatter() override;
+
+    private:
+    DateTimeFormatter* m_dateTimeFormatter = nullptr;
 };

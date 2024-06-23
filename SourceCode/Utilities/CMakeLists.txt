@@ -10,6 +10,9 @@ add_library(Utility SHARED
 
 			UtilityInterface.cpp
 			UtilityInterface.h
+
+			DateTimeFormatter.cpp
+			DateTimeFormatter.h
 )
 
 set_property(TARGET Utility PROPERTY RUNTIME_OUTPUT_DIRECTORY "$<1:${REVELATION_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}/extensions/${PROJECT_NAME}>") 
