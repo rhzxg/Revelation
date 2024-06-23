@@ -54,6 +54,11 @@ void RevelationInterface::Uninitialize()
 
 void RevelationInterface::InitExtensions()
 {
+#ifdef WIN32
+    WCHAR currDir[MAX_PATH] = {0};
+    GetCurrentDirectoryW(MAX_PATH, currDir);
+#endif // WIN32
+
     std::filesystem::path extensionPath = m_applicationPath / "extensions";
     for (const auto& entry : std::filesystem::directory_iterator(extensionPath))
     {
@@ -67,9 +72,11 @@ void RevelationInterface::InitExtensions()
                 if (fileExtension == ".dll" && std::regex_match(fileName, camelCaseRegex))
                 {
 #ifdef WIN32
+                    SetCurrentDirectoryW(entry.path().wstring().c_str());
                     HINSTANCE library = LoadLibraryW(subEntry.path().wstring().c_str());
                     if (nullptr == library)
                     {
+                        DWORD errorCode = GetLastError();
                         continue;
                     }
 
@@ -95,6 +102,10 @@ void RevelationInterface::InitExtensions()
             }
         }
     }
+
+#ifdef WIN32
+    SetCurrentDirectoryW(currDir);
+#endif // WIN32
 
     for (auto& interfacePair : m_interfaces)
     {
