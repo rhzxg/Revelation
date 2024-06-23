@@ -2,12 +2,10 @@
 
 UtilityInterface::UtilityInterface(IRevelationInterface* intf)
 {
-
 }
 
 UtilityInterface::~UtilityInterface()
 {
-
 }
 
 void UtilityInterface::Initialize()

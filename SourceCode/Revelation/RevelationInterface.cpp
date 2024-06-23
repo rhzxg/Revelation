@@ -1,8 +1,5 @@
 #include "RevelationInterface.h"
 #include <regex>
-#ifdef WIN32
-#include "windows.h"
-#endif // WIN32
 
 RevelationInterface::RevelationInterface()
 {
@@ -45,6 +42,14 @@ void RevelationInterface::Uninitialize()
         delete extensionIntf;
     }
     m_interfaces.clear();
+
+#ifdef WIN32
+    for (HINSTANCE library : m_libraries)
+    {
+        FreeLibrary(library);
+    }
+    m_libraries.clear();
+#endif // WIN32
 }
 
 void RevelationInterface::InitExtensions()
@@ -62,28 +67,29 @@ void RevelationInterface::InitExtensions()
                 if (fileExtension == ".dll" && std::regex_match(fileName, camelCaseRegex))
                 {
 #ifdef WIN32
-                    HINSTANCE hDLL = LoadLibraryW(subEntry.path().wstring().c_str());
-                    if (nullptr == hDLL)
+                    HINSTANCE library = LoadLibraryW(subEntry.path().wstring().c_str());
+                    if (nullptr == library)
                     {
                         continue;
                     }
 
                     typedef IExtensionInterface* (*ExtensionEntranceFunction)(IRevelationInterface*);
-                    ExtensionEntranceFunction CreateExtensionInstance = (ExtensionEntranceFunction)GetProcAddress(hDLL, "ExtensionEntrance");
+                    ExtensionEntranceFunction CreateExtensionInstance = (ExtensionEntranceFunction)GetProcAddress(library, "ExtensionEntrance");
                     if (nullptr == CreateExtensionInstance)
                     {
+                        FreeLibrary(library);
                         continue;
                     }
 
                     IExtensionInterface* extension = CreateExtensionInstance(this);
                     if (nullptr == extension)
                     {
+                        FreeLibrary(library);
                         continue;
                     }
 
+                    m_libraries.push_back(library);
                     m_interfaces[fileName] = extension;
-
-                    FreeLibrary(hDLL);
 #endif // WIN32
                 }
             }
