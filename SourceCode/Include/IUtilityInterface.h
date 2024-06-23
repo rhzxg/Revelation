@@ -1,6 +1,7 @@
 #pragma once
+#include "IExtensionInterface.h"
 
-class IUtilityInterface
+class IUtilityInterface : public IExtensionInterface
 {
   public:
 };
