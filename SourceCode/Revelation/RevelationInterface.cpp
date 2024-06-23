@@ -1,5 +1,4 @@
 #include "RevelationInterface.h"
-#include <filesystem>
 #include <regex>
 #ifdef WIN32
 #include "windows.h"
@@ -13,6 +12,11 @@ RevelationInterface::RevelationInterface()
 RevelationInterface::~RevelationInterface()
 {
     Uninitialize();
+}
+
+std::filesystem::path RevelationInterface::GetApplicationPath()
+{
+    return m_applicationPath;
 }
 
 std::filesystem::path RevelationInterface::GetResourcePath()
@@ -59,20 +63,20 @@ void RevelationInterface::InitExtensions()
                 {
 #ifdef WIN32
                     HINSTANCE hDLL = LoadLibraryW(subEntry.path().wstring().c_str());
-                    if (hDLL == NULL)
+                    if (nullptr == hDLL)
                     {
                         continue;
                     }
 
-                    typedef IExtensionInterface* (*ExtensionEntranceFunction)();
+                    typedef IExtensionInterface* (*ExtensionEntranceFunction)(IRevelationInterface*);
                     ExtensionEntranceFunction CreateExtensionInstance = (ExtensionEntranceFunction)GetProcAddress(hDLL, "ExtensionEntrance");
-                    if (CreateExtensionInstance == NULL)
+                    if (nullptr == CreateExtensionInstance)
                     {
                         continue;
                     }
 
-                    IExtensionInterface* extension = CreateExtensionInstance();
-                    if (extension == NULL)
+                    IExtensionInterface* extension = CreateExtensionInstance(this);
+                    if (nullptr == extension)
                     {
                         continue;
                     }

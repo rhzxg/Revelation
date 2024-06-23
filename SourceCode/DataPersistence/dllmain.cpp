@@ -1,7 +1,7 @@
-﻿#include "IExtensionInterface.h"
+﻿#include "IRevelationInterface.h"
 #include "DataPersistenceInterface.h"
 
-extern "C" __declspec(dllexport) IExtensionInterface* ExtensionEntrance()
+DLL_EXPORT IExtensionInterface* ExtensionEntrance(IRevelationInterface* intf)
 {
-    return new DataPersistenceInterface();
+    return new DataPersistenceInterface(intf);
 }
