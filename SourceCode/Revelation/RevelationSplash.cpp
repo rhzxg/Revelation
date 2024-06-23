@@ -23,7 +23,7 @@ void RevelationSplash::InitWidget()
     setWindowFlag(Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);
 
-    auto    imagePath = m_interface->GetResourcePath() / "images" / "revelation.png";
+    auto    imagePath = m_interface->GetResourcePath() / "images" / "splash.png";
     if (std::filesystem::exists(imagePath))
     {
         QLabel* label = new QLabel(ui.eSplashWidget);
