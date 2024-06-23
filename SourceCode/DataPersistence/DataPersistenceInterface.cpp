@@ -3,7 +3,6 @@
 DataPersistenceInterface::DataPersistenceInterface(IRevelationInterface* intf)
     : m_revelationIntf(intf)
 {
-    Initialize();
 }
 
 DataPersistenceInterface::~DataPersistenceInterface()

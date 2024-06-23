@@ -89,4 +89,10 @@ void RevelationInterface::InitExtensions()
             }
         }
     }
+
+    for (auto& interfacePair : m_interfaces)
+    {
+        IExtensionInterface* extensionIntf = interfacePair.second;
+        extensionIntf->Initialize();
+    }
 }
