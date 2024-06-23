@@ -1,5 +1,5 @@
 #pragma once
-#include "IDataPersistenceInterface.h"
+#include "DataPersistence/IDataPersistenceInterface.h"
 #include "IRevelationInterface.h"
 
 class DataPersistenceInterface : public IDataPersistenceInterface
