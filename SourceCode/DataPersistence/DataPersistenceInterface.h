@@ -1,6 +1,7 @@
 #pragma once
 #include "DataPersistence/IDataPersistenceInterface.h"
 #include "IRevelationInterface.h"
+#include <sqlite3.h>
 
 class DataPersistenceInterface : public IDataPersistenceInterface
 {
@@ -15,6 +16,11 @@ class DataPersistenceInterface : public IDataPersistenceInterface
     void CreateDatabaseFolder();
     void CreateDatabaseByDate();
 
+    // todo: create table
+    void CreateTable();
+
   private:
     IRevelationInterface* m_revelationIntf = nullptr;
+
+    sqlite3* m_currentDatabase = nullptr;
 };
