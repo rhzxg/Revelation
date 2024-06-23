@@ -20,7 +20,7 @@ void RevelationSplash::Initialize()
 
 void RevelationSplash::InitWidget()
 {
-    setWindowFlag(Qt::FramelessWindowHint);
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground);
 
     auto    imagePath = m_interface->GetResourcePath() / "images" / "splash.png";
