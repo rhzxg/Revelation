@@ -1,6 +1,9 @@
 // defines data prototypes
-
 #pragma once
+#include <string>
+
+using Int64  = int64_t;
+using Uint64 = uint64_t;
 
 enum class TaskStatus
 {
@@ -20,7 +23,7 @@ enum class TaskType
 
 struct TaskPrototype
 {
-    int64_t     m_id;
+    Int64       m_id;
     std::string m_title;
     std::string m_desc;
     std::string m_createTime;

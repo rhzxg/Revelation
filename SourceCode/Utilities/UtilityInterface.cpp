@@ -1,5 +1,6 @@
 #include "UtilityInterface.h"
 #include "DateTimeFormatter.h"
+#include "SnowFlakeGenerator.h"
 
 UtilityInterface::UtilityInterface(IRevelationInterface* intf)
 {
@@ -24,4 +25,13 @@ IDateTimeFormatter* UtilityInterface::GetDateTimeFormatter()
         m_dateTimeFormatter = new DateTimeFormatter();
     }
     return m_dateTimeFormatter;
+}
+
+ISnowFlakeGenerator* UtilityInterface::GetSnowFlakeGenerator()
+{
+    if (nullptr == m_snowFlakeGenerator)
+    {
+        m_snowFlakeGenerator = new SnowFlakeGenerator();
+    }
+    return m_snowFlakeGenerator;
 }
