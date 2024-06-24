@@ -1,16 +1,15 @@
 #pragma once
 #include <QWidget>
 #include "ui_Revelation.h"
-#include "FramelessWindow.h"
 
 class RevelationInterface;
 
-class Revelation : public CFramelessWindow
+class Revelation : public QWidget
 {
     Q_OBJECT
 
   public:
-    Revelation(RevelationInterface* intf, CFramelessWindow* parent = nullptr);
+    Revelation(RevelationInterface* intf, QWidget* parent = nullptr);
     ~Revelation();
 
   private:

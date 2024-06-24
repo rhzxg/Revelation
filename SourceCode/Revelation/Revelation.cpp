@@ -4,9 +4,10 @@
 #include <QString>
 #include <QPainter>
 #include <QPushButton>
+#include <QGridLayout>
 
-Revelation::Revelation(RevelationInterface* intf, CFramelessWindow* parent)
-    : m_interface(intf), CFramelessWindow(parent)
+Revelation::Revelation(RevelationInterface* intf, QWidget* parent)
+    : m_interface(intf), QWidget(parent)
 {
     ui.setupUi(this);
 

@@ -1,6 +1,8 @@
 #include <QApplication>
 #include <QTimer>
+#include <QScreen>
 #include "RevelationInterface.h"
+#include "FramelessWindow.h"
 #include "RevelationSplash.h"
 #include "Revelation.h"
 
@@ -14,7 +16,14 @@ int main(int argc, char* argv[])
     QTimer::singleShot(3000, [&]() { splash.close(); });
     splash.exec();
 
-    Revelation window(intf.get());
+    CFramelessWindow window;
+    Revelation       centralWidget(intf.get());
+    window.resize(centralWidget.size());
+    window.setCentralWidget(&centralWidget);
+
+    QScreen* currentScreen  = QGuiApplication::screenAt(window.pos());
+    QRect    screenGeometry = currentScreen->availableGeometry();
+    window.move((screenGeometry.width() - window.width()) / 2, (screenGeometry.height() - window.height()) / 2);
     window.show();
 
     return app.exec();

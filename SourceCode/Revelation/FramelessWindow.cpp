@@ -14,7 +14,7 @@
 #pragma comment(lib, "Dwmapi.lib") // Adds missing library, fixes error LNK2019: unresolved external symbol __imp__DwmExtendFrameIntoClientArea
 #pragma comment(lib, "user32.lib")
 
-    CFramelessWindow::CFramelessWindow(QWidget* parent)
+CFramelessWindow::CFramelessWindow(QWidget* parent)
     : QMainWindow(parent),
       m_titlebar(Q_NULLPTR),
       m_borderWidth(5),
@@ -110,148 +110,151 @@ bool CFramelessWindow::nativeEvent(const QByteArray& eventType, void* message, l
 
     switch (msg->message)
     {
-    case WM_NCCALCSIZE: {
-        NCCALCSIZE_PARAMS& params = *reinterpret_cast<NCCALCSIZE_PARAMS*>(msg->lParam);
-        if (params.rgrc[0].top != 0)
-            params.rgrc[0].top -= 1;
-
-        // this kills the window frame and title bar we added with WS_THICKFRAME and WS_CAPTION
-        *result = WVR_REDRAW;
-        return true;
-    }
-    case WM_NCHITTEST: {
-        *result = 0;
-
-        const LONG border_width = m_borderWidth;
-        RECT       winrect;
-        GetWindowRect(HWND(winId()), &winrect);
-
-        long x = GET_X_LPARAM(msg->lParam);
-        long y = GET_Y_LPARAM(msg->lParam);
-
-        if (m_bResizeable)
+        case WM_NCCALCSIZE:
         {
+            NCCALCSIZE_PARAMS& params = *reinterpret_cast<NCCALCSIZE_PARAMS*>(msg->lParam);
+            if (params.rgrc[0].top != 0)
+                params.rgrc[0].top -= 1;
 
-            bool resizeWidth  = minimumWidth() != maximumWidth();
-            bool resizeHeight = minimumHeight() != maximumHeight();
-
-            if (resizeWidth)
-            {
-                // left border
-                if (x >= winrect.left && x < winrect.left + border_width)
-                {
-                    *result = HTLEFT;
-                }
-                // right border
-                if (x < winrect.right && x >= winrect.right - border_width)
-                {
-                    *result = HTRIGHT;
-                }
-            }
-            if (resizeHeight)
-            {
-                // bottom border
-                if (y < winrect.bottom && y >= winrect.bottom - border_width)
-                {
-                    *result = HTBOTTOM;
-                }
-                // top border
-                if (y >= winrect.top && y < winrect.top + border_width)
-                {
-                    *result = HTTOP;
-                }
-            }
-            if (resizeWidth && resizeHeight)
-            {
-                // bottom left corner
-                if (x >= winrect.left && x < winrect.left + border_width &&
-                    y < winrect.bottom && y >= winrect.bottom - border_width)
-                {
-                    *result = HTBOTTOMLEFT;
-                }
-                // bottom right corner
-                if (x < winrect.right && x >= winrect.right - border_width &&
-                    y < winrect.bottom && y >= winrect.bottom - border_width)
-                {
-                    *result = HTBOTTOMRIGHT;
-                }
-                // top left corner
-                if (x >= winrect.left && x < winrect.left + border_width &&
-                    y >= winrect.top && y < winrect.top + border_width)
-                {
-                    *result = HTTOPLEFT;
-                }
-                // top right corner
-                if (x < winrect.right && x >= winrect.right - border_width &&
-                    y >= winrect.top && y < winrect.top + border_width)
-                {
-                    *result = HTTOPRIGHT;
-                }
-            }
-        }
-        if (0 != *result)
-            return true;
-
-        //*result still equals 0, that means the cursor locate OUTSIDE the frame area
-        // but it may locate in titlebar area
-        if (!m_titlebar)
-            return false;
-
-        // support highdpi
-        double dpr = this->devicePixelRatioF();
-        QPoint pos = m_titlebar->mapFromGlobal(QPoint(x / dpr, y / dpr));
-
-        if (!m_titlebar->rect().contains(pos))
-            return false;
-        QWidget* child = m_titlebar->childAt(pos);
-        if (!child)
-        {
-            *result = HTCAPTION;
+            // this kills the window frame and title bar we added with WS_THICKFRAME and WS_CAPTION
+            *result = WVR_REDRAW;
             return true;
         }
-        else
+        case WM_NCHITTEST:
         {
-            if (m_whiteList.contains(child))
+            *result = 0;
+
+            const LONG border_width = m_borderWidth;
+            RECT       winrect;
+            GetWindowRect(HWND(winId()), &winrect);
+
+            long x = GET_X_LPARAM(msg->lParam);
+            long y = GET_Y_LPARAM(msg->lParam);
+
+            if (m_bResizeable)
+            {
+
+                bool resizeWidth  = minimumWidth() != maximumWidth();
+                bool resizeHeight = minimumHeight() != maximumHeight();
+
+                if (resizeWidth)
+                {
+                    // left border
+                    if (x >= winrect.left && x < winrect.left + border_width)
+                    {
+                        *result = HTLEFT;
+                    }
+                    // right border
+                    if (x < winrect.right && x >= winrect.right - border_width)
+                    {
+                        *result = HTRIGHT;
+                    }
+                }
+                if (resizeHeight)
+                {
+                    // bottom border
+                    if (y < winrect.bottom && y >= winrect.bottom - border_width)
+                    {
+                        *result = HTBOTTOM;
+                    }
+                    // top border
+                    if (y >= winrect.top && y < winrect.top + border_width)
+                    {
+                        *result = HTTOP;
+                    }
+                }
+                if (resizeWidth && resizeHeight)
+                {
+                    // bottom left corner
+                    if (x >= winrect.left && x < winrect.left + border_width &&
+                        y < winrect.bottom && y >= winrect.bottom - border_width)
+                    {
+                        *result = HTBOTTOMLEFT;
+                    }
+                    // bottom right corner
+                    if (x < winrect.right && x >= winrect.right - border_width &&
+                        y < winrect.bottom && y >= winrect.bottom - border_width)
+                    {
+                        *result = HTBOTTOMRIGHT;
+                    }
+                    // top left corner
+                    if (x >= winrect.left && x < winrect.left + border_width &&
+                        y >= winrect.top && y < winrect.top + border_width)
+                    {
+                        *result = HTTOPLEFT;
+                    }
+                    // top right corner
+                    if (x < winrect.right && x >= winrect.right - border_width &&
+                        y >= winrect.top && y < winrect.top + border_width)
+                    {
+                        *result = HTTOPRIGHT;
+                    }
+                }
+            }
+            if (0 != *result)
+                return true;
+
+            //*result still equals 0, that means the cursor locate OUTSIDE the frame area
+            // but it may locate in titlebar area
+            if (!m_titlebar)
+                return false;
+
+            // support highdpi
+            double dpr = this->devicePixelRatioF();
+            QPoint pos = m_titlebar->mapFromGlobal(QPoint(x / dpr, y / dpr));
+
+            if (!m_titlebar->rect().contains(pos))
+                return false;
+            QWidget* child = m_titlebar->childAt(pos);
+            if (!child)
             {
                 *result = HTCAPTION;
                 return true;
             }
-        }
-        return false;
-    } // end case WM_NCHITTEST
-    case WM_GETMINMAXINFO: {
-        if (::IsZoomed(msg->hwnd))
-        {
-            RECT frame = {0, 0, 0, 0};
-            AdjustWindowRectEx(&frame, WS_OVERLAPPEDWINDOW, FALSE, 0);
-
-            // record frame area data
-            double dpr = this->devicePixelRatioF();
-
-            m_frames.setLeft(abs(frame.left) / dpr + 0.5);
-            m_frames.setTop(abs(frame.bottom) / dpr + 0.5);
-            m_frames.setRight(abs(frame.right) / dpr + 0.5);
-            m_frames.setBottom(abs(frame.bottom) / dpr + 0.5);
-
-            QMainWindow::setContentsMargins(m_frames.left() + m_margins.left(),
-                                            m_frames.top() + m_margins.top(),
-                                            m_frames.right() + m_margins.right(),
-                                            m_frames.bottom() + m_margins.bottom());
-            m_bJustMaximized = true;
-        }
-        else
-        {
-            if (m_bJustMaximized)
+            else
             {
-                QMainWindow::setContentsMargins(m_margins);
-                m_frames         = QMargins();
-                m_bJustMaximized = false;
+                if (m_whiteList.contains(child))
+                {
+                    *result = HTCAPTION;
+                    return true;
+                }
             }
+            return false;
+        } // end case WM_NCHITTEST
+        case WM_GETMINMAXINFO:
+        {
+            if (::IsZoomed(msg->hwnd))
+            {
+                RECT frame = {0, 0, 0, 0};
+                AdjustWindowRectEx(&frame, WS_OVERLAPPEDWINDOW, FALSE, 0);
+
+                // record frame area data
+                double dpr = this->devicePixelRatioF();
+
+                m_frames.setLeft(abs(frame.left) / dpr + 0.5);
+                m_frames.setTop(abs(frame.bottom) / dpr + 0.5);
+                m_frames.setRight(abs(frame.right) / dpr + 0.5);
+                m_frames.setBottom(abs(frame.bottom) / dpr + 0.5);
+
+                QMainWindow::setContentsMargins(m_frames.left() + m_margins.left(),
+                                                m_frames.top() + m_margins.top(),
+                                                m_frames.right() + m_margins.right(),
+                                                m_frames.bottom() + m_margins.bottom());
+                m_bJustMaximized = true;
+            }
+            else
+            {
+                if (m_bJustMaximized)
+                {
+                    QMainWindow::setContentsMargins(m_margins);
+                    m_frames         = QMargins();
+                    m_bJustMaximized = false;
+                }
+            }
+            return false;
         }
-        return false;
-    }
-    default:
-        return QMainWindow::nativeEvent(eventType, message, (qintptr*)result);
+        default:
+            return QMainWindow::nativeEvent(eventType, message, (qintptr*)result);
     }
 }
 
@@ -279,16 +282,16 @@ QMargins CFramelessWindow::contentsMargins() const
 }
 void CFramelessWindow::getContentsMargins(int* left, int* top, int* right, int* bottom) const
 {
-   /* QMainWindow::getContentsMargins(left, top, right, bottom);
-    if (!(left && top && right && bottom))
-        return;
-    if (isMaximized())
-    {
-        *left -= m_frames.left();
-        *top -= m_frames.top();
-        *right -= m_frames.right();
-        *bottom -= m_frames.bottom();
-    }*/
+    /* QMainWindow::getContentsMargins(left, top, right, bottom);
+     if (!(left && top && right && bottom))
+         return;
+     if (isMaximized())
+     {
+         *left -= m_frames.left();
+         *top -= m_frames.top();
+         *right -= m_frames.right();
+         *bottom -= m_frames.bottom();
+     }*/
 }
 QRect CFramelessWindow::contentsRect() const
 {

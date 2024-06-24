@@ -13,7 +13,7 @@
 #include <QList>
 #include <QMargins>
 #include <QRect>
-    class CFramelessWindow : public QMainWindow
+class CFramelessWindow : public QMainWindow
 {
     Q_OBJECT
   public:
@@ -71,7 +71,7 @@
 #include <QMouseEvent>
 #include <QResizeEvent>
 #include <QPoint>
-    class CFramelessWindow : public QMainWindow
+class CFramelessWindow : public QMainWindow
 {
     Q_OBJECT
   public:
