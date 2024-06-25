@@ -2,7 +2,6 @@
 #include <QTimer>
 #include <QScreen>
 #include "RevelationInterface.h"
-#include "FramelessWindow.h"
 #include "RevelationSplash.h"
 #include "Revelation.h"
 
