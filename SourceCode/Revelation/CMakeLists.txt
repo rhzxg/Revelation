@@ -14,14 +14,14 @@ add_executable(Revelation
                RevelationInterface.cpp
                RevelationInterface.h
 
-               FramelessWindow.cpp
-               FramelessWindow.h
                RevelationSplash.cpp
                RevelationSplash.h
                RevelationSplash.ui
                Revelation.cpp
                Revelation.h
                Revelation.ui
+               RevelationListView.cpp
+               RevelationListView.h
 )
 
 if(MSVC)

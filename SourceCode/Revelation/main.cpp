@@ -16,15 +16,8 @@ int main(int argc, char* argv[])
     QTimer::singleShot(3000, [&]() { splash.close(); });
     splash.exec();
 
-    CFramelessWindow window;
-    Revelation       centralWidget(intf.get());
-    window.resize(centralWidget.size());
-    window.setCentralWidget(&centralWidget);
-
-    QScreen* currentScreen  = QGuiApplication::screenAt(window.pos());
-    QRect    screenGeometry = currentScreen->availableGeometry();
-    window.move((screenGeometry.width() - window.width()) / 2, (screenGeometry.height() - window.height()) / 2);
-    window.show();
+    Revelation revelation(intf.get());
+    revelation.show();
 
     return app.exec();
 }
