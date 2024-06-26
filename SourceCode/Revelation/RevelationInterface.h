@@ -9,7 +9,7 @@
 class RevelationInterface : public IRevelationInterface
 {
   public:
-    RevelationInterface();
+    RevelationInterface(void* mainWindow);
     ~RevelationInterface();
 
     virtual std::filesystem::path GetApplicationPath() override;

@@ -6,32 +6,101 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>806</width>
-    <height>400</height>
+    <width>1000</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Revelation</string>
   </property>
-  <widget class="QWidget" name="eTitleBarWidget" native="true">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>811</width>
-     <height>41</height>
-    </rect>
+  <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,1,1">
+   <property name="rightMargin">
+    <number>9</number>
    </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>PushButton</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+   <property name="bottomMargin">
+    <number>9</number>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
+     <item>
+      <widget class="QLabel" name="labelTitleTodo">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Todo</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="taskWidgetTodo" native="true"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
+     <item>
+      <widget class="QLabel" name="labelTitleProgramming">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Doing</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="taskWidgetProgramming" native="true"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,1">
+     <item>
+      <widget class="QLabel" name="labelTitleTesting">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Testing</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="taskWidgetTesting" native="true"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,1">
+     <item>
+      <widget class="QLabel" name="labelTitleDone">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Done</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="taskWidgetDone" native="true"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

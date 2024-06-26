@@ -1,8 +1,10 @@
 #include "RevelationInterface.h"
 #include <regex>
 
-RevelationInterface::RevelationInterface()
+RevelationInterface::RevelationInterface(void* mainWindow)
 {
+    m_mainWindow = mainWindow;
+
     Initialize();
 }
 

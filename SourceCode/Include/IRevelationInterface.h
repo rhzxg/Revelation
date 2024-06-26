@@ -7,7 +7,7 @@ class IRevelationInterface
 {
   public:
     virtual std::filesystem::path GetApplicationPath() = 0;
-    virtual std::filesystem::path GetResourcePath() = 0;
+    virtual std::filesystem::path GetResourcePath()    = 0;
 
     template <typename T>
     T* GetInterfaceById(const std::string& id)
@@ -20,6 +20,14 @@ class IRevelationInterface
         return nullptr;
     }
 
+    template <typename T>
+    T* GetMainWindow()
+    {
+        return dynamic_cast<T*>(m_mainWindow);
+    }
+
   protected:
     std::unordered_map<std::string, IExtensionInterface*> m_interfaces;
+
+    void* m_mainWindow = nullptr;
 };
