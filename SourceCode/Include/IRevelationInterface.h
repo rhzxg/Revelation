@@ -20,10 +20,9 @@ class IRevelationInterface
         return nullptr;
     }
 
-    template <typename T>
-    T* GetMainWindow()
+    void* GetMainWindow()
     {
-        return dynamic_cast<T*>(m_mainWindow);
+        return m_mainWindow;
     }
 
   protected:

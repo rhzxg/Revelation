@@ -1,14 +1,17 @@
 #pragma once
 #include <QDialog>
-#include "ui_RevelationSidebar.h"
+#include "ui_RevelationLeftSidebar.h"
 
-class RevelationSidebar : public QDialog
+class RevelationLeftSidebar : public QDialog
 {
     Q_OBJECT
 
   public:
-    RevelationSidebar(QWidget* parent = nullptr);
-    ~RevelationSidebar();
+    RevelationLeftSidebar(QWidget* parent = nullptr);
+    ~RevelationLeftSidebar();
+
+    void SetVisible(bool visible);
+    bool IsVisible();
 
   private:
     void Initialize();
@@ -20,5 +23,5 @@ class RevelationSidebar : public QDialog
     void OnCentralWidgetResized(const QSize& size);
 
   private:
-    Ui::RevelationSidebarClass ui;
+    Ui::RevelationLeftSidebarClass ui;
 };

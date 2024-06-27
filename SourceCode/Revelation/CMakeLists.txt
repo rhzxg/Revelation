@@ -19,9 +19,9 @@ add_executable(Revelation
                RevelationSplash.cpp
                RevelationSplash.h
                RevelationSplash.ui
-               RevelationSidebar.cpp
-               RevelationSidebar.h
-               RevelationSidebar.ui
+               RevelationLeftSidebar.cpp
+               RevelationLeftSidebar.h
+               RevelationLeftSidebar.ui
                RevelationBottomBar.cpp
                RevelationBottomBar.h
                RevelationBottomBar.ui
@@ -35,6 +35,7 @@ add_executable(Revelation
 if(MSVC)
 set_property(TARGET Revelation PROPERTY RUNTIME_OUTPUT_DIRECTORY "$<1:${REVELATION_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}>") 
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od")
+add_definitions(-DNOMINMAX)
 endif()
 
 target_link_libraries(${PROJECT_NAME} Qt6::Widgets)

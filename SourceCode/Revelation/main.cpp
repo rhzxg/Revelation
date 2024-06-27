@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
     mainWindow.setMinimumSize(600, 400);
     mainWindow.resize(revelation.size());
     mainWindow.show();
-    revelation.ShowBottomBar();
+    revelation.SetBottomBarVisible(true);
 
     return app.exec();
 }

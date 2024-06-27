@@ -10,5 +10,9 @@ class RevelationMainWindow : public QMainWindow
     ~RevelationMainWindow();
 
   private:
+    void Initialize();
+    void InitWidget();
+
+  private:
     virtual void moveEvent(QMoveEvent* event) override;
 };

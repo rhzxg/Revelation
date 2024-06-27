@@ -10,13 +10,16 @@ class RevelationBottomBar : public QDialog
     RevelationBottomBar(QWidget* parent = nullptr);
     ~RevelationBottomBar();
 
+    void SetVisible(bool visible);
+    bool IsVisible();
+
   private:
     void Initialize();
     void InitWidget();
     void InitSignalSlots();
 
   public slots:
-    void OnCentralWidgetChanged(const QPoint& point);
+    void OnCentralWidgetMoved(const QPoint& point, const QSize& size);
 
   private:
     Ui::RevelationBottomBarClass ui;
