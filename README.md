@@ -49,7 +49,7 @@ git clone https://github.com/Codingdogzxg/Revelation.git
 ```bash
 mkdir build
 cd build
-cmake ../SourceCode/ --presets windows
+cmake ../SourceCode/ --preset windows
 ```
 
 ### Deploy executable 
