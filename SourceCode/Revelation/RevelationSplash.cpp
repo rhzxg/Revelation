@@ -20,8 +20,15 @@ void RevelationSplash::Initialize()
 
 void RevelationSplash::InitWidget()
 {
-    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-    setAttribute(Qt::WA_TranslucentBackground);
+    this->setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    this->setAttribute(Qt::WA_TranslucentBackground);
+
+    auto iconPath   = m_interface->GetResourcePath() / "images" / "icon.ico";
+    if (std::filesystem::exists(iconPath))
+    {
+        QPixmap pixmap(QString::fromStdString(iconPath.u8string()));
+        this->setWindowIcon(pixmap);
+    }
 
     auto    imagePath = m_interface->GetResourcePath() / "images" / "splash.png";
     if (std::filesystem::exists(imagePath))
@@ -34,6 +41,6 @@ void RevelationSplash::InitWidget()
     }
     else
     {
-        close();
+        this->close();
     }
 }
