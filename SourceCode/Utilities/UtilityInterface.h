@@ -3,7 +3,7 @@
 #include "IRevelationInterface.h"
 
 class DateTimeFormatter;
-class SnowFlakeGenerator;
+class SnowflakeGenerator;
 
 class UtilityInterface : public IUtilityInterface
 {
@@ -15,9 +15,9 @@ class UtilityInterface : public IUtilityInterface
     virtual void Uninitialize() override;
 
     virtual IDateTimeFormatter* GetDateTimeFormatter() override;
-    virtual ISnowFlakeGenerator* GetSnowFlakeGenerator() override;
+    virtual ISnowflakeGenerator* GetSnowflakeGenerator() override;
 
   private:
     DateTimeFormatter*  m_dateTimeFormatter  = nullptr;
-    SnowFlakeGenerator* m_snowFlakeGenerator = nullptr;
+    SnowflakeGenerator* m_snowFlakeGenerator = nullptr;
 };

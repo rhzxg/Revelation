@@ -7,5 +7,5 @@ class IUtilityInterface : public IExtensionInterface
 {
   public:
     virtual IDateTimeFormatter*  GetDateTimeFormatter()  = 0;
-    virtual ISnowFlakeGenerator* GetSnowFlakeGenerator() = 0;
+    virtual ISnowflakeGenerator* GetSnowflakeGenerator() = 0;
 };

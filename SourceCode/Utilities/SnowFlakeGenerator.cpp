@@ -1,17 +1,17 @@
-#include "SnowFlakeGenerator.h"
+#include "SnowflakeGenerator.h"
 
-SnowFlakeGenerator::SnowFlakeGenerator()
+SnowflakeGenerator::SnowflakeGenerator()
 {
     m_machineId     = 1;
     m_sequence      = 0;
     m_lastTimestamp = 0;
 }
 
-SnowFlakeGenerator::~SnowFlakeGenerator()
+SnowflakeGenerator::~SnowflakeGenerator()
 {
 }
 
-Uint64 SnowFlakeGenerator::GenerateNewSnowId()
+Uint64 SnowflakeGenerator::GenerateNewSnowId()
 {
     uint64_t timestamp = GetCurrentTimestamp();
     if (timestamp < m_lastTimestamp)
@@ -38,14 +38,14 @@ Uint64 SnowFlakeGenerator::GenerateNewSnowId()
            m_sequence;
 }
 
-Uint64 SnowFlakeGenerator::GetCurrentTimestamp()
+Uint64 SnowflakeGenerator::GetCurrentTimestamp()
 {
     return std::chrono::duration_cast<std::chrono::milliseconds>(
                std::chrono::system_clock::now().time_since_epoch())
         .count();
 }
 
-Uint64 SnowFlakeGenerator::WaitUntilNextMillisecond(Uint64 lastTimestamp)
+Uint64 SnowflakeGenerator::WaitUntilNextMillisecond(Uint64 lastTimestamp)
 {
     uint64_t timestamp = GetCurrentTimestamp();
     while (timestamp <= lastTimestamp)

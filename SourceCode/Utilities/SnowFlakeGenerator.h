@@ -1,12 +1,12 @@
 #pragma once
-#include "Utility/ISnowFlakeGenerator.h"
+#include "Utility/ISnowflakeGenerator.h"
 #include <mutex>
 
-class SnowFlakeGenerator : public ISnowFlakeGenerator
+class SnowflakeGenerator : public ISnowflakeGenerator
 {
   public:
-    SnowFlakeGenerator();
-    ~SnowFlakeGenerator();
+    SnowflakeGenerator();
+    ~SnowflakeGenerator();
 
     virtual Uint64 GenerateNewSnowId() override;
 

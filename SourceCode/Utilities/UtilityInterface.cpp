@@ -1,6 +1,6 @@
 #include "UtilityInterface.h"
 #include "DateTimeFormatter.h"
-#include "SnowFlakeGenerator.h"
+#include "SnowflakeGenerator.h"
 
 UtilityInterface::UtilityInterface(IRevelationInterface* intf)
 {
@@ -27,11 +27,11 @@ IDateTimeFormatter* UtilityInterface::GetDateTimeFormatter()
     return m_dateTimeFormatter;
 }
 
-ISnowFlakeGenerator* UtilityInterface::GetSnowFlakeGenerator()
+ISnowflakeGenerator* UtilityInterface::GetSnowflakeGenerator()
 {
     if (nullptr == m_snowFlakeGenerator)
     {
-        m_snowFlakeGenerator = new SnowFlakeGenerator();
+        m_snowFlakeGenerator = new SnowflakeGenerator();
     }
     return m_snowFlakeGenerator;
 }

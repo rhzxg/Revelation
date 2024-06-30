@@ -13,8 +13,8 @@ add_library(Utility SHARED
 
 			DateTimeFormatter.cpp
 			DateTimeFormatter.h
-			SnowFlakeGenerator.cpp
-			SnowFlakeGenerator.h
+			SnowflakeGenerator.cpp
+			SnowflakeGenerator.h
 )
 
 if(MSVC)
