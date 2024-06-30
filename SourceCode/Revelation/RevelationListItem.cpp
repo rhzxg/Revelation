@@ -1,15 +1,16 @@
 #include "RevelationListItem.h"
 
-RevelationListItem::RevelationListItem(QWidget *parent)
-	: QWidget(parent)
+RevelationListItem::RevelationListItem(QWidget* parent)
+    : QWidget(parent)
 {
-	ui.setupUi(this);
+    ui.setupUi(this);
 
-	Initialize();
+    Initialize();
 }
 
 RevelationListItem::~RevelationListItem()
-{}
+{
+}
 
 void RevelationListItem::Initialize()
 {

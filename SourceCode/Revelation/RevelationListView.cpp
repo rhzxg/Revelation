@@ -2,6 +2,7 @@
 #include "RevelationListModel.h"
 #include "RevelationListDelegate.h"
 #include <QListWidgetItem>
+#include <QLayout>
 
 RevelationListView::RevelationListView(QWidget* parent /*= nullptr*/)
     : QListView(parent)
@@ -30,8 +31,7 @@ void RevelationListView::Initialize()
 
 void RevelationListView::InitWidget()
 {
-    this->setSpacing(2);
-    this->setStyleSheet("QListView { background: transparent; border: none;}");
+    this->setStyleSheet("QListView { background: transparent; border: none; }");
 }
 
 void RevelationListView::InitSignalSlots()
