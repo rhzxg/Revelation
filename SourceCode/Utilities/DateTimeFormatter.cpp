@@ -2,6 +2,7 @@
 #include <ctime>
 #include <iomanip>
 #include <sstream>
+#include <unordered_map>
 
 DateTimeFormatter::DateTimeFormatter()
 {
@@ -11,69 +12,59 @@ DateTimeFormatter::~DateTimeFormatter()
 {
 }
 
-std::string DateTimeFormatter::GetCurrentDateString(TimeMask::DetailLevel detailLevel)
+std::string DateTimeFormatter::GetCurrentDateTimeString(TimeMask::DetailLevel detailLevel)
 {
-    std::time_t now   = std::time(nullptr);
-    std::tm*    tmNow = std::localtime(&now); // todo fix
+    std::time_t now = std::time(nullptr);
+    std::tm     tmNow;
+    localtime_s(&tmNow, &now);
 
-    if (detailLevel == TimeMask::Year)
+    static const std::unordered_map<TimeMask::DetailLevel, const char*> formatMap = {
+        {TimeMask::Year, "%Y"},
+        {TimeMask::Month, "%m"},
+        {TimeMask::Day, "%d"},
+        {TimeMask::Hour, "%H"},
+        {TimeMask::Minute, "%M"},
+        {TimeMask::Second, "%S"},
+        {TimeMask::YMD, "%Y-%m-%d"},
+        {TimeMask::YMDH, "%Y-%m-%d %H"},
+        {TimeMask::YMDHM, "%Y-%m-%d %H:%M"},
+        {TimeMask::YMDHMS, "%Y-%m-%d %H:%M:%S"}};
+
+    auto it = formatMap.find(detailLevel);
+    if (it != formatMap.end())
     {
-        return std::to_string(tmNow->tm_year);
-    }
-    else if (detailLevel == TimeMask::Month)
-    {
-        return std::to_string(tmNow->tm_mon + 1);
-    }
-    else if (detailLevel == TimeMask::Day)
-    {
-        return std::to_string(tmNow->tm_mday);
-    }
-    else if (detailLevel == TimeMask::Hour)
-    {
-        return std::to_string(tmNow->tm_hour);
-    }
-    else if (detailLevel == TimeMask::Minute)
-    {
-        return std::to_string(tmNow->tm_min);
-    }
-    else if (detailLevel == TimeMask::Second)
-    {
-        return std::to_string(tmNow->tm_sec);
-    }
-    // else if (detailLevel == TimeMask::MiliSecond)
-    //{
-    //     return std::to_string(tmNow->tm);
-    // }
-    else if (detailLevel == TimeMask::YMD)
-    {
-        // format: yyyy-mm-dd
         std::ostringstream oss;
-        oss << std::put_time(tmNow, "%Y-%m-%d");
+        oss << std::put_time(&tmNow, it->second);
         return oss.str();
     }
-    else if (detailLevel == TimeMask::YMDH)
+
+    return "";
+}
+
+std::string DateTimeFormatter::GetPartDataTimeFromString(const std::string& dataTimeStr, TimeMask::DetailLevel detailLevel)
+{
+    static const std::unordered_map<TimeMask::DetailLevel, std::pair<size_t, size_t>> formatMap = {
+        {TimeMask::Year, {0, 4}},
+        {TimeMask::Month, {5, 2}},
+        {TimeMask::Day, {8, 2}},
+        {TimeMask::Hour, {11, 2}},
+        {TimeMask::Minute, {14, 2}},
+        {TimeMask::Second, {17, 2}},
+        {TimeMask::YMD, {0, 10}},
+        {TimeMask::YMDH, {0, 13}},
+        {TimeMask::YMDHM, {0, 16}},
+        {TimeMask::YMDHMS, {0, 19}}};
+
+    auto finder = formatMap.find(detailLevel);
+    if (finder != formatMap.end())
     {
-        // format: yyyy-mm-dd hh
-        std::ostringstream oss;
-        oss << std::put_time(tmNow, "%Y-%m-%d %H");
-        return oss.str();
+        size_t start  = finder->second.first;
+        size_t length = finder->second.second;
+        if (dataTimeStr.size() >= start + length)
+        {
+            return dataTimeStr.substr(start, length);
+        }
     }
-    else if (detailLevel == TimeMask::YMDHM)
-    {
-        // format: yyyy-mm-dd hh::mm
-        std::ostringstream oss;
-        oss << std::put_time(tmNow, "%Y-%m-%d %H:%M");
-        return oss.str();
-    }
-    else if (detailLevel == TimeMask::YMDHMS)
-    {
-        // format: yyyy-mm-dd hh::mm::ss
-        std::ostringstream oss;
-        oss << std::put_time(tmNow, "%Y-%m-%d %H:%M:%S");
-        return oss.str();
-    }
-    // else if (detailLevel == TimeMask::YMDHMSM)
-    //{
-    // }
+
     return "";
 }

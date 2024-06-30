@@ -24,5 +24,6 @@ struct TimeMask
 class IDateTimeFormatter
 {
   public:
-    virtual std::string GetCurrentDateString(TimeMask::DetailLevel detailLevel) = 0;
+    virtual std::string GetCurrentDateTimeString(TimeMask::DetailLevel detailLevel)                                  = 0;
+    virtual std::string GetPartDataTimeFromString(const std::string& dataTimeStr, TimeMask::DetailLevel detailLevel) = 0;
 };

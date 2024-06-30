@@ -7,6 +7,7 @@ class DateTimeFormatter : public IDateTimeFormatter
     DateTimeFormatter();
     ~DateTimeFormatter();
 
-    virtual std::string GetCurrentDateString(TimeMask::DetailLevel detailLevel);
+    virtual std::string GetCurrentDateTimeString(TimeMask::DetailLevel detailLevel);
+    virtual std::string GetPartDataTimeFromString(const std::string& dataTimeStr, TimeMask::DetailLevel detailLevel);
 };
 
