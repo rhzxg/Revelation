@@ -28,6 +28,8 @@ add_executable(Revelation
                Revelation.cpp
                Revelation.h
                Revelation.ui
+               RevelationListModel.cpp
+               RevelationListModel.h
                RevelationListView.cpp
                RevelationListView.h
 )
