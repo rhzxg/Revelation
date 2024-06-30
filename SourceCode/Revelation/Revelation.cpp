@@ -1,5 +1,6 @@
 #include "Revelation.h"
 #include "RevelationInterface.h"
+#include "RevelationListView.h"
 #include <QLabel>
 #include <QString>
 #include <QMainWindow>
@@ -29,14 +30,6 @@ void Revelation::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
-void Revelation::mouseReleaseEvent(QMouseEvent* event)
-{
-    if (GetSidebar()->IsVisible())
-    {
-        GetSidebar()->SetVisible(false);
-    }
-}
-
 void Revelation::resizeEvent(QResizeEvent* event)
 {
     // sidebar
@@ -62,8 +55,8 @@ void Revelation::InitWidget()
         mainWindow->setWindowIcon(pixmap);
     }
 
-    std::vector<QLabel*>  labels{ui.labelTitleTodo, ui.labelTitleProgramming, ui.labelTitleTesting, ui.labelTitleDone};
-    std::vector<QWidget*> widgets{ui.taskWidgetTodo, ui.taskWidgetProgramming, ui.taskWidgetTesting, ui.taskWidgetDone};
+    std::vector<QLabel*>  labels{ui.labelTitleTodo, ui.labelTitleDoing, ui.labelTitleTesting, ui.labelTitleDone};
+    std::vector<QWidget*> widgets{ui.taskWidgetTodo, ui.taskWidgetDoing, ui.taskWidgetTesting, ui.taskWidgetDone};
     std::vector<QString>  colors{"#CAF0FC", "#ADE8F6", "#90E0EF", "#48CAE4"};
     for (int i = 0; i < 4; ++i)
     {
@@ -71,12 +64,19 @@ void Revelation::InitWidget()
         QWidget* widget = widgets[i];
 
         QString labelStyle  = QString("QLabel {background-color:%1; color:#FFFFFF; border-radius:5px; font-size: 16px;}").arg(colors[i]);
-        QString widgetStyle = QString("QWidget {background-color:%1; color:#FFFFFF; border-radius:5px;}").arg(colors[i]);
+        QString widgetStyle = QString("QWidget#widget {background-color:%1; color:#FFFFFF; border-radius:5px;}").arg(colors[i]);
 
         label->setAlignment(Qt::AlignCenter);
         label->setStyleSheet(labelStyle);
 
+        widget->setObjectName("widget");
         widget->setStyleSheet(widgetStyle);
+
+        RevelationListView* view   = new RevelationListView();
+        QGridLayout*        layout = new QGridLayout(widget);
+        layout->setContentsMargins(0, 0, 0, 0);
+        layout->addWidget(view);
+        widget->setLayout(layout);
     }
 }
 

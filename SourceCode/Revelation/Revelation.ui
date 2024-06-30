@@ -13,14 +13,23 @@
   <property name="windowTitle">
    <string>Revelation</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,1,1">
+  <layout class="QGridLayout" name="gridLayout_2">
+   <property name="leftMargin">
+    <number>8</number>
+   </property>
+   <property name="topMargin">
+    <number>8</number>
+   </property>
    <property name="rightMargin">
-    <number>9</number>
+    <number>8</number>
    </property>
    <property name="bottomMargin">
-    <number>9</number>
+    <number>8</number>
    </property>
-   <item>
+   <property name="spacing">
+    <number>8</number>
+   </property>
+   <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
      <item>
       <widget class="QLabel" name="labelTitleTodo">
@@ -40,10 +49,10 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="0" column="1">
     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
      <item>
-      <widget class="QLabel" name="labelTitleProgramming">
+      <widget class="QLabel" name="labelTitleDoing">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -56,11 +65,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QWidget" name="taskWidgetProgramming" native="true"/>
+      <widget class="QWidget" name="taskWidgetDoing" native="true"/>
      </item>
     </layout>
    </item>
-   <item>
+   <item row="0" column="2">
     <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,1">
      <item>
       <widget class="QLabel" name="labelTitleTesting">
@@ -80,7 +89,7 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="0" column="3">
     <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,1">
      <item>
       <widget class="QLabel" name="labelTitleDone">

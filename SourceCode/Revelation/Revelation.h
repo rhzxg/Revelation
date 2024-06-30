@@ -19,7 +19,6 @@ class Revelation : public QWidget
 
   private:
     virtual void mouseMoveEvent(QMouseEvent* event) override;
-    virtual void mouseReleaseEvent(QMouseEvent* event) override;
     virtual void resizeEvent(QResizeEvent* event) override;
 
   private:
@@ -27,8 +26,8 @@ class Revelation : public QWidget
     void InitWidget();
     void InitSignalSlots();
 
-    RevelationLeftSidebar*   GetSidebar();
-    RevelationBottomBar* GetBottomBar();
+    RevelationLeftSidebar* GetSidebar();
+    RevelationBottomBar*   GetBottomBar();
 
   signals:
     void CentralWidgetMoved(const QPoint& point, const QSize& size);
@@ -39,6 +38,6 @@ class Revelation : public QWidget
 
     RevelationInterface* m_interface = nullptr;
 
-    RevelationLeftSidebar*   m_sidebar   = nullptr;
-    RevelationBottomBar* m_bottomBar = nullptr;
+    RevelationLeftSidebar* m_sidebar   = nullptr;
+    RevelationBottomBar*   m_bottomBar = nullptr;
 };

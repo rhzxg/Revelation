@@ -18,6 +18,8 @@ class RevelationLeftSidebar : public QDialog
     void InitWidget();
     void InitSignalSlots();
 
+    virtual void showEvent(QShowEvent* event) override;
+
   public slots:
     void OnCentralWidgetMoved(const QPoint& point);
     void OnCentralWidgetResized(const QSize& size);
