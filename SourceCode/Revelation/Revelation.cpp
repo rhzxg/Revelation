@@ -69,8 +69,8 @@ void Revelation::InitWidget()
         QLabel*  label  = labels[i];
         QWidget* widget = widgets[i];
 
-        QString labelStyle  = QString("QLabel {background-color:%1; color:#FFFFFF; border-radius:5px; font-size: 16px;}").arg(colors[i]);
-        QString widgetStyle = QString("QWidget#widget {background-color:%1; color:#FFFFFF; border-radius:5px;}").arg(colors[i]);
+        QString labelStyle  = QString("QLabel {background-color:%1; color:#FFFFFF; border-radius:8px; font-size: 16px;}").arg(colors[i]);
+        QString widgetStyle = QString("QWidget#widget {background-color:%1; color:#FFFFFF; border-radius:8px;}").arg(colors[i]);
 
         label->setAlignment(Qt::AlignCenter);
         label->setStyleSheet(labelStyle);

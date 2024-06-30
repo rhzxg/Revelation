@@ -20,6 +20,6 @@ class RevelationListModel : public QAbstractListModel, public IDataModelInterfac
     virtual QVariant      data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-    private:
+  public:
     std::vector<TaskPrototype> m_tasks;
 };

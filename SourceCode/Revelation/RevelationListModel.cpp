@@ -3,6 +3,12 @@
 RevelationListModel::RevelationListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
+    // test
+    for (int i = 0; i < 5; ++i)
+    {
+        TaskPrototype tp;
+        m_tasks.push_back(tp);
+    }
 }
 
 RevelationListModel::~RevelationListModel()
@@ -36,6 +42,14 @@ bool RevelationListModel::hasChildren(const QModelIndex& parent /*= QModelIndex(
 
 QVariant RevelationListModel::data(const QModelIndex& index, int role /*= Qt::DisplayRole*/) const
 {
+    if (!index.isValid() || index.row() >= m_tasks.size())
+        return QVariant();
+
+    if (role == Qt::DisplayRole)
+    {
+        return QString::fromStdString(m_tasks.at(index.row()).m_title);
+    }
+
     return QVariant();
 }
 

@@ -31,6 +31,10 @@ add_executable(Revelation
                RevelationListModel.h
                RevelationListView.cpp
                RevelationListView.h
+               RevelationListDelegate.cpp
+               RevelationListDelegate.h
+               RevelationListItem.cpp
+               RevelationListItem.h
 )
 
 if(MSVC)

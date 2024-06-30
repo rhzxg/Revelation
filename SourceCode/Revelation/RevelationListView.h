@@ -2,6 +2,7 @@
 #include <QListView>
 
 class RevelationListModel;
+class RevelationListDelegate;
 
 class RevelationListView : public QListView
 {
@@ -17,5 +18,6 @@ class RevelationListView : public QListView
     void InitSignalSlots();
 
   private:
-    RevelationListModel* m_model = nullptr;
+    RevelationListModel*    m_model    = nullptr;
+    RevelationListDelegate* m_delegate = nullptr;
 };
