@@ -15,6 +15,7 @@ enum class TaskStatus
 
 enum class TaskType
 {
+    None,
     Bug,
     Feature,
     Test,
