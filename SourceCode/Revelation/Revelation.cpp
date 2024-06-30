@@ -1,5 +1,5 @@
 #include "Revelation.h"
-#include "RevelationInterface.h"
+#include "IRevelationInterface.h"
 #include "RevelationListView.h"
 #include "RevelationLeftSidebar.h"
 #include "RevelationRightSidebar.h"
@@ -7,8 +7,9 @@
 #include <QLabel>
 #include <QString>
 #include <QMainWindow>
+#include <QMessageBox>
 
-Revelation::Revelation(RevelationInterface* intf, QWidget* parent)
+Revelation::Revelation(IRevelationInterface* intf, QWidget* parent)
     : m_interface(intf), QWidget(parent)
 {
     ui.setupUi(this);
@@ -20,18 +21,13 @@ Revelation::~Revelation()
 {
 }
 
-void Revelation::SetBottomBarVisible(bool visible)
-{
-    GetBottomBar()->SetVisible(visible);
-}
-
 void Revelation::mouseMoveEvent(QMouseEvent* event)
 {
     if (event->pos().x() < 10 && event->pos().y() < 10)
     {
         GetSidebar(RevelationSidebar::Left)->SetVisible(true);
 
-        //test
+        // test
         GetSidebar(RevelationSidebar::Right)->SetVisible(true);
     }
 }
@@ -41,6 +37,13 @@ void Revelation::resizeEvent(QResizeEvent* event)
     // sidebar
     emit CentralWidgetMoved(mapToGlobal(this->pos()), this->size());
     emit CentralWidgetResized(this->size());
+}
+
+void Revelation::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+
+    GetSidebar(RevelationSidebar::Bottom)->SetVisible(true);
 }
 
 void Revelation::Initialize()
@@ -61,9 +64,10 @@ void Revelation::InitWidget()
         mainWindow->setWindowIcon(pixmap);
     }
 
-    std::vector<QLabel*>  labels{ui.labelTitleTodo, ui.labelTitleDoing, ui.labelTitleTesting, ui.labelTitleDone};
-    std::vector<QWidget*> widgets{ui.taskWidgetTodo, ui.taskWidgetDoing, ui.taskWidgetTesting, ui.taskWidgetDone};
-    std::vector<QString>  colors{"#CAF0FC", "#ADE8F6", "#90E0EF", "#48CAE4"};
+    std::vector<QLabel*>     labels{ui.labelTitleTodo, ui.labelTitleDoing, ui.labelTitleTesting, ui.labelTitleDone};
+    std::vector<QWidget*>    widgets{ui.taskWidgetTodo, ui.taskWidgetDoing, ui.taskWidgetTesting, ui.taskWidgetDone};
+    std::vector<QString>     colors{"#CAF0FC", "#ADE8F6", "#90E0EF", "#48CAE4"};
+    std::vector<std::string> listNames{"Todo", "Doing", "Testing", "Done"};
     for (int i = 0; i < 4; ++i)
     {
         QLabel*  label  = labels[i];
@@ -78,11 +82,13 @@ void Revelation::InitWidget()
         widget->setObjectName("widget");
         widget->setStyleSheet(widgetStyle);
 
-        RevelationListView* view   = new RevelationListView();
+        RevelationListView* view   = new RevelationListView(m_interface);
         QGridLayout*        layout = new QGridLayout(widget);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(view);
         widget->setLayout(layout);
+
+        m_listViews.emplace(listNames[i], view);
     }
 }
 
@@ -98,10 +104,10 @@ RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
     {
         if (nullptr == m_leftSidebar)
         {
-            m_leftSidebar  = new RevelationLeftSidebar(this);
-            
+            m_leftSidebar = new RevelationLeftSidebar(m_interface, this);
+
             m_leftSidebar->resize(m_leftSidebar->width(), this->height() - 30);
-            
+
             QPoint basePos = mapToGlobal(this->pos());
             int    x       = basePos.x() + 20;
             int    y       = basePos.y() + 15;
@@ -116,10 +122,10 @@ RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
     {
         if (nullptr == m_rightSidebar)
         {
-            m_rightSidebar = new RevelationRightSidebar(this);
-            
+            m_rightSidebar = new RevelationRightSidebar(m_interface, this);
+
             m_rightSidebar->resize(m_rightSidebar->width(), this->height() - 30);
-            
+
             QPoint basePos = mapToGlobal(this->pos());
             int    x       = basePos.x() + width() - m_rightSidebar->width() - 20;
             int    y       = basePos.y() + 15;
@@ -130,22 +136,28 @@ RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
         }
         sidebar = m_rightSidebar;
     }
+    else if (RevelationSidebar::Bottom == side)
+    {
+        if (nullptr == m_bottomBar)
+        {
+            m_bottomBar    = new RevelationBottomBar(m_interface, this);
+            QPoint basePos = mapToGlobal(this->pos());
+            int    x       = basePos.x() + this->size().width() / 2 - m_bottomBar->size().width() / 2;
+            int    y       = basePos.y() + this->size().height() / 5 * 4;
+            y              = std::max(y, basePos.y() + this->size().height() - m_bottomBar->height() - 50);
+            m_bottomBar->move(x, y);
+
+            connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)), m_bottomBar, SLOT(OnCentralWidgetMoved(const QPoint&, const QSize&)));
+
+            auto finder = m_listViews.find("Todo");
+            if (finder != m_listViews.end())
+            {
+                RevelationListView* view = finder->second;
+                connect(m_bottomBar, SIGNAL(TaskItemCreated(TaskPrototype)), view, SLOT(OnTaskItemReparenting(TaskPrototype)));
+            }
+        }
+        sidebar = m_bottomBar;
+    }
 
     return sidebar;
-}
-
-RevelationBottomBar* Revelation::GetBottomBar()
-{
-    if (nullptr == m_bottomBar)
-    {
-        m_bottomBar    = new RevelationBottomBar(this);
-        QPoint basePos = mapToGlobal(this->pos());
-        int    x       = basePos.x() + this->size().width() / 2 - m_bottomBar->size().width() / 2;
-        int    y       = basePos.y() + this->size().height() / 5 * 4;
-        y              = std::max(y, basePos.y() + this->size().height() - m_bottomBar->height() - 50);
-        m_bottomBar->move(x, y);
-
-        connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)), m_bottomBar, SLOT(OnCentralWidgetMoved(const QPoint&, const QSize&)));
-    }
-    return m_bottomBar;
 }

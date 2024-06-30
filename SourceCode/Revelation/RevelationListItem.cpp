@@ -12,6 +12,19 @@ RevelationListItem::~RevelationListItem()
 {
 }
 
+void RevelationListItem::SetItemTaskData(TaskPrototype task)
+{
+    m_task = task;
+
+    ui.labelTitle->setText(QString::fromStdString(task.m_title));
+    ui.labelDeadline->setText(QString::fromStdString(task.m_deadline));
+}
+
+TaskPrototype RevelationListItem::GetItemTaskData()
+{
+    return m_task;
+}
+
 void RevelationListItem::Initialize()
 {
     InitWidget();

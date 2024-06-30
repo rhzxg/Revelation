@@ -1,6 +1,8 @@
 #pragma once
 #include <QListView>
+#include "IRevelationDataDefine.h"
 
+class IRevelationInterface;
 class RevelationListModel;
 class RevelationListDelegate;
 
@@ -9,7 +11,7 @@ class RevelationListView : public QListView
     Q_OBJECT
 
   public:
-    RevelationListView(QWidget* parent = nullptr);
+    RevelationListView(IRevelationInterface* intf, QWidget* parent = nullptr);
     ~RevelationListView();
 
   private:
@@ -17,7 +19,12 @@ class RevelationListView : public QListView
     void InitWidget();
     void InitSignalSlots();
 
+  public slots:
+    void OnTaskItemReparenting(TaskPrototype task);
+
   private:
+    IRevelationInterface* m_interface = nullptr;
+
     RevelationListModel*    m_model    = nullptr;
     RevelationListDelegate* m_delegate = nullptr;
 };

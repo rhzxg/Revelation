@@ -1,14 +1,9 @@
 #include "RevelationListModel.h"
+#include "IRevelationInterface.h"
 
-RevelationListModel::RevelationListModel(QObject* parent)
-    : QAbstractListModel(parent)
+RevelationListModel::RevelationListModel(IRevelationInterface* intf, QObject* parent /*= nullptr*/)
+    : m_interface(intf), QAbstractListModel(parent)
 {
-    // test
-    for (int i = 0; i < 5; ++i)
-    {
-        TaskPrototype tp;
-        m_tasks.push_back(tp);
-    }
 }
 
 RevelationListModel::~RevelationListModel()
@@ -17,7 +12,7 @@ RevelationListModel::~RevelationListModel()
 
 QModelIndex RevelationListModel::index(int row, int column, const QModelIndex& parent /*= QModelIndex()*/) const
 {
-    return QAbstractListModel::createIndex(row, column, (qintptr)1);
+    return QAbstractListModel::createIndex(row, column, (qintptr)row);
 }
 
 QModelIndex RevelationListModel::parent(const QModelIndex& child) const
@@ -55,5 +50,10 @@ QVariant RevelationListModel::data(const QModelIndex& index, int role /*= Qt::Di
 
 Qt::ItemFlags RevelationListModel::flags(const QModelIndex& index) const
 {
-    return Qt::ItemFlag::NoItemFlags;
+    if (!index.isValid())
+    {
+        return Qt::NoItemFlags;
+    }
+
+    return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled;
 }

@@ -1,9 +1,10 @@
 #include "RevelationListDelegate.h"
 #include "RevelationListItem.h"
+#include "RevelationListModel.h"
 #include <QPainter>
 
-RevelationListDelegate::RevelationListDelegate(QObject* parent)
-    : QStyledItemDelegate(parent)
+RevelationListDelegate::RevelationListDelegate(IRevelationInterface* intf, QObject* parent /*= nullptr*/)
+    : m_interface(intf), QStyledItemDelegate(parent)
 {
 }
 
@@ -13,12 +14,15 @@ RevelationListDelegate::~RevelationListDelegate()
 
 void RevelationListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    QString text = index.data().toString();
+    int                  taskIndex = (int)index.internalPointer();
+    RevelationListModel* model     = (RevelationListModel*)index.model();
+    TaskPrototype        prototype = model->m_tasks.at(taskIndex);
 
     QStyleOptionViewItem opt = option;
     opt.rect.adjust(2, 1, -2, -1);
 
     RevelationListItem widget;
+    widget.SetItemTaskData(prototype);
     widget.setGeometry(opt.rect);
     widget.setStyleSheet("background: transparent;");
 

@@ -7,7 +7,7 @@ class RevelationLeftSidebar : public RevelationSidebar
     Q_OBJECT
 
   public:
-    RevelationLeftSidebar(QWidget* parent = nullptr);
+    RevelationLeftSidebar(IRevelationInterface* intf, QWidget* parent = nullptr);
     ~RevelationLeftSidebar();
 
   private:

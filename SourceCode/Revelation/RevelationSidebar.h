@@ -1,11 +1,12 @@
 #pragma once
 #include <QDialog>
+#include "IRevelationInterface.h"
 
 class RevelationSidebar : public QDialog
 {
   public:
-    RevelationSidebar(QWidget* parent = nullptr)
-        : QDialog(parent)
+    RevelationSidebar(IRevelationInterface* intf, QWidget* parent = nullptr)
+        : m_interface(intf), QDialog(parent)
     {
     }
 
@@ -27,6 +28,10 @@ class RevelationSidebar : public QDialog
     enum Side
     {
         Left = 0,
-        Right
+        Right,
+        Bottom
     };
+
+  protected:
+    IRevelationInterface* m_interface = nullptr;
 };

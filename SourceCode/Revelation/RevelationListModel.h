@@ -3,12 +3,17 @@
 #include "DataModel/IDataModelInterface.h"
 #include "IRevelationDataDefine.h"
 
+class IRevelationInterface;
+
 class RevelationListModel : public QAbstractListModel, public IDataModelInterface
 {
     Q_OBJECT
 
+    friend class RevelationListView;
+    friend class RevelationListDelegate;
+
   public:
-    RevelationListModel(QObject* parent);
+    RevelationListModel(IRevelationInterface* intf, QObject* parent = nullptr);
     ~RevelationListModel();
 
   private:
@@ -20,6 +25,8 @@ class RevelationListModel : public QAbstractListModel, public IDataModelInterfac
     virtual QVariant      data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-  public:
+  private:
+    IRevelationInterface* m_interface = nullptr;
+
     std::vector<TaskPrototype> m_tasks;
 };

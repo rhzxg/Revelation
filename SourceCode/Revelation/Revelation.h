@@ -3,16 +3,18 @@
 #include <QMouseEvent>
 #include "ui_Revelation.h"
 #include "RevelationSidebar.h"
+#include <unordered_map>
 
-class RevelationInterface;
+class IRevelationInterface;
 class RevelationBottomBar;
+class RevelationListView;
 
 class Revelation : public QWidget
 {
     Q_OBJECT
 
   public:
-    Revelation(RevelationInterface* intf, QWidget* parent = nullptr);
+    Revelation(IRevelationInterface* intf, QWidget* parent = nullptr);
     ~Revelation();
 
     void SetBottomBarVisible(bool visible);
@@ -20,6 +22,7 @@ class Revelation : public QWidget
   private:
     virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void resizeEvent(QResizeEvent* event) override;
+    virtual void showEvent(QShowEvent* event) override;
 
   private:
     void Initialize();
@@ -27,7 +30,6 @@ class Revelation : public QWidget
     void InitSignalSlots();
 
     RevelationSidebar*   GetSidebar(RevelationSidebar::Side side);
-    RevelationBottomBar* GetBottomBar();
 
   signals:
     void CentralWidgetMoved(const QPoint& point, const QSize& size);
@@ -36,9 +38,11 @@ class Revelation : public QWidget
   private:
     Ui::RevelationClass ui;
 
-    RevelationInterface* m_interface = nullptr;
+    IRevelationInterface* m_interface = nullptr;
 
     RevelationSidebar*   m_leftSidebar  = nullptr;
     RevelationSidebar*   m_rightSidebar = nullptr;
-    RevelationBottomBar* m_bottomBar    = nullptr;
+    RevelationSidebar*   m_bottomBar    = nullptr;
+
+    std::unordered_map<std::string, RevelationListView*> m_listViews;
 };

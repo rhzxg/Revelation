@@ -1,8 +1,8 @@
 #include "RevelationLeftSidebar.h"
 #include <QPropertyAnimation>
 
-RevelationLeftSidebar::RevelationLeftSidebar(QWidget* parent)
-    : RevelationSidebar(parent)
+RevelationLeftSidebar::RevelationLeftSidebar(IRevelationInterface* intf, QWidget* parent)
+    : RevelationSidebar(intf, parent)
 {
     ui.setupUi(this);
 

@@ -1,25 +1,27 @@
 #pragma once
-#include <QDialog>
+#include "RevelationSidebar.h"
 #include "ui_RevelationBottomBar.h"
+#include "IRevelationDataDefine.h"
 
-class RevelationBottomBar : public QDialog
+class RevelationBottomBar : public RevelationSidebar
 {
     Q_OBJECT
 
   public:
-    RevelationBottomBar(QWidget* parent = nullptr);
+    RevelationBottomBar(IRevelationInterface* intf, QWidget* parent = nullptr);
     ~RevelationBottomBar();
-
-    void SetVisible(bool visible);
-    bool IsVisible();
 
   private:
     void Initialize();
     void InitWidget();
     void InitSignalSlots();
 
+  signals:
+    void TaskItemCreated(TaskPrototype task);
+
   public slots:
     void OnCentralWidgetMoved(const QPoint& point, const QSize& size);
+    void OnBtnConfirmClicked();
 
   private:
     Ui::RevelationBottomBarClass ui;
