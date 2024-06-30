@@ -1,7 +1,7 @@
-#include "RevelationLeftSidebar.h"
+#include "RevelationRightSidebar.h"
 #include <QPropertyAnimation>
 
-RevelationLeftSidebar::RevelationLeftSidebar(QWidget* parent)
+RevelationRightSidebar::RevelationRightSidebar(QWidget* parent)
     : RevelationSidebar(parent)
 {
     ui.setupUi(this);
@@ -9,17 +9,17 @@ RevelationLeftSidebar::RevelationLeftSidebar(QWidget* parent)
     Initialize();
 }
 
-RevelationLeftSidebar::~RevelationLeftSidebar()
+RevelationRightSidebar::~RevelationRightSidebar()
 {
 }
 
-void RevelationLeftSidebar::Initialize()
+void RevelationRightSidebar::Initialize()
 {
     InitWidget();
     InitSignalSlots();
 }
 
-void RevelationLeftSidebar::InitWidget()
+void RevelationRightSidebar::InitWidget()
 {
     this->setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
     this->setWindowFlag(Qt::WindowDoesNotAcceptFocus);
@@ -31,7 +31,7 @@ void RevelationLeftSidebar::InitWidget()
     ui.frame->setStyleSheet("QFrame { background: #F8E16C; border-radius: 10px 10px 10px 10px; }");
 }
 
-void RevelationLeftSidebar::InitSignalSlots()
+void RevelationRightSidebar::InitSignalSlots()
 {
     connect(ui.btnHide, &QPushButton::clicked, this, [&]() {
         QPropertyAnimation* animation = new QPropertyAnimation(this, "windowOpacity");
@@ -44,7 +44,7 @@ void RevelationLeftSidebar::InitSignalSlots()
     });
 }
 
-void RevelationLeftSidebar::showEvent(QShowEvent* event)
+void RevelationRightSidebar::showEvent(QShowEvent* event)
 {
     QWidget::showEvent(event);
 
@@ -55,14 +55,14 @@ void RevelationLeftSidebar::showEvent(QShowEvent* event)
     opacityAnimation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void RevelationLeftSidebar::OnCentralWidgetMoved(const QPoint& point)
+void RevelationRightSidebar::OnCentralWidgetMoved(const QPoint& point, const QSize& size)
 {
-    int x = point.x() + 20;
+    int x = point.x() + size.width() - this->width() - 20;
     int y = point.y() + 15;
     this->move(x, y);
 }
 
-void RevelationLeftSidebar::OnCentralWidgetResized(const QSize& size)
+void RevelationRightSidebar::OnCentralWidgetResized(const QSize& size)
 {
     this->resize(this->width(), size.height() - 30);
 }

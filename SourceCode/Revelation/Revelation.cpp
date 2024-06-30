@@ -1,6 +1,9 @@
 #include "Revelation.h"
 #include "RevelationInterface.h"
 #include "RevelationListView.h"
+#include "RevelationLeftSidebar.h"
+#include "RevelationRightSidebar.h"
+#include "RevelationBottomBar.h"
 #include <QLabel>
 #include <QString>
 #include <QMainWindow>
@@ -26,7 +29,10 @@ void Revelation::mouseMoveEvent(QMouseEvent* event)
 {
     if (event->pos().x() < 10 && event->pos().y() < 10)
     {
-        GetSidebar()->SetVisible(true);
+        GetSidebar(RevelationSidebar::Left)->SetVisible(true);
+
+        //test
+        GetSidebar(RevelationSidebar::Right)->SetVisible(true);
     }
 }
 
@@ -84,21 +90,48 @@ void Revelation::InitSignalSlots()
 {
 }
 
-RevelationLeftSidebar* Revelation::GetSidebar()
+RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
 {
-    if (nullptr == m_sidebar)
-    {
-        m_sidebar      = new RevelationLeftSidebar(this);
-        QPoint basePos = mapToGlobal(this->pos());
-        int    x       = basePos.x() + 20;
-        int    y       = basePos.y() + 15;
-        m_sidebar->move(x, y);
-        m_sidebar->resize(m_sidebar->width(), this->height() - 30);
+    RevelationSidebar* sidebar = nullptr;
 
-        connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)), m_sidebar, SLOT(OnCentralWidgetMoved(const QPoint&)));
-        connect(this, SIGNAL(CentralWidgetResized(const QSize&)), m_sidebar, SLOT(OnCentralWidgetResized(const QSize&)));
+    if (RevelationSidebar::Left == side)
+    {
+        if (nullptr == m_leftSidebar)
+        {
+            m_leftSidebar  = new RevelationLeftSidebar(this);
+            
+            m_leftSidebar->resize(m_leftSidebar->width(), this->height() - 30);
+            
+            QPoint basePos = mapToGlobal(this->pos());
+            int    x       = basePos.x() + 20;
+            int    y       = basePos.y() + 15;
+            m_leftSidebar->move(x, y);
+
+            connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)), m_leftSidebar, SLOT(OnCentralWidgetMoved(const QPoint&)));
+            connect(this, SIGNAL(CentralWidgetResized(const QSize&)), m_leftSidebar, SLOT(OnCentralWidgetResized(const QSize&)));
+        }
+        sidebar = m_leftSidebar;
     }
-    return m_sidebar;
+    else if (RevelationSidebar::Right == side)
+    {
+        if (nullptr == m_rightSidebar)
+        {
+            m_rightSidebar = new RevelationRightSidebar(this);
+            
+            m_rightSidebar->resize(m_rightSidebar->width(), this->height() - 30);
+            
+            QPoint basePos = mapToGlobal(this->pos());
+            int    x       = basePos.x() + width() - m_rightSidebar->width() - 20;
+            int    y       = basePos.y() + 15;
+            m_rightSidebar->move(x, y);
+
+            connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)), m_rightSidebar, SLOT(OnCentralWidgetMoved(const QPoint&, const QSize&)));
+            connect(this, SIGNAL(CentralWidgetResized(const QSize&)), m_rightSidebar, SLOT(OnCentralWidgetResized(const QSize&)));
+        }
+        sidebar = m_rightSidebar;
+    }
+
+    return sidebar;
 }
 
 RevelationBottomBar* Revelation::GetBottomBar()

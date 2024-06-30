@@ -2,10 +2,10 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include "ui_Revelation.h"
-#include "RevelationLeftSidebar.h"
-#include "RevelationBottomBar.h"
+#include "RevelationSidebar.h"
 
 class RevelationInterface;
+class RevelationBottomBar;
 
 class Revelation : public QWidget
 {
@@ -26,8 +26,8 @@ class Revelation : public QWidget
     void InitWidget();
     void InitSignalSlots();
 
-    RevelationLeftSidebar* GetSidebar();
-    RevelationBottomBar*   GetBottomBar();
+    RevelationSidebar*   GetSidebar(RevelationSidebar::Side side);
+    RevelationBottomBar* GetBottomBar();
 
   signals:
     void CentralWidgetMoved(const QPoint& point, const QSize& size);
@@ -38,6 +38,7 @@ class Revelation : public QWidget
 
     RevelationInterface* m_interface = nullptr;
 
-    RevelationLeftSidebar* m_sidebar   = nullptr;
-    RevelationBottomBar*   m_bottomBar = nullptr;
+    RevelationSidebar*   m_leftSidebar  = nullptr;
+    RevelationSidebar*   m_rightSidebar = nullptr;
+    RevelationBottomBar* m_bottomBar    = nullptr;
 };

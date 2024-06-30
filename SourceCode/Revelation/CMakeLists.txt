@@ -18,16 +18,15 @@ add_executable(Revelation
                RevelationMainWindow.h
                RevelationSplash.cpp
                RevelationSplash.h
-               RevelationSplash.ui
+               RevelationSidebar.h
                RevelationLeftSidebar.cpp
                RevelationLeftSidebar.h
-               RevelationLeftSidebar.ui
+               RevelationRightSidebar.cpp
+               RevelationRightSidebar.h
                RevelationBottomBar.cpp
                RevelationBottomBar.h
-               RevelationBottomBar.ui
                Revelation.cpp
                Revelation.h
-               Revelation.ui
                RevelationListModel.cpp
                RevelationListModel.h
                RevelationListView.cpp

@@ -1,14 +1,14 @@
 #pragma once
 #include "RevelationSidebar.h"
-#include "ui_RevelationLeftSidebar.h"
+#include "ui_RevelationRightSidebar.h"
 
-class RevelationLeftSidebar : public RevelationSidebar
+class RevelationRightSidebar : public RevelationSidebar
 {
     Q_OBJECT
 
   public:
-    RevelationLeftSidebar(QWidget* parent = nullptr);
-    ~RevelationLeftSidebar();
+    RevelationRightSidebar(QWidget* parent = nullptr);
+    ~RevelationRightSidebar();
 
   private:
     void Initialize();
@@ -18,9 +18,9 @@ class RevelationLeftSidebar : public RevelationSidebar
     virtual void showEvent(QShowEvent* event) override;
 
   public slots:
-    void OnCentralWidgetMoved(const QPoint& point);
+    void OnCentralWidgetMoved(const QPoint& point, const QSize& size);
     void OnCentralWidgetResized(const QSize& size);
 
   private:
-    Ui::RevelationLeftSidebarClass ui;
+    Ui::RevelationRightSidebarClass ui;
 };
