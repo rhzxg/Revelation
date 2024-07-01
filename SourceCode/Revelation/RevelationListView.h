@@ -26,8 +26,6 @@ class RevelationListView : public QListView
     void InitSignalSlots();
 
   private:
-    //virtual void paintEvent(QPaintEvent* event) override;
-
     // drag & drop
     virtual void startDrag(Qt::DropActions supportedActions) override;
     virtual void dragEnterEvent(QDragEnterEvent* event) override;

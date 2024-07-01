@@ -51,18 +51,6 @@ void RevelationListView::InitSignalSlots()
 {
 }
 
-// void RevelationListView::paintEvent(QPaintEvent* event)
-//{
-//     QAbstractItemView::paintEvent(event);
-//
-//     if (m_dragging && m_dragging)
-//     {
-//         QPainter painter(viewport());
-//         painter.setPen(Qt::red);
-//         painter.drawLine(0, m_dropPos.y(), viewport()->width(), m_dropPos.y());
-//     }
-// }
-
 void RevelationListView::startDrag(Qt::DropActions supportedActions)
 {
     QModelIndexList indexes = selectedIndexes();
