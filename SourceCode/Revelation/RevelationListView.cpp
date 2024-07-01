@@ -75,7 +75,7 @@ void RevelationListView::startDrag(Qt::DropActions supportedActions)
         dataStream << taskID;
 
         QMimeData* mimeData = new QMimeData;
-        mimeData->setData("application/task_data", itemData);
+        mimeData->setData("revelation/task_data", itemData);
 
         QDrag* drag = new QDrag(this);
         drag->setMimeData(mimeData);
@@ -86,7 +86,7 @@ void RevelationListView::startDrag(Qt::DropActions supportedActions)
 
 void RevelationListView::dragEnterEvent(QDragEnterEvent* event)
 {
-    if (event->mimeData()->hasFormat("application/task_data"))
+    if (event->mimeData()->hasFormat("revelation/task_data"))
     {
         event->acceptProposedAction();
 
@@ -99,7 +99,7 @@ void RevelationListView::dragEnterEvent(QDragEnterEvent* event)
 
 void RevelationListView::dragMoveEvent(QDragMoveEvent* event)
 {
-    if (event->mimeData()->hasFormat("application/task_data"))
+    if (event->mimeData()->hasFormat("revelation/task_data"))
     {
         event->acceptProposedAction();
         m_dropPos      = event->pos();
@@ -118,9 +118,9 @@ void RevelationListView::dragLeaveEvent(QDragLeaveEvent* event)
 void RevelationListView::dropEvent(QDropEvent* event)
 {
     const QMimeData* mimeData = event->mimeData();
-    if (mimeData->hasFormat("application/task_data"))
+    if (mimeData->hasFormat("revelation/task_data"))
     {
-        QByteArray  itemData = mimeData->data("application/task_data");
+        QByteArray  itemData = mimeData->data("revelation/task_data");
         QDataStream dataStream(&itemData, QIODevice::ReadOnly);
 
         Uint64 taskID;
