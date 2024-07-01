@@ -34,4 +34,9 @@ struct TaskPrototype
     std::string m_deadline;
     TaskStatus  m_taskStatus;
     TaskType    m_taskType;
+
+    bool operator==(const TaskPrototype& other) const
+    {
+        return this->m_id == other.m_id;
+    }
 };
