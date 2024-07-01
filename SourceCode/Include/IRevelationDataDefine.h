@@ -7,15 +7,16 @@ using Uint64 = uint64_t;
 
 enum class TaskStatus
 {
+    None = 0,
     Todo,
-    Programming,
+    Doing,
     Testing,
     Done
 };
 
 enum class TaskType
 {
-    None,
+    None = 0,
     Bug,
     Feature,
     Test,
