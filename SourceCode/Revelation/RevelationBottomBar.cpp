@@ -71,7 +71,7 @@ void RevelationBottomBar::OnBtnConfirmClicked()
     task.m_desc       = "";
     task.m_startTime  = now;
     task.m_finishTime = "";
-    task.m_deadline   = timeFormatter->GetPartDataTimeFromString(now, TimeMask::YMD);
+    task.m_deadline   = timeFormatter->GetPartDateTimeFromString(now, TimeMask::YMD);
     task.m_createTime = now;
     task.m_taskStatus = TaskStatus::Todo;
     task.m_taskType   = TaskType::None;

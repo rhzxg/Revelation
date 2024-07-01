@@ -41,7 +41,7 @@ std::string DateTimeFormatter::GetCurrentDateTimeString(TimeMask::DetailLevel de
     return "";
 }
 
-std::string DateTimeFormatter::GetPartDataTimeFromString(const std::string& dataTimeStr, TimeMask::DetailLevel detailLevel)
+std::string DateTimeFormatter::ParsePartDateTimeFromString(const std::string& dataTimeStr, TimeMask::DetailLevel detailLevel)
 {
     static const std::unordered_map<TimeMask::DetailLevel, std::pair<size_t, size_t>> formatMap = {
         {TimeMask::Year, {0, 4}},
@@ -67,4 +67,20 @@ std::string DateTimeFormatter::GetPartDataTimeFromString(const std::string& data
     }
 
     return "";
+}
+
+time_t DateTimeFormatter::ConvertDateTimeFromString(const std::string& dataTimeStr)
+{
+    char* charTime = (char*)dataTimeStr.data();
+    tm    tm_;
+    int   year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0, msec = 0;
+    int   parsed = sscanf_s(charTime, "%d-%d-%d %d:%d:%d.%d", &year, &month, &day, &hour, &minute, &second, &msec);
+    tm_.tm_year  = year - 1900;
+    tm_.tm_mon   = month - 1;
+    tm_.tm_mday  = day;
+    tm_.tm_min   = minute;
+    tm_.tm_sec   = second;
+    tm_.tm_isdst = 0;
+    time_t t_    = mktime(&tm_) * 1000 + msec;
+    return t_;
 }
