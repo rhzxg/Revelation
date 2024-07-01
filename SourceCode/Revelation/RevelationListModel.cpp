@@ -1,5 +1,9 @@
 #include "RevelationListModel.h"
 #include "IRevelationInterface.h"
+#include "Utility/IUtilityInterface.h"
+
+// shared cache
+std::unordered_map<Uint64, TaskPrototype> RevelationListModel::s_taskCache;
 
 RevelationListModel::RevelationListModel(IRevelationInterface* intf, QObject* parent /*= nullptr*/)
     : m_interface(intf), QAbstractListModel(parent)
@@ -8,6 +12,44 @@ RevelationListModel::RevelationListModel(IRevelationInterface* intf, QObject* pa
 
 RevelationListModel::~RevelationListModel()
 {
+}
+
+void RevelationListModel::InsertTaskItem(const TaskPrototype& task, bool fromDatabase /*= false*/)
+{
+    // shared cache
+    s_taskCache.emplace(task.m_id, task);
+
+    std::lock_guard<std::mutex> lock(m_mutex);
+    auto                        timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
+    auto                        it            = std::lower_bound(m_tasks.begin(), m_tasks.end(), task, [&](TaskPrototype t1, TaskPrototype t2) {
+        time_t t1Time = timeFormatter->ConvertDateTimeFromString(t1.m_createTime);
+        time_t t2Time = timeFormatter->ConvertDateTimeFromString(t2.m_createTime);
+
+        return t1Time < t2Time;
+    });
+    m_tasks.insert(it, task);
+
+    layoutChanged();
+
+    if (!fromDatabase)
+    {
+        // update database
+    }
+}
+
+void RevelationListModel::RemoveTaskItem(const TaskPrototype& task)
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    auto                        finder = std::find(m_tasks.begin(), m_tasks.end(), task);
+    if (finder != m_tasks.end())
+    {
+        m_tasks.erase(finder);
+
+        layoutChanged();
+    }
+
+    // shared cache
+    s_taskCache.erase(task.m_id);
 }
 
 QModelIndex RevelationListModel::index(int row, int column, const QModelIndex& parent /*= QModelIndex()*/) const

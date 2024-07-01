@@ -17,7 +17,7 @@ class RevelationBottomBar : public RevelationSidebar
     void InitSignalSlots();
 
   signals:
-    void TaskItemCreated(TaskPrototype task);
+    void TaskItemCreated(TaskPrototype task, TaskStatus from, TaskStatus to);
 
   public slots:
     void OnCentralWidgetMoved(const QPoint& point, const QSize& size);

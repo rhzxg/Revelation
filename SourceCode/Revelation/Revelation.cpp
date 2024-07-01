@@ -1,6 +1,7 @@
 #include "Revelation.h"
 #include "IRevelationInterface.h"
 #include "RevelationListView.h"
+#include "RevelationListModel.h"
 #include "RevelationLeftSidebar.h"
 #include "RevelationRightSidebar.h"
 #include "RevelationBottomBar.h"
@@ -64,14 +65,15 @@ void Revelation::InitWidget()
         mainWindow->setWindowIcon(pixmap);
     }
 
-    std::vector<QLabel*>     labels{ui.labelTitleTodo, ui.labelTitleDoing, ui.labelTitleTesting, ui.labelTitleDone};
-    std::vector<QWidget*>    widgets{ui.taskWidgetTodo, ui.taskWidgetDoing, ui.taskWidgetTesting, ui.taskWidgetDone};
-    std::vector<QString>     colors{"#CAF0FC", "#ADE8F6", "#90E0EF", "#48CAE4"};
-    std::vector<std::string> listNames{"Todo", "Doing", "Testing", "Done"};
+    std::vector<QLabel*>    labels{ui.labelTitleTodo, ui.labelTitleDoing, ui.labelTitleTesting, ui.labelTitleDone};
+    std::vector<QWidget*>   widgets{ui.taskWidgetTodo, ui.taskWidgetDoing, ui.taskWidgetTesting, ui.taskWidgetDone};
+    std::vector<QString>    colors{"#CAF0FC", "#ADE8F6", "#90E0EF", "#48CAE4"};
+    std::vector<TaskStatus> listTypes{TaskStatus::Todo, TaskStatus::Doing, TaskStatus::Testing, TaskStatus::Done};
     for (int i = 0; i < 4; ++i)
     {
-        QLabel*  label  = labels[i];
-        QWidget* widget = widgets[i];
+        QLabel*    label  = labels[i];
+        QWidget*   widget = widgets[i];
+        TaskStatus type   = listTypes[i];
 
         QString labelStyle  = QString("QLabel {background-color:%1; color:#FFFFFF; border-radius:8px; font-size: 16px;}").arg(colors[i]);
         QString widgetStyle = QString("QWidget#widget {background-color:%1; color:#FFFFFF; border-radius:8px;}").arg(colors[i]);
@@ -82,13 +84,17 @@ void Revelation::InitWidget()
         widget->setObjectName("widget");
         widget->setStyleSheet(widgetStyle);
 
-        RevelationListView* view   = new RevelationListView(m_interface);
-        QGridLayout*        layout = new QGridLayout(widget);
+        RevelationListView* view = new RevelationListView(m_interface);
+        view->SetViewType(type);
+        QGridLayout* layout = new QGridLayout(widget);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(view);
         widget->setLayout(layout);
 
-        m_listViews.emplace(listNames[i], view);
+        m_listViews.emplace(type, view);
+
+        connect(view, SIGNAL(TaskItemReparenting(TaskPrototype, TaskStatus, TaskStatus)),
+                this, SLOT(OnTaskItemReparenting(TaskPrototype, TaskStatus, TaskStatus)));
     }
 }
 
@@ -113,8 +119,11 @@ RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
             int    y       = basePos.y() + 15;
             m_leftSidebar->move(x, y);
 
-            connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)), m_leftSidebar, SLOT(OnCentralWidgetMoved(const QPoint&)));
-            connect(this, SIGNAL(CentralWidgetResized(const QSize&)), m_leftSidebar, SLOT(OnCentralWidgetResized(const QSize&)));
+            connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)),
+                    m_leftSidebar, SLOT(OnCentralWidgetMoved(const QPoint&)));
+
+            connect(this, SIGNAL(CentralWidgetResized(const QSize&)),
+                    m_leftSidebar, SLOT(OnCentralWidgetResized(const QSize&)));
         }
         sidebar = m_leftSidebar;
     }
@@ -131,8 +140,11 @@ RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
             int    y       = basePos.y() + 15;
             m_rightSidebar->move(x, y);
 
-            connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)), m_rightSidebar, SLOT(OnCentralWidgetMoved(const QPoint&, const QSize&)));
-            connect(this, SIGNAL(CentralWidgetResized(const QSize&)), m_rightSidebar, SLOT(OnCentralWidgetResized(const QSize&)));
+            connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)),
+                    m_rightSidebar, SLOT(OnCentralWidgetMoved(const QPoint&, const QSize&)));
+
+            connect(this, SIGNAL(CentralWidgetResized(const QSize&)),
+                    m_rightSidebar, SLOT(OnCentralWidgetResized(const QSize&)));
         }
         sidebar = m_rightSidebar;
     }
@@ -147,17 +159,40 @@ RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
             y              = std::max(y, basePos.y() + this->size().height() - m_bottomBar->height() - 50);
             m_bottomBar->move(x, y);
 
-            connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)), m_bottomBar, SLOT(OnCentralWidgetMoved(const QPoint&, const QSize&)));
+            connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)),
+                    m_bottomBar, SLOT(OnCentralWidgetMoved(const QPoint&, const QSize&)));
 
-            auto finder = m_listViews.find("Todo");
-            if (finder != m_listViews.end())
-            {
-                RevelationListView* view = finder->second;
-                connect(m_bottomBar, SIGNAL(TaskItemCreated(TaskPrototype)), view, SLOT(OnTaskItemReparenting(TaskPrototype)));
-            }
+            // task creation
+            connect(m_bottomBar, SIGNAL(TaskItemCreated(TaskPrototype, TaskStatus, TaskStatus)),
+                    this, SLOT(OnTaskItemReparenting(TaskPrototype, TaskStatus, TaskStatus)));
         }
         sidebar = m_bottomBar;
     }
 
     return sidebar;
+}
+
+void Revelation::OnTaskItemReparenting(TaskPrototype task, TaskStatus from, TaskStatus to)
+{
+    if (from == to)
+    {
+        return;
+    }
+
+    auto fromFinder = m_listViews.find(from);
+    if (fromFinder != m_listViews.end())
+    {
+        RevelationListView*  view  = fromFinder->second;
+        RevelationListModel* model = (RevelationListModel*)view->model();
+        model->RemoveTaskItem(task);
+    }
+
+    auto toFinder = m_listViews.find(to);
+    if (toFinder != m_listViews.end())
+    {
+        RevelationListView*  view  = toFinder->second;
+        RevelationListModel* model = (RevelationListModel*)view->model();
+        task.m_taskStatus          = to; // change task status
+        model->InsertTaskItem(task);
+    }
 }

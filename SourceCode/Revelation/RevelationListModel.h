@@ -2,6 +2,7 @@
 #include <QAbstractListModel>
 #include "DataModel/IDataModelInterface.h"
 #include "IRevelationDataDefine.h"
+#include <mutex>
 
 class IRevelationInterface;
 
@@ -16,6 +17,9 @@ class RevelationListModel : public QAbstractListModel, public IDataModelInterfac
     RevelationListModel(IRevelationInterface* intf, QObject* parent = nullptr);
     ~RevelationListModel();
 
+    void InsertTaskItem(const TaskPrototype& task, bool fromDatabase = false);
+    void RemoveTaskItem(const TaskPrototype& task);
+
   private:
     virtual QModelIndex   index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
     virtual QModelIndex   parent(const QModelIndex& child) const override;
@@ -28,5 +32,9 @@ class RevelationListModel : public QAbstractListModel, public IDataModelInterfac
   private:
     IRevelationInterface* m_interface = nullptr;
 
+    // cache
+    static std::unordered_map<Uint64, TaskPrototype> s_taskCache;
+
+    std::mutex                 m_mutex;
     std::vector<TaskPrototype> m_tasks;
 };

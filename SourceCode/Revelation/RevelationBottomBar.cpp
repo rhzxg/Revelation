@@ -76,7 +76,7 @@ void RevelationBottomBar::OnBtnConfirmClicked()
     task.m_taskStatus = TaskStatus::Todo;
     task.m_taskType   = TaskType::None;
 
-    emit TaskItemCreated(task);
+    emit TaskItemCreated(task, TaskStatus::None, TaskStatus::Todo);
 
     ui.editTask->setText("");
 
