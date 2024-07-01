@@ -27,9 +27,6 @@ void Revelation::mouseMoveEvent(QMouseEvent* event)
     if (event->pos().x() < 10 && event->pos().y() < 10)
     {
         GetSidebar(RevelationSidebar::Left)->SetVisible(true);
-
-        // test
-        GetSidebar(RevelationSidebar::Right)->SetVisible(true);
     }
 }
 
