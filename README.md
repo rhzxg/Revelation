@@ -56,12 +56,12 @@ cmake ../SourceCode/ --preset windows
 
 ```bash
 # using qt msvc command line tool
-# cd to build folder
+# cd to binary folder where `Revelation.exe` is located
 windeployqt Revelation.exe
 ```
 
 ### Copy resource files
 
-Copy files from `./resources` to the build folder where `Revelation.exe` is located.
+Copy files from `./resources` to the binary folder where `Revelation.exe` is located.
 
 ### Open solution and set 'Revelation' as default start up project
