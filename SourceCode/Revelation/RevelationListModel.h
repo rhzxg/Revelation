@@ -5,7 +5,7 @@
 
 class IRevelationInterface;
 
-class RevelationListModel : public QAbstractListModel,
+class RevelationListModel : public QAbstractListModel
 {
     Q_OBJECT
 
