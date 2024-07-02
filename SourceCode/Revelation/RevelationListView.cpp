@@ -56,18 +56,28 @@ void RevelationListView::startDrag(Qt::DropActions supportedActions)
     QModelIndexList indexes = selectedIndexes();
     if (indexes.count() > 0)
     {
+        QModelIndex index = indexes.first();
         QByteArray  itemData;
         QDataStream dataStream(&itemData, QIODevice::WriteOnly);
 
-        Uint64 taskID = m_model->m_tasks.at(indexes.first().row()).m_id;
+        Uint64 taskID = m_model->m_tasks.at(index.row()).m_id;
         dataStream << taskID;
+
+        QRect   rect = this->visualRect(index);
+        QPixmap pixmap(rect.size());
+        pixmap.fill(Qt::transparent);
+
+        QPainter painter(&pixmap);
+        this->viewport()->render(&painter, QPoint(), QRegion(rect));
+        painter.end();
 
         QMimeData* mimeData = new QMimeData;
         mimeData->setData("revelation/task_data", itemData);
 
         QDrag* drag = new QDrag(this);
+        drag->setHotSpot(pixmap.rect().center());
         drag->setMimeData(mimeData);
-
+        drag->setPixmap(pixmap);
         drag->exec(Qt::MoveAction);
     }
 }
