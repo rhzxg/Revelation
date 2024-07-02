@@ -40,7 +40,7 @@ void DataPersistenceInterface::CreateDatabaseByDate()
         return;
     }
 
-    std::string           currentDate      = utilityIntf->GetDateTimeFormatter()->GetCurrentDateString(TimeMask::YMD);
+    std::string           currentDate      = utilityIntf->GetDateTimeFormatter()->GetCurrentDateTimeString(TimeMask::YMD);
     std::string           suffix           = ".rev";
     std::string           fileName         = currentDate + suffix;
     std::filesystem::path databaseFilePath = m_revelationIntf->GetApplicationPath() / "databases" / fileName;
