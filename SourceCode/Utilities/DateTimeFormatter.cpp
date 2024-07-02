@@ -78,6 +78,7 @@ time_t DateTimeFormatter::ConvertDateTimeFromString(const std::string& dataTimeS
     tm_.tm_year  = year - 1900;
     tm_.tm_mon   = month - 1;
     tm_.tm_mday  = day;
+    tm_.tm_hour  = hour;
     tm_.tm_min   = minute;
     tm_.tm_sec   = second;
     tm_.tm_isdst = 0;
