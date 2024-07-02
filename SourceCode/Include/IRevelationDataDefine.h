@@ -23,9 +23,16 @@ enum class TaskType
     UI
 };
 
+enum class TaskTag
+{
+    None = 0,
+    Routine,
+    Inherited
+};
+
 struct TaskPrototype
 {
-    Int64       m_id;
+    Uint64      m_id;
     std::string m_title;
     std::string m_desc;
     std::string m_createTime;
@@ -34,6 +41,7 @@ struct TaskPrototype
     std::string m_deadline;
     TaskStatus  m_taskStatus;
     TaskType    m_taskType;
+    TaskTag     m_taskTag;
 
     bool operator==(const TaskPrototype& other) const
     {
