@@ -1,12 +1,11 @@
 #pragma once
 #include <QAbstractListModel>
-#include "DataModel/IDataModelInterface.h"
 #include "IRevelationDataDefine.h"
 #include <mutex>
 
 class IRevelationInterface;
 
-class RevelationListModel : public QAbstractListModel, public IDataModelInterface
+class RevelationListModel : public QAbstractListModel,
 {
     Q_OBJECT
 
