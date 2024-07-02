@@ -1,6 +1,7 @@
 #pragma once
 #include "DataPersistence/IDataPersistenceInterface.h"
 #include "IRevelationInterface.h"
+#include "IRevelationDataDefine.h"
 #include <sqlite3.h>
 
 class DataPersistenceInterface : public IDataPersistenceInterface
@@ -12,12 +13,16 @@ class DataPersistenceInterface : public IDataPersistenceInterface
     virtual void Initialize() override;
     virtual void Uninitialize() override;
 
+    virtual void InsertOrReplaceTask(TaskPrototype task) override;
+
   private:
+    void ExecDatabaseCreationRoutine();
+
     void CreateDatabaseFolder();
     void CreateDatabaseByDate();
 
-    // todo: create table
     void CreateTable();
+    void CollectInheritedRecords();
 
   private:
     IRevelationInterface* m_revelationIntf = nullptr;

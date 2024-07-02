@@ -5,6 +5,7 @@
 #include "RevelationLeftSidebar.h"
 #include "RevelationRightSidebar.h"
 #include "RevelationBottomBar.h"
+#include "DataPersistence/IDataPersistenceInterface.h"
 #include <QLabel>
 #include <QString>
 #include <QMainWindow>
@@ -191,5 +192,11 @@ void Revelation::OnTaskItemReparenting(TaskPrototype task, TaskStatus from, Task
         RevelationListModel* model = (RevelationListModel*)view->model();
         task.m_taskStatus          = to; // change task status
         model->InsertTaskItem(task);
+    }
+
+    auto dataPersistenceIntf = m_interface->GetInterfaceById<IDataPersistenceInterface>("DataPersistence");
+    if (nullptr != dataPersistenceIntf)
+    {
+        dataPersistenceIntf->InsertOrReplaceTask(task);
     }
 }
