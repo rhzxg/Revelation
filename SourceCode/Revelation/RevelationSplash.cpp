@@ -1,7 +1,8 @@
 #include "RevelationSplash.h"
+#include "RevelationInterface.h"
 #include <QLabel>
 
-RevelationSplash::RevelationSplash(RevelationInterface* intf, QWidget* parent)
+RevelationSplash::RevelationSplash(IRevelationInterface* intf, QWidget* parent)
     : m_interface(intf), QDialog(parent)
 {
     ui.setupUi(this);

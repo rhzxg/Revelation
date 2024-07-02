@@ -1,14 +1,15 @@
 #pragma once
 #include <QDialog>
 #include "ui_RevelationSplash.h"
-#include "RevelationInterface.h"
+
+class IRevelationInterface;
 
 class RevelationSplash : public QDialog
 {
     Q_OBJECT
 
   public:
-    RevelationSplash(RevelationInterface* intf, QWidget* parent = nullptr);
+    RevelationSplash(IRevelationInterface* intf, QWidget* parent = nullptr);
     ~RevelationSplash();
 
   private:
@@ -18,5 +19,5 @@ class RevelationSplash : public QDialog
   private:
     Ui::RevelationSplashClass ui;
 
-    RevelationInterface* m_interface = nullptr;
+    IRevelationInterface* m_interface = nullptr;
 };
