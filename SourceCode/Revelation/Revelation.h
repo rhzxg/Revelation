@@ -28,6 +28,8 @@ class Revelation : public QWidget
     void InitWidget();
     void InitSignalSlots();
 
+    void ReteiveDataFromDatabase();
+
     RevelationSidebar* GetSidebar(RevelationSidebar::Side side);
 
   signals:

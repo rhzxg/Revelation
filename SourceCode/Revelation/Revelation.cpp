@@ -49,6 +49,8 @@ void Revelation::Initialize()
 {
     InitWidget();
     InitSignalSlots();
+
+    ReteiveDataFromDatabase();
 }
 
 void Revelation::InitWidget()
@@ -98,6 +100,33 @@ void Revelation::InitWidget()
 
 void Revelation::InitSignalSlots()
 {
+}
+
+void Revelation::ReteiveDataFromDatabase()
+{
+    auto dataPersistenceIntf = m_interface->GetInterfaceById<IDataPersistenceInterface>("DataPersistence");
+    if (nullptr == dataPersistenceIntf)
+    {
+        return;
+    }
+
+    std::vector<TaskPrototype> tasks;
+    dataPersistenceIntf->ReteiveTasksFromDatabase(tasks);
+
+    for (const auto& viewPr : m_listViews)
+    {
+        TaskStatus           taskStatus = viewPr.first;
+        RevelationListView*  view       = viewPr.second;
+        RevelationListModel* model      = (RevelationListModel*)view->model();
+
+        for (const TaskPrototype& task : tasks)
+        {
+            if (task.m_taskStatus == taskStatus)
+            {
+                model->InsertTaskItem(task, true);
+            }
+        }
+    }
 }
 
 RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
@@ -197,6 +226,9 @@ void Revelation::OnTaskItemReparenting(TaskPrototype task, TaskStatus from, Task
     auto dataPersistenceIntf = m_interface->GetInterfaceById<IDataPersistenceInterface>("DataPersistence");
     if (nullptr != dataPersistenceIntf)
     {
-        dataPersistenceIntf->InsertOrReplaceTask(task);
+        std::thread databaseThread([=]() {
+            dataPersistenceIntf->InsertOrReplaceTaskInDatabase(task);
+        });
+        databaseThread.detach();
     }
 }

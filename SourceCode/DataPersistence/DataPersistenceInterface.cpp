@@ -26,12 +26,14 @@ void DataPersistenceInterface::Uninitialize()
     }
 }
 
-void DataPersistenceInterface::InsertOrReplaceTask(TaskPrototype task)
+void DataPersistenceInterface::InsertOrReplaceTaskInDatabase(TaskPrototype task)
 {
     if (nullptr == m_currentDatabase)
     {
         return;
     }
+
+    std::lock_guard<std::mutex> lock(m_insertMutex);
 
     sqlite3_stmt* stmt;
     std::string   insertSql = R"(
@@ -68,9 +70,76 @@ void DataPersistenceInterface::InsertOrReplaceTask(TaskPrototype task)
         {
             std::cerr << "Failed to insert data: " << sqlite3_errmsg(m_currentDatabase) << std::endl;
         }
-
-        sqlite3_finalize(stmt);
     }
+    sqlite3_finalize(stmt);
+}
+
+void DataPersistenceInterface::RemoveTaskFromDatabase(TaskPrototype task)
+{
+    if (nullptr == m_currentDatabase)
+    {
+        return;
+    }
+
+    sqlite3_stmt* stmt;
+    std::string   deleteSql = R"(
+        DELETE FROM t_tasks WHERE f_id = ?;
+    )";
+
+    auto rc = sqlite3_prepare_v2(m_currentDatabase, deleteSql.c_str(), -1, &stmt, nullptr);
+    if (rc == SQLITE_OK)
+    {
+        sqlite3_bind_int64(stmt, 1, task.m_id);
+
+        rc = sqlite3_step(stmt);
+        if (rc != SQLITE_DONE)
+        {
+            std::cerr << "Failed to delete data: " << sqlite3_errmsg(m_currentDatabase) << std::endl;
+        }
+    }
+    sqlite3_finalize(stmt);
+}
+
+void DataPersistenceInterface::ReteiveTasksFromDatabase(std::vector<TaskPrototype>& tasks)
+{
+    if (nullptr == m_currentDatabase)
+    {
+        return;
+    }
+
+    // always read
+    std::string reteiveSql = R"(
+        SELECT * FROM t_tasks;
+    )";
+
+    sqlite3_stmt* stmt;
+    auto          rc = sqlite3_prepare_v2(m_currentDatabase, reteiveSql.c_str(), -1, &stmt, nullptr);
+    if (rc == SQLITE_OK)
+    {
+        auto toStr = [&](const unsigned char* c) {
+            const char* text = reinterpret_cast<const char*>(c);
+            return std::string(text);
+        };
+
+        while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+        {
+            TaskPrototype task;
+            task.m_id         = sqlite3_column_int64(stmt, 0);
+            task.m_title      = toStr(sqlite3_column_text(stmt, 1));
+            task.m_desc       = toStr(sqlite3_column_text(stmt, 2));
+            task.m_createTime = toStr(sqlite3_column_text(stmt, 3));
+            task.m_startTime  = toStr(sqlite3_column_text(stmt, 4));
+            task.m_finishTime = toStr(sqlite3_column_text(stmt, 5));
+            task.m_deadline   = toStr(sqlite3_column_text(stmt, 6));
+            task.m_taskStatus = TaskStatus(sqlite3_column_int(stmt, 7));
+            task.m_taskType   = TaskType(sqlite3_column_int(stmt, 8));
+            task.m_taskTag    = TaskTag(sqlite3_column_int(stmt, 9));
+
+            tasks.emplace_back(task);
+        }
+    }
+
+    sqlite3_finalize(stmt);
 }
 
 void DataPersistenceInterface::ExecDatabaseCreationRoutine()
@@ -250,7 +319,7 @@ void DataPersistenceInterface::CollectInheritedRecords()
                 task.m_taskTag = TaskTag::Inherited;
             }
 
-            InsertOrReplaceTask(task);
+            InsertOrReplaceTaskInDatabase(task);
         }
     }
 

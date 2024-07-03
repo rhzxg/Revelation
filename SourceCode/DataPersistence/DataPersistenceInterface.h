@@ -3,6 +3,7 @@
 #include "IRevelationInterface.h"
 #include "IRevelationDataDefine.h"
 #include <sqlite3.h>
+#include <mutex>
 
 class DataPersistenceInterface : public IDataPersistenceInterface
 {
@@ -13,7 +14,9 @@ class DataPersistenceInterface : public IDataPersistenceInterface
     virtual void Initialize() override;
     virtual void Uninitialize() override;
 
-    virtual void InsertOrReplaceTask(TaskPrototype task) override;
+    virtual void InsertOrReplaceTaskInDatabase(TaskPrototype task) override;
+    virtual void RemoveTaskFromDatabase(TaskPrototype task) override;
+    virtual void ReteiveTasksFromDatabase(std::vector<TaskPrototype>& tasks) override;
 
   private:
     void ExecDatabaseCreationRoutine();
@@ -28,4 +31,6 @@ class DataPersistenceInterface : public IDataPersistenceInterface
     IRevelationInterface* m_revelationIntf = nullptr;
 
     sqlite3* m_currentDatabase = nullptr;
+
+    std::mutex m_insertMutex;
 };
