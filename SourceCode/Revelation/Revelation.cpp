@@ -119,7 +119,7 @@ void Revelation::ReteiveDataFromDatabase()
         RevelationListView*  view       = viewPr.second;
         RevelationListModel* model      = (RevelationListModel*)view->model();
 
-        for (const TaskPrototype& task : tasks)
+        for (TaskPrototype& task : tasks)
         {
             if (task.m_taskStatus == taskStatus)
             {

@@ -16,7 +16,9 @@ class RevelationListModel : public QAbstractListModel
     RevelationListModel(IRevelationInterface* intf, QObject* parent = nullptr);
     ~RevelationListModel();
 
-    void InsertTaskItem(const TaskPrototype& task, bool fromDatabase = false);
+    void SetModelType(TaskStatus modelType);
+
+    void InsertTaskItem(TaskPrototype& task, bool fromDatabase = false);
     void RemoveTaskItem(const TaskPrototype& task);
 
   private:
@@ -28,11 +30,16 @@ class RevelationListModel : public QAbstractListModel
     virtual QVariant      data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
 
+    private:
+    void ChangeTaskData(TaskPrototype& task);
+
   private:
     IRevelationInterface* m_interface = nullptr;
 
     // cache
     static std::unordered_map<Uint64, TaskPrototype> s_taskCache;
+
+    TaskStatus m_type = TaskStatus::None;
 
     std::mutex                 m_mutex;
     std::vector<TaskPrototype> m_tasks;

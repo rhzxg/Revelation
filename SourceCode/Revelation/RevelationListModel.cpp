@@ -14,8 +14,18 @@ RevelationListModel::~RevelationListModel()
 {
 }
 
-void RevelationListModel::InsertTaskItem(const TaskPrototype& task, bool fromDatabase /*= false*/)
+void RevelationListModel::SetModelType(TaskStatus modelType)
 {
+    m_type = modelType;
+}
+
+void RevelationListModel::InsertTaskItem(TaskPrototype& task, bool fromDatabase /*= false*/)
+{
+    if (!fromDatabase)
+    {
+        ChangeTaskData(task);
+    }
+
     // shared cache
     s_taskCache.emplace(task.m_id, task);
 
@@ -98,4 +108,20 @@ Qt::ItemFlags RevelationListModel::flags(const QModelIndex& index) const
     }
 
     return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled;
+}
+
+void RevelationListModel::ChangeTaskData(TaskPrototype& task)
+{
+    // change task data
+    task.m_taskStatus = m_type;
+    if (m_type == TaskStatus::Done)
+    {
+        auto timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
+        task.m_finishTime  = timeFormatter->GetCurrentDateTimeString(TimeMask::YMDHMS);
+    }
+    else
+    {
+        // drag from done to another
+        task.m_finishTime = "";
+    }
 }

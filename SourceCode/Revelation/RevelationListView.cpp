@@ -28,11 +28,6 @@ void RevelationListView::SetViewType(TaskStatus viewType)
 
 void RevelationListView::Initialize()
 {
-    m_model    = new RevelationListModel(m_interface, this);
-    m_delegate = new RevelationListDelegate(m_interface, this);
-    this->setModel(m_model);
-    this->setItemDelegate(m_delegate);
-
     InitWidget();
     InitSignalSlots();
 }
@@ -45,6 +40,13 @@ void RevelationListView::InitWidget()
     this->setDragDropMode(QAbstractItemView::DragDrop);
 
     this->setStyleSheet("QListView { background: transparent; border: none; }");
+
+    m_model    = new RevelationListModel(m_interface, this);
+    m_delegate = new RevelationListDelegate(m_interface, this);
+    this->setModel(m_model);
+    this->setItemDelegate(m_delegate);
+
+    m_model->SetModelType(m_type);
 }
 
 void RevelationListView::InitSignalSlots()

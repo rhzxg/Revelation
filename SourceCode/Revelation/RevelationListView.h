@@ -14,6 +14,8 @@ class RevelationListView : public QListView
 {
     Q_OBJECT
 
+    friend class RevelationListModel;
+
   public:
     RevelationListView(IRevelationInterface* intf, QWidget* parent = nullptr);
     ~RevelationListView();
