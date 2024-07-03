@@ -40,11 +40,6 @@ void RevelationListModel::InsertTaskItem(TaskPrototype& task, bool fromDatabase 
     m_tasks.insert(it, task);
 
     layoutChanged();
-
-    if (!fromDatabase)
-    {
-        // update database
-    }
 }
 
 void RevelationListModel::RemoveTaskItem(const TaskPrototype& task)
