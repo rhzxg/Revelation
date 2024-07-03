@@ -21,7 +21,7 @@ class DataPersistenceInterface : public IDataPersistenceInterface
     void CreateDatabaseFolder();
     void CreateDatabaseByDate();
 
-    void CreateTable();
+    bool CreateTable();
     void CollectInheritedRecords();
 
   private:

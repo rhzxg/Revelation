@@ -36,16 +36,16 @@ void DataPersistenceInterface::InsertOrReplaceTask(TaskPrototype task)
     sqlite3_stmt* stmt;
     std::string   insertSql = R"(
         REPLACE INTO t_tasks (
-            c_id, 
-            c_title,
-            c_desc, 
-            c_create_time, 
-            c_start_time, 
-            c_finish_time, 
-            c_deadline, 
-            c_status, 
-            c_type, 
-            c_tag) 
+            f_id, 
+            f_title,
+            f_desc, 
+            f_create_time, 
+            f_start_time, 
+            f_finish_time, 
+            f_deadline, 
+            f_status, 
+            f_type, 
+            f_tag) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     )";
 
@@ -85,10 +85,11 @@ void DataPersistenceInterface::ExecDatabaseCreationRoutine()
     CreateDatabaseByDate();
 
     // create table
-    CreateTable();
-
-    // collect inherited records
-    CollectInheritedRecords();
+    if (CreateTable())
+    {
+        // collect inherited records
+        CollectInheritedRecords();
+    }
 }
 
 void DataPersistenceInterface::CreateDatabaseFolder()
@@ -108,33 +109,45 @@ void DataPersistenceInterface::CreateDatabaseByDate()
         return;
     }
 
-    std::string           currentDate      = utilityIntf->GetDateTimeFormatter()->GetCurrentDateTimeString(TimeMask::YMD);
+    std::string           today            = utilityIntf->GetDateTimeFormatter()->GetCurrentDateTimeString(TimeMask::YMD);
     std::string           suffix           = ".rev";
-    std::string           fileName         = currentDate + suffix;
+    std::string           fileName         = today + suffix;
     std::filesystem::path databaseFilePath = m_revelationIntf->GetApplicationPath() / "databases" / fileName;
 
     sqlite3_open(databaseFilePath.u8string().c_str(), &m_currentDatabase);
 }
 
-void DataPersistenceInterface::CreateTable()
+bool DataPersistenceInterface::CreateTable()
 {
     if (nullptr == m_currentDatabase)
     {
-        return;
+        return false;
+    }
+
+    std::string   tableQuerySql = "SELECT name FROM sqlite_master WHERE type='table' AND name='t_tasks';";
+    sqlite3_stmt* stmt;
+    if (sqlite3_prepare_v2(m_currentDatabase, tableQuerySql.c_str(), -1, &stmt, nullptr) == SQLITE_OK)
+    {
+        if (sqlite3_step(stmt) == SQLITE_ROW)
+        {
+            sqlite3_finalize(stmt);
+            return false;
+        }
+        sqlite3_finalize(stmt);
     }
 
     std::string createTableSql = R"(
         CREATE TABLE IF NOT EXISTS t_tasks (
-            c_id INTEGER PRIMARY KEY,
-            c_title TEXT,
-            c_desc TEXT,
-            c_create_time TEXT,
-            c_start_time TEXT,
-            c_finish_time TEXT,
-            c_deadline TEXT,
-            c_status INTEGER,
-            c_type INTEGER,
-            c_tag INTEGER
+            f_id INTEGER PRIMARY KEY,
+            f_title TEXT,
+            f_desc TEXT,
+            f_create_time TEXT,
+            f_start_time TEXT,
+            f_finish_time TEXT,
+            f_deadline TEXT,
+            f_status INTEGER,
+            f_type INTEGER,
+            f_tag INTEGER
         );
     )";
 
@@ -143,7 +156,10 @@ void DataPersistenceInterface::CreateTable()
     if (rc != SQLITE_OK)
     {
         std::cerr << "SQL error: " << sqlite3_errmsg(m_currentDatabase) << std::endl;
+        return false;
     }
+
+    return true;
 }
 
 void DataPersistenceInterface::CollectInheritedRecords()
@@ -164,28 +180,30 @@ void DataPersistenceInterface::CollectInheritedRecords()
     std::string today           = utilityIntf->GetDateTimeFormatter()->GetCurrentDateTimeString(TimeMask::YMD);
     time_t      currentDataTime = utilityIntf->GetDateTimeFormatter()->ConvertDateTimeFromString(today);
 
-    std::string mostRecentDatabaseFileName = "";
+    std::string mostRecentDatabaseFileStem = "";
     time_t      mostRecentDate             = -1;
     for (const auto& entry : std::filesystem::directory_iterator(databaseFolderPath))
     {
         if (entry.is_regular_file())
         {
-            std::string databaseFileName = entry.path().filename().stem().u8string();
-            if (databaseFileName == today)
+            std::string databaseFileStem = entry.path().filename().stem().u8string();
+            if (databaseFileStem == today)
             {
                 continue;
             }
 
-            time_t dataTime = utilityIntf->GetDateTimeFormatter()->ConvertDateTimeFromString(databaseFileName);
+            time_t dataTime = utilityIntf->GetDateTimeFormatter()->ConvertDateTimeFromString(databaseFileStem);
             if (dataTime > mostRecentDate)
             {
                 mostRecentDate             = dataTime;
-                mostRecentDatabaseFileName = databaseFileName;
+                mostRecentDatabaseFileStem = databaseFileStem;
             }
         }
     }
 
-    std::filesystem::path mostRecentDatabaseFile = databaseFolderPath / mostRecentDatabaseFileName;
+    std::string           suffix                     = ".rev";
+    std::string           mostRecentDatabaseFileName = mostRecentDatabaseFileStem + suffix;
+    std::filesystem::path mostRecentDatabaseFile     = databaseFolderPath / mostRecentDatabaseFileName;
     if (!std::filesystem::exists(mostRecentDatabaseFile))
     {
         return;
@@ -199,12 +217,12 @@ void DataPersistenceInterface::CollectInheritedRecords()
         return;
     }
 
-    // collect records
-    std::string   createTableSql = R"(
-        SELECT * FROM t_tasks WHERE c_tag = 1 OR c_tag = 2;
+    // collect records of: ([not done] or [routine] or [inherited])
+    std::string   collectSql = R"(
+        SELECT * FROM t_tasks WHERE (f_status <> 4 OR f_tag IN (1, 2));
     )";
     sqlite3_stmt* stmt;
-    auto          rc = sqlite3_prepare_v2(mostRecentDatabase, createTableSql.c_str(), -1, &stmt, nullptr);
+    auto          rc = sqlite3_prepare_v2(mostRecentDatabase, collectSql.c_str(), -1, &stmt, nullptr);
     if (rc == SQLITE_OK)
     {
         auto toStr = [&](const unsigned char* c) {
@@ -226,9 +244,16 @@ void DataPersistenceInterface::CollectInheritedRecords()
             task.m_taskType   = TaskType(sqlite3_column_int(stmt, 8));
             task.m_taskTag    = TaskTag(sqlite3_column_int(stmt, 9));
 
+            // update task tag
+            if (task.m_taskStatus != TaskStatus::Done)
+            {
+                task.m_taskTag = TaskTag::Inherited;
+            }
+
             InsertOrReplaceTask(task);
         }
     }
 
+    sqlite3_finalize(stmt);
     sqlite3_close(mostRecentDatabase);
 }
