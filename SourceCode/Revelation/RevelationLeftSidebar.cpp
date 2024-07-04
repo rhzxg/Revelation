@@ -22,7 +22,6 @@ void RevelationLeftSidebar::Initialize()
 void RevelationLeftSidebar::InitWidget()
 {
     this->setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
-    this->setWindowFlag(Qt::WindowDoesNotAcceptFocus);
     this->setWindowFlag(Qt::FramelessWindowHint);
     this->setWindowFlag(Qt::Tool);
 
@@ -57,7 +56,7 @@ void RevelationLeftSidebar::showEvent(QShowEvent* event)
 
 void RevelationLeftSidebar::OnCentralWidgetMoved(const QPoint& point)
 {
-    int x = point.x() + 20;
+    int x = point.x() + 18;
     int y = point.y() + 15;
     this->move(x, y);
 }

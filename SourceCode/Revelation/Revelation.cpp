@@ -122,8 +122,12 @@ void Revelation::InitWidget()
                 this, SLOT(OnTaskItemReparenting(TaskPrototype, TaskStatus, TaskStatus)));
 
         connect(view, SIGNAL(TaskItemSelected(TaskPrototype)),
-            GetSidebar(RevelationSidebar::Right), SLOT(OnTaskItemSelected(TaskPrototype)));
+                GetSidebar(RevelationSidebar::Right), SLOT(OnTaskItemSelected(TaskPrototype)));
     }
+
+    GetSidebar(RevelationSidebar::Left)->SetVisible(false);
+    GetSidebar(RevelationSidebar::Right)->SetVisible(false);
+    GetSidebar(RevelationSidebar::Bottom)->SetVisible(false);
 }
 
 void Revelation::InitSignalSlots()
@@ -140,13 +144,6 @@ RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
         {
             m_leftSidebar = new RevelationLeftSidebar(m_interface, this);
 
-            m_leftSidebar->resize(m_leftSidebar->width(), this->height() - 30);
-
-            QPoint basePos = mapToGlobal(this->pos());
-            int    x       = basePos.x() + 20;
-            int    y       = basePos.y() + 15;
-            m_leftSidebar->move(x, y);
-
             connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)),
                     m_leftSidebar, SLOT(OnCentralWidgetMoved(const QPoint&)));
 
@@ -160,14 +157,7 @@ RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
         if (nullptr == m_rightSidebar)
         {
             m_rightSidebar = new RevelationRightSidebar(m_interface, this);
-
-            m_rightSidebar->resize(m_rightSidebar->width(), this->height() - 30);
-
-            QPoint basePos = mapToGlobal(this->pos());
-            int    x       = basePos.x() + width() - m_rightSidebar->width() - 20;
-            int    y       = basePos.y() + 15;
-            m_rightSidebar->move(x, y);
-
+            
             connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)),
                     m_rightSidebar, SLOT(OnCentralWidgetMoved(const QPoint&, const QSize&)));
 
@@ -180,12 +170,7 @@ RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
     {
         if (nullptr == m_bottomBar)
         {
-            m_bottomBar    = new RevelationBottomBar(m_interface, this);
-            QPoint basePos = mapToGlobal(this->pos());
-            int    x       = basePos.x() + this->size().width() / 2 - m_bottomBar->size().width() / 2;
-            int    y       = basePos.y() + this->size().height() / 5 * 4;
-            y              = std::max(y, basePos.y() + this->size().height() - m_bottomBar->height() - 50);
-            m_bottomBar->move(x, y);
+            m_bottomBar = new RevelationBottomBar(m_interface, this);
 
             connect(this, SIGNAL(CentralWidgetMoved(const QPoint&, const QSize&)),
                     m_bottomBar, SLOT(OnCentralWidgetMoved(const QPoint&, const QSize&)));
