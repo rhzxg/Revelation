@@ -23,6 +23,15 @@ std::filesystem::path RevelationInterface::GetResourcePath()
     return m_resourcePath;
 }
 
+void RevelationInterface::InitExtensions()
+{
+    for (auto& interfacePair : m_interfaces)
+    {
+        IExtensionInterface* extensionIntf = interfacePair.second;
+        extensionIntf->Initialize();
+    }
+}
+
 void RevelationInterface::Initialize()
 {
 #ifdef WIN32
@@ -32,7 +41,7 @@ void RevelationInterface::Initialize()
     m_resourcePath    = m_applicationPath / "resources";
 #endif // WIN32
 
-    InitExtensions();
+    LoadExtensions();
 }
 
 void RevelationInterface::Uninitialize()
@@ -54,7 +63,7 @@ void RevelationInterface::Uninitialize()
 #endif // WIN32
 }
 
-void RevelationInterface::InitExtensions()
+void RevelationInterface::LoadExtensions()
 {
 #ifdef WIN32
     WCHAR currDir[MAX_PATH] = {0};
@@ -108,10 +117,4 @@ void RevelationInterface::InitExtensions()
 #ifdef WIN32
     SetCurrentDirectoryW(currDir);
 #endif // WIN32
-
-    for (auto& interfacePair : m_interfaces)
-    {
-        IExtensionInterface* extensionIntf = interfacePair.second;
-        extensionIntf->Initialize();
-    }
 }

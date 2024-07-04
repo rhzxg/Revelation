@@ -15,11 +15,13 @@ class RevelationInterface : public IRevelationInterface
     virtual std::filesystem::path GetApplicationPath() override;
     virtual std::filesystem::path GetResourcePath() override;
 
+    void InitExtensions();
+
   private:
     void Initialize();
     void Uninitialize();
 
-    void InitExtensions();
+    void LoadExtensions();
 
   private:
 #ifdef WIN32
