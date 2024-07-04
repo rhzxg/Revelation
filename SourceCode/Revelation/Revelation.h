@@ -18,6 +18,8 @@ class Revelation : public QWidget
     Revelation(IRevelationInterface* intf, QWidget* parent = nullptr);
     ~Revelation();
 
+    void ReteiveDataFromDatabase();
+
   private:
     virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void resizeEvent(QResizeEvent* event) override;
@@ -27,8 +29,6 @@ class Revelation : public QWidget
     void Initialize();
     void InitWidget();
     void InitSignalSlots();
-
-    void ReteiveDataFromDatabase();
 
     RevelationSidebar* GetSidebar(RevelationSidebar::Side side);
 

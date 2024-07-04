@@ -23,6 +23,33 @@ Revelation::~Revelation()
 {
 }
 
+void Revelation::ReteiveDataFromDatabase()
+{
+    auto dataPersistenceIntf = m_interface->GetInterfaceById<IDataPersistenceInterface>("DataPersistence");
+    if (nullptr == dataPersistenceIntf)
+    {
+        return;
+    }
+
+    std::vector<TaskPrototype> tasks;
+    dataPersistenceIntf->ReteiveTasksFromDatabase(tasks);
+
+    for (const auto& viewPr : m_listViews)
+    {
+        TaskStatus           taskStatus = viewPr.first;
+        RevelationListView*  view       = viewPr.second;
+        RevelationListModel* model      = (RevelationListModel*)view->model();
+
+        for (TaskPrototype& task : tasks)
+        {
+            if (task.m_taskStatus == taskStatus)
+            {
+                model->InsertTaskItem(task, true);
+            }
+        }
+    }
+}
+
 void Revelation::mouseMoveEvent(QMouseEvent* event)
 {
     if (event->pos().x() < 10 && event->pos().y() < 10)
@@ -95,38 +122,14 @@ void Revelation::InitWidget()
 
         connect(view, SIGNAL(TaskItemReparenting(TaskPrototype, TaskStatus, TaskStatus)),
                 this, SLOT(OnTaskItemReparenting(TaskPrototype, TaskStatus, TaskStatus)));
+
+        connect(view, SIGNAL(TaskItemSelected(TaskPrototype)),
+            GetSidebar(RevelationSidebar::Right), SLOT(OnTaskItemSelected(TaskPrototype)));
     }
 }
 
 void Revelation::InitSignalSlots()
 {
-}
-
-void Revelation::ReteiveDataFromDatabase()
-{
-    auto dataPersistenceIntf = m_interface->GetInterfaceById<IDataPersistenceInterface>("DataPersistence");
-    if (nullptr == dataPersistenceIntf)
-    {
-        return;
-    }
-
-    std::vector<TaskPrototype> tasks;
-    dataPersistenceIntf->ReteiveTasksFromDatabase(tasks);
-
-    for (const auto& viewPr : m_listViews)
-    {
-        TaskStatus           taskStatus = viewPr.first;
-        RevelationListView*  view       = viewPr.second;
-        RevelationListModel* model      = (RevelationListModel*)view->model();
-
-        for (TaskPrototype& task : tasks)
-        {
-            if (task.m_taskStatus == taskStatus)
-            {
-                model->InsertTaskItem(task, true);
-            }
-        }
-    }
 }
 
 RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
@@ -219,7 +222,6 @@ void Revelation::OnTaskItemReparenting(TaskPrototype task, TaskStatus from, Task
     {
         RevelationListView*  view  = toFinder->second;
         RevelationListModel* model = (RevelationListModel*)view->model();
-        task.m_taskStatus          = to; // change task status
         model->InsertTaskItem(task);
     }
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "RevelationSidebar.h"
 #include "ui_RevelationRightSidebar.h"
+#include "IRevelationDataDefine.h"
 
 class RevelationRightSidebar : public RevelationSidebar
 {
@@ -20,6 +21,8 @@ class RevelationRightSidebar : public RevelationSidebar
   public slots:
     void OnCentralWidgetMoved(const QPoint& point, const QSize& size);
     void OnCentralWidgetResized(const QSize& size);
+
+    void OnTaskItemSelected(TaskPrototype task);
 
   private:
     Ui::RevelationRightSidebarClass ui;

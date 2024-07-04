@@ -16,13 +16,18 @@ void RevelationListDelegate::paint(QPainter* painter, const QStyleOptionViewItem
 {
     int                  taskIndex = (int)index.internalPointer();
     RevelationListModel* model     = (RevelationListModel*)index.model();
-    TaskPrototype        prototype = model->m_tasks.at(taskIndex);
+    if (taskIndex >= model->m_tasks.size())
+    {
+        return;
+    }
+
+    TaskPrototype task = model->m_tasks.at(taskIndex);
 
     QStyleOptionViewItem opt = option;
     opt.rect.adjust(2, 1, -2, -1);
 
     RevelationListItem widget;
-    widget.SetItemTaskData(prototype);
+    widget.SetTaskData(task);
     widget.setGeometry(opt.rect);
     widget.setStyleSheet("background: transparent;");
 

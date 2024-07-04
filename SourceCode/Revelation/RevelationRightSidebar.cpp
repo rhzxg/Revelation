@@ -29,6 +29,8 @@ void RevelationRightSidebar::InitWidget()
     this->setAttribute(Qt::WA_TranslucentBackground);
 
     ui.frame->setStyleSheet("QFrame { background: #F8E16C; border-radius: 10px 10px 10px 10px; }");
+
+    ui.labelCreateTime->setAlignment(Qt::AlignCenter);
 }
 
 void RevelationRightSidebar::InitSignalSlots()
@@ -65,4 +67,14 @@ void RevelationRightSidebar::OnCentralWidgetMoved(const QPoint& point, const QSi
 void RevelationRightSidebar::OnCentralWidgetResized(const QSize& size)
 {
     this->resize(this->width(), size.height() - 30);
+}
+
+void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
+{
+    this->show();
+
+    ui.editTitle->setText(QString::fromStdString(task.m_title));
+    ui.editDesc->setText(QString::fromStdString(task.m_desc));
+
+    ui.labelCreateTime->setText(QString::fromStdString(task.m_createTime));
 }

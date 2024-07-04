@@ -37,6 +37,10 @@ class RevelationListView : public QListView
 
   signals:
     void TaskItemReparenting(TaskPrototype task, TaskStatus from, TaskStatus to);
+    void TaskItemSelected(const TaskPrototype& task);
+
+  private slots:
+    void OnItemClicked(const QModelIndex& index);
 
   private:
     IRevelationInterface* m_interface = nullptr;

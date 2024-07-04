@@ -51,6 +51,7 @@ void RevelationListView::InitWidget()
 
 void RevelationListView::InitSignalSlots()
 {
+    connect(this, &QListView::clicked, this, &RevelationListView::OnItemClicked);
 }
 
 void RevelationListView::startDrag(Qt::DropActions supportedActions)
@@ -92,7 +93,7 @@ void RevelationListView::dragEnterEvent(QDragEnterEvent* event)
 
         m_dragging     = true;
         m_dropPosValid = true;
-        m_dropPos      = event->pos();
+        m_dropPos      = event->position().toPoint();
         viewport()->update();
     }
 }
@@ -102,7 +103,7 @@ void RevelationListView::dragMoveEvent(QDragMoveEvent* event)
     if (event->mimeData()->hasFormat("revelation/task_data"))
     {
         event->acceptProposedAction();
-        m_dropPos      = event->pos();
+        m_dropPos      = event->position().toPoint();
         m_dropPosValid = true;
         viewport()->update();
     }
@@ -137,4 +138,21 @@ void RevelationListView::dropEvent(QDropEvent* event)
 
         emit TaskItemReparenting(task, task.m_taskStatus, m_type);
     }
+}
+
+void RevelationListView::OnItemClicked(const QModelIndex& index)
+{
+    if (!index.isValid())
+    {
+        return;
+    }
+
+    int taskIndex = (int)index.internalPointer();
+    if (taskIndex >= m_model->m_tasks.size())
+    {
+        return;
+    }
+
+    TaskPrototype task = m_model->m_tasks.at(taskIndex);
+    emit          TaskItemSelected(task);
 }
