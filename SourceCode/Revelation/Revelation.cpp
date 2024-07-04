@@ -76,8 +76,6 @@ void Revelation::Initialize()
 {
     InitWidget();
     InitSignalSlots();
-
-    ReteiveDataFromDatabase();
 }
 
 void Revelation::InitWidget()
