@@ -24,6 +24,8 @@ RevelationListView::~RevelationListView()
 void RevelationListView::SetViewType(TaskStatus viewType)
 {
     m_type = viewType;
+
+    m_model->SetModelType(m_type);
 }
 
 void RevelationListView::Initialize()
@@ -45,8 +47,6 @@ void RevelationListView::InitWidget()
     m_delegate = new RevelationListDelegate(m_interface, this);
     this->setModel(m_model);
     this->setItemDelegate(m_delegate);
-
-    m_model->SetModelType(m_type);
 }
 
 void RevelationListView::InitSignalSlots()
