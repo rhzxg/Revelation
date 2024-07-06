@@ -1,5 +1,6 @@
 #include "RevelationRightSidebar.h"
 #include <QPropertyAnimation>
+#include <QMouseEvent>
 
 RevelationRightSidebar::RevelationRightSidebar(IRevelationInterface* intf, QWidget* parent)
     : RevelationSidebar(intf, parent)
@@ -21,6 +22,8 @@ void RevelationRightSidebar::Initialize()
 
 void RevelationRightSidebar::InitWidget()
 {
+    this->installEventFilter(this);
+
     this->setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
     this->setWindowFlag(Qt::FramelessWindowHint);
     this->setWindowFlag(Qt::Tool);
@@ -45,6 +48,8 @@ void RevelationRightSidebar::InitSignalSlots()
 
         connect(animation, &QPropertyAnimation::finished, this, &QWidget::hide);
     });
+
+    connect(ui.btnDelete, &QPushButton::clicked, this, &RevelationRightSidebar::OnBtnDeleteTaskItemClicked);
 }
 
 void RevelationRightSidebar::showEvent(QShowEvent* event)
@@ -56,6 +61,16 @@ void RevelationRightSidebar::showEvent(QShowEvent* event)
     opacityAnimation->setStartValue(0.0);
     opacityAnimation->setEndValue(1.0);
     opacityAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void RevelationRightSidebar::hideEvent(QHideEvent* event)
+{
+    OnTaskItemEdited();
+}
+
+void RevelationRightSidebar::closeEvent(QCloseEvent* event)
+{
+    OnTaskItemEdited();
 }
 
 void RevelationRightSidebar::OnCentralWidgetMoved(const QPoint& point, const QSize& size)
@@ -72,7 +87,13 @@ void RevelationRightSidebar::OnCentralWidgetResized(const QSize& size)
 
 void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
 {
-    this->show();
+    // update previous task data first
+    OnTaskItemEdited();
+    m_taskValid = true;
+
+    this->blockSignals(true);
+
+    m_task = task;
 
     ui.editTitle->setText(QString::fromStdString(task.m_title));
     ui.editDesc->setText(QString::fromStdString(task.m_desc));
@@ -90,4 +111,32 @@ void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
     ui.btnSlectDeadline->setText(task.m_deadline.empty() ? tr("N/A") : QString::fromStdString(task.m_deadline));
 
     ui.labelCreateTime->setText(tr("Created: ") + QString::fromStdString(task.m_createTime));
+
+    this->blockSignals(false);
+    this->show();
+}
+
+void RevelationRightSidebar::OnTaskItemEdited()
+{
+    if (!m_taskValid)
+    {
+        return;
+    }
+
+    m_task.m_title = ui.editTitle->text().toStdString();
+    m_task.m_desc  = ui.editDesc->toPlainText().toStdString();
+
+    // TODO: other params
+
+    // change render cache, memory cache, and database
+    emit TaskItemEdited(m_task);
+}
+
+void RevelationRightSidebar::OnBtnDeleteTaskItemClicked()
+{
+    m_taskValid = false;
+
+    emit TaskItemDeleted(m_task);
+
+    this->hide();
 }

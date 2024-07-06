@@ -19,6 +19,7 @@ class RevelationListModel : public QAbstractListModel
     void SetModelType(TaskStatus modelType);
 
     void InsertTaskItem(TaskPrototype& task, bool fromDatabase = false);
+    void ChangeTaskItem(const TaskPrototype& task);
     void RemoveTaskItem(const TaskPrototype& task);
 
   private:
@@ -31,7 +32,7 @@ class RevelationListModel : public QAbstractListModel
     virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
 
     private:
-    void ChangeTaskData(TaskPrototype& task);
+    void UpdateTaskData(TaskPrototype& task);
 
   private:
     IRevelationInterface* m_interface = nullptr;

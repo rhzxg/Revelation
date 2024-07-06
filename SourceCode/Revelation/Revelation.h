@@ -38,6 +38,8 @@ class Revelation : public QWidget
 
   public slots:
     void OnTaskItemReparenting(TaskPrototype task, TaskStatus from, TaskStatus to);
+    void OnTaskItemEdited(const TaskPrototype& task);
+    void OnTaskItemDeleted(const TaskPrototype& task);
 
   private:
     Ui::RevelationClass ui;

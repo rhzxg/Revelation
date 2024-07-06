@@ -46,4 +46,3 @@ endif()
 target_link_libraries(${PROJECT_NAME} Qt6::Widgets)
 
 target_include_directories(Revelation PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../Include)
-

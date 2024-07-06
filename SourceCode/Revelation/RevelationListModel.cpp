@@ -23,13 +23,14 @@ void RevelationListModel::InsertTaskItem(TaskPrototype& task, bool fromDatabase 
 {
     if (!fromDatabase)
     {
-        ChangeTaskData(task);
+        UpdateTaskData(task);
     }
+
+    std::lock_guard<std::mutex> lock(m_mutex);
 
     // shared cache
     s_taskCache.emplace(task.m_id, task);
 
-    std::lock_guard<std::mutex> lock(m_mutex);
     auto                        timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
     auto                        it            = std::lower_bound(m_tasks.begin(), m_tasks.end(), task, [&](TaskPrototype t1, TaskPrototype t2) {
         time_t t1Time = timeFormatter->ConvertDateTimeFromString(t1.m_createTime);
@@ -42,9 +43,30 @@ void RevelationListModel::InsertTaskItem(TaskPrototype& task, bool fromDatabase 
     layoutChanged();
 }
 
+void RevelationListModel::ChangeTaskItem(const TaskPrototype& task)
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+
+    // shared cache
+    auto sharedCacheFinder = s_taskCache.find(task.m_id);
+    if (sharedCacheFinder != s_taskCache.end())
+    {
+        sharedCacheFinder->second = task;
+    }
+
+    auto                        renderDataFinder = std::find(m_tasks.begin(), m_tasks.end(), task);
+    if (renderDataFinder != m_tasks.end())
+    {
+        *renderDataFinder = task;
+    }
+
+    layoutChanged();
+}
+
 void RevelationListModel::RemoveTaskItem(const TaskPrototype& task)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
+
     auto                        finder = std::find(m_tasks.begin(), m_tasks.end(), task);
     if (finder != m_tasks.end())
     {
@@ -105,7 +127,7 @@ Qt::ItemFlags RevelationListModel::flags(const QModelIndex& index) const
     return Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | Qt::ItemIsEnabled;
 }
 
-void RevelationListModel::ChangeTaskData(TaskPrototype& task)
+void RevelationListModel::UpdateTaskData(TaskPrototype& task)
 {
     // change task data
     task.m_taskStatus = m_type;
