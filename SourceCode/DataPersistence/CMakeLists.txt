@@ -7,7 +7,7 @@ find_package(SQLite3 REQUIRED)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_library(DataPersistence SHARED 
+add_library(${PROJECT_NAME} SHARED 
 			dllmain.cpp
 
 			DataPersistenceInterface.cpp
@@ -15,10 +15,10 @@ add_library(DataPersistence SHARED
 )
 
 if(MSVC)
-set_property(TARGET DataPersistence PROPERTY RUNTIME_OUTPUT_DIRECTORY "$<1:${REVELATION_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}/extensions/${PROJECT_NAME}>") 
+set_property(TARGET ${PROJECT_NAME} PROPERTY RUNTIME_OUTPUT_DIRECTORY "$<1:${REVELATION_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}/extensions/${PROJECT_NAME}>") 
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od")
 endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE SQLite::SQLite3)
 
-target_include_directories(DataPersistence PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../Include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../Include)
