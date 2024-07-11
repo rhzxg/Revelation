@@ -1,0 +1,3 @@
+[submodule "SourceCode/FluentUI"]
+	path = SourceCode/FluentUI
+	url = git@github.com:CodingDogzxg/FluentUI.git
