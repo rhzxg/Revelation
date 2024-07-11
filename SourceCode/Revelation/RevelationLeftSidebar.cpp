@@ -39,7 +39,9 @@ void RevelationLeftSidebar::InitSignalSlots()
         animation->setEndValue(0.0);
         animation->start(QAbstractAnimation::DeleteWhenStopped);
 
-        connect(animation, &QPropertyAnimation::finished, this, &QWidget::hide);
+        connect(animation, &QPropertyAnimation::finished, this, [&]() {
+            parentWidget()->hide();
+        });
     });
 }
 
@@ -52,13 +54,6 @@ void RevelationLeftSidebar::showEvent(QShowEvent* event)
     opacityAnimation->setStartValue(0.0);
     opacityAnimation->setEndValue(1.0);
     opacityAnimation->start(QAbstractAnimation::DeleteWhenStopped);
-}
-
-void RevelationLeftSidebar::OnCentralWidgetMoved(const QPoint& point)
-{
-    int x = point.x() + 18;
-    int y = point.y() + 15;
-    this->move(x, y);
 }
 
 void RevelationLeftSidebar::OnCentralWidgetResized(const QSize& size)

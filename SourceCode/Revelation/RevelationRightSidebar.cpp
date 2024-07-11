@@ -1,6 +1,7 @@
 #include "RevelationRightSidebar.h"
 #include <QPropertyAnimation>
 #include <QMouseEvent>
+#include "CommonWidgets/ICommonWidgetInterface.h"
 
 RevelationRightSidebar::RevelationRightSidebar(IRevelationInterface* intf, QWidget* parent)
     : RevelationSidebar(intf, parent)
@@ -46,7 +47,9 @@ void RevelationRightSidebar::InitSignalSlots()
         animation->setEndValue(0.0);
         animation->start(QAbstractAnimation::DeleteWhenStopped);
 
-        connect(animation, &QPropertyAnimation::finished, this, &QWidget::hide);
+        connect(animation, &QPropertyAnimation::finished, this, [&]() {
+            parentWidget()->hide();
+        });
     });
 
     connect(ui.btnDelete, &QPushButton::clicked, this, &RevelationRightSidebar::OnBtnDeleteTaskItemClicked);
@@ -113,7 +116,7 @@ void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
     ui.labelCreateTime->setText(tr("Created: ") + QString::fromStdString(task.m_createTime));
 
     this->blockSignals(false);
-    this->show();
+    this->parentWidget()->show();
 }
 
 void RevelationRightSidebar::OnTaskItemEdited()

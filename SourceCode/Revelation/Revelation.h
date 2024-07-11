@@ -30,7 +30,7 @@ class Revelation : public QWidget
     void InitWidget();
     void InitSignalSlots();
 
-    RevelationSidebar* GetSidebar(RevelationSidebar::Side side);
+    RevelationSidebarWrapper* GetSidebarWrapper(RevelationSidebar::Side side);
 
   signals:
     void CentralWidgetMoved(const QPoint& point, const QSize& size);
@@ -46,9 +46,9 @@ class Revelation : public QWidget
 
     IRevelationInterface* m_interface = nullptr;
 
-    RevelationSidebar* m_leftSidebar  = nullptr;
-    RevelationSidebar* m_rightSidebar = nullptr;
-    RevelationSidebar* m_bottomBar    = nullptr;
+    RevelationSidebarWrapper* m_leftSidebarWrapper  = nullptr;
+    RevelationSidebarWrapper* m_rightSidebarWrapper = nullptr;
+    RevelationSidebarWrapper* m_bottomBarWrapper    = nullptr;
 
     std::unordered_map<TaskStatus, RevelationListView*> m_listViews;
 };

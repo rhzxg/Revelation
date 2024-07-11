@@ -33,6 +33,8 @@
 
 # Build folder
 /build
+x64/
+**/x64/
 
 # Compiled folder
 /binary

@@ -22,14 +22,12 @@ void RevelationBottomBar::Initialize()
 
 void RevelationBottomBar::InitWidget()
 {
-    this->setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
-    // this->setWindowFlag(Qt::WindowDoesNotAcceptFocus);
+    // this->setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
+    this->setWindowFlag(Qt::NoDropShadowWindowHint);
     this->setWindowFlag(Qt::FramelessWindowHint);
-    this->setWindowFlag(Qt::Tool);
+    // this->setWindowFlag(Qt::Popup);
 
     this->setAttribute(Qt::WA_TranslucentBackground);
-
-    this->activateWindow();
 
     ui.frame->setStyleSheet("QFrame { background: #FB637E; border-radius: 10px 10px 10px 10px; }");
     ui.editTask->setStyleSheet("QLineEdit { background: transparent; border: none; color: black; }");
@@ -49,7 +47,7 @@ void RevelationBottomBar::OnCentralWidgetMoved(const QPoint& point, const QSize&
     int x = point.x() + size.width() / 2 - this->size().width() / 2;
     int y = point.y() + size.height() / 5 * 4;
     y     = std::max(y, point.y() + size.height() - this->height() - 50);
-    this->move(x, y);
+    this->parentWidget();
 }
 
 void RevelationBottomBar::OnBtnConfirmClicked()
@@ -79,11 +77,4 @@ void RevelationBottomBar::OnBtnConfirmClicked()
     emit TaskItemCreated(task, TaskStatus::None, TaskStatus::Todo);
 
     ui.editTask->setText("");
-
-    auto mainWindow = (QMainWindow*)m_interface->GetMainWindow();
-    if (nullptr != mainWindow)
-    {
-        mainWindow->activateWindow();
-        mainWindow->setFocus(Qt::MouseFocusReason);
-    }
 }

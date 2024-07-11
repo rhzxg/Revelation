@@ -18,7 +18,6 @@ class RevelationLeftSidebar : public RevelationSidebar
     virtual void showEvent(QShowEvent* event) override;
 
   public slots:
-    void OnCentralWidgetMoved(const QPoint& point);
     void OnCentralWidgetResized(const QSize& size);
 
   private:

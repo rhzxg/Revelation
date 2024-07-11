@@ -2,17 +2,17 @@
 #include <QTimer>
 #include <QScreen>
 #include "RevelationInterface.h"
-#include "RevelationMainWindow.h"
 #include "RevelationSplash.h"
 #include "Revelation.h"
 #include <thread>
+#include "RevelationMainWindow.h"
 
 int main(int argc, char* argv[])
 {
-    QApplication         app(argc, argv);
-    RevelationMainWindow mainWindow;
+    QApplication app(argc, argv);
 
-    auto intf = std::make_shared<RevelationInterface>(&mainWindow);
+    RevelationMainWindow mainWindow;
+    auto                 intf = std::make_shared<RevelationInterface>(&mainWindow);
 
     RevelationSplash splash(intf.get());
     Revelation       revelation(intf.get());
@@ -37,9 +37,7 @@ int main(int argc, char* argv[])
 
     splash.exec();
 
-    mainWindow.setCentralWidget(&revelation);
-    mainWindow.setMinimumSize(600, 400);
-    mainWindow.resize(revelation.size());
+    mainWindow.SetCentralWidget(&revelation);
     mainWindow.show();
 
     return app.exec();

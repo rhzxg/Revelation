@@ -1,7 +1,9 @@
 #pragma once
-#include <QMainWindow>
+#include "FluControls/FluFrameLessWidget.h"
 
-class RevelationMainWindow : public QMainWindow
+class Revelation;
+
+class RevelationMainWindow : public FluFrameLessWidget
 {
     Q_OBJECT
 
@@ -9,10 +11,15 @@ class RevelationMainWindow : public QMainWindow
     RevelationMainWindow(QWidget* parent = nullptr);
     ~RevelationMainWindow();
 
+    void SetCentralWidget(Revelation* widget);
+
   private:
     void Initialize();
     void InitWidget();
 
   private:
     virtual void moveEvent(QMoveEvent* event) override;
+
+  private:
+    Revelation* m_revelationWidget = nullptr;
 };

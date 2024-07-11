@@ -38,11 +38,15 @@ add_executable(${PROJECT_NAME}
 )
 
 if(MSVC)
+set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER Revelation)
 set_property(TARGET ${PROJECT_NAME} PROPERTY RUNTIME_OUTPUT_DIRECTORY "$<1:${REVELATION_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}>") 
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od")
 add_definitions(-DNOMINMAX)
 endif()
 
 target_link_libraries(${PROJECT_NAME} Qt6::Widgets)
+target_link_libraries(${PROJECT_NAME} FluUtils)
+target_link_libraries(${PROJECT_NAME} FluControls)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../Include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../FluentUI)
