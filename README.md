@@ -33,7 +33,7 @@ setx VCPKG_DEFAULT_BINARY_CACHE "path_to_an_empty_folder2"
 ### Clone Repository
 
 ```bash
-git clone https://github.com/Codingdogzxg/Revelation.git
+git clone --recursive https://github.com/Codingdogzxg/Revelation.git
 ```
 
 ### Edit CMakePresets.json
