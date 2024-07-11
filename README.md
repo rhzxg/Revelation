@@ -1,5 +1,10 @@
-# Revelation
-A to-do list software tailored for software engineers.
+<div align=center>
+  <img src="resources/images/splash.png">
+</div>
+<p align="center">
+  A to-do list software tailored for software engineers, inspired by the Revelation album of G.E.M.
+</p>
+
 # Build Steps:
 ## [Windows]
 ### Requirements
@@ -65,3 +70,6 @@ windeployqt Revelation.exe
 Copy files from `./resources` to the binary folder where `Revelation.exe` is located.
 
 ### Open solution and set 'Revelation' as default start up project
+
+# Reference
++ [mowangshuying/CppQtFluentUi888: FluentUI For Cpp Qt.(github.com)](https://github.com/mowangshuying/CppQtFluentUi888)
