@@ -17,9 +17,6 @@ class RevelationLeftSidebar : public RevelationSidebar
 
     virtual void showEvent(QShowEvent* event) override;
 
-  public slots:
-    void OnCentralWidgetResized(const QSize& size);
-
   private:
     Ui::RevelationLeftSidebarClass ui;
 };

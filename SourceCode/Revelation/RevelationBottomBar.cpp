@@ -42,14 +42,6 @@ void RevelationBottomBar::InitSignalSlots()
     connect(ui.btnConfirm, &QPushButton::clicked, this, &RevelationBottomBar::OnBtnConfirmClicked);
 }
 
-void RevelationBottomBar::OnCentralWidgetMoved(const QPoint& point, const QSize& size)
-{
-    int x = point.x() + size.width() / 2 - this->size().width() / 2;
-    int y = point.y() + size.height() / 5 * 4;
-    y     = std::max(y, point.y() + size.height() - this->height() - 50);
-    this->parentWidget();
-}
-
 void RevelationBottomBar::OnBtnConfirmClicked()
 {
     std::string taskTitle = ui.editTask->text().toStdString();

@@ -1,7 +1,6 @@
 #include "RevelationRightSidebar.h"
 #include <QPropertyAnimation>
 #include <QMouseEvent>
-#include "CommonWidgets/ICommonWidgetInterface.h"
 
 RevelationRightSidebar::RevelationRightSidebar(IRevelationInterface* intf, QWidget* parent)
     : RevelationSidebar(intf, parent)
@@ -23,15 +22,8 @@ void RevelationRightSidebar::Initialize()
 
 void RevelationRightSidebar::InitWidget()
 {
-    this->installEventFilter(this);
-
-    this->setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
-    this->setWindowFlag(Qt::FramelessWindowHint);
-    this->setWindowFlag(Qt::Tool);
-
-    this->setAttribute(Qt::WA_TranslucentBackground);
-
-    ui.frame->setStyleSheet("QFrame { background: #F8E16C; border-radius: 8px 8px 8px 8px; }");
+    ui.frame->setObjectName("RevelationFrame");
+    ui.frame->setStyleSheet("QFrame#RevelationFrame { background: #F0F0F0; border-radius: 7px; }");
     ui.editTitle->setStyleSheet("QLineEdit { background-color: #F0F0F0; border-radius: 4px; }");
     ui.editDesc->setStyleSheet("QTextEdit { background-color: #F0F0F0; }");
 
@@ -41,15 +33,7 @@ void RevelationRightSidebar::InitWidget()
 void RevelationRightSidebar::InitSignalSlots()
 {
     connect(ui.btnHide, &QPushButton::clicked, this, [&]() {
-        QPropertyAnimation* animation = new QPropertyAnimation(this, "windowOpacity");
-        animation->setDuration(100);
-        animation->setStartValue(windowOpacity());
-        animation->setEndValue(0.0);
-        animation->start(QAbstractAnimation::DeleteWhenStopped);
-
-        connect(animation, &QPropertyAnimation::finished, this, [&]() {
-            parentWidget()->hide();
-        });
+        parentWidget()->hide();
     });
 
     connect(ui.btnDelete, &QPushButton::clicked, this, &RevelationRightSidebar::OnBtnDeleteTaskItemClicked);
@@ -58,12 +42,6 @@ void RevelationRightSidebar::InitSignalSlots()
 void RevelationRightSidebar::showEvent(QShowEvent* event)
 {
     QWidget::showEvent(event);
-
-    QPropertyAnimation* opacityAnimation = new QPropertyAnimation(this, "windowOpacity");
-    opacityAnimation->setDuration(100);
-    opacityAnimation->setStartValue(0.0);
-    opacityAnimation->setEndValue(1.0);
-    opacityAnimation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 void RevelationRightSidebar::hideEvent(QHideEvent* event)
@@ -74,18 +52,6 @@ void RevelationRightSidebar::hideEvent(QHideEvent* event)
 void RevelationRightSidebar::closeEvent(QCloseEvent* event)
 {
     OnTaskItemEdited();
-}
-
-void RevelationRightSidebar::OnCentralWidgetMoved(const QPoint& point, const QSize& size)
-{
-    int x = point.x() + size.width() - this->width() - 18;
-    int y = point.y() + 15;
-    this->move(x, y);
-}
-
-void RevelationRightSidebar::OnCentralWidgetResized(const QSize& size)
-{
-    this->resize(this->width(), size.height() - 30);
 }
 
 void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
@@ -109,9 +75,9 @@ void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
     ui.labelType->setText(lutTypes[(int)task.m_taskType]);
     ui.labelTag->setText(lutTags[(int)task.m_taskTag]);
 
-    ui.btnSlectStartTime->setText(task.m_startTime.empty() ? tr("N/A") : QString::fromStdString(task.m_startTime));
-    ui.btnSlectFinishTime->setText(task.m_finishTime.empty() ? tr("N/A") : QString::fromStdString(task.m_finishTime));
-    ui.btnSlectDeadline->setText(task.m_deadline.empty() ? tr("N/A") : QString::fromStdString(task.m_deadline));
+    // ui.btnSlectStartTime->setText(task.m_startTime.empty() ? tr("N/A") : QString::fromStdString(task.m_startTime));
+    // ui.btnSlectFinishTime->setText(task.m_finishTime.empty() ? tr("N/A") : QString::fromStdString(task.m_finishTime));
+    // ui.btnSlectDeadline->setText(task.m_deadline.empty() ? tr("N/A") : QString::fromStdString(task.m_deadline));
 
     ui.labelCreateTime->setText(tr("Created: ") + QString::fromStdString(task.m_createTime));
 
@@ -141,5 +107,5 @@ void RevelationRightSidebar::OnBtnDeleteTaskItemClicked()
 
     emit TaskItemDeleted(m_task);
 
-    this->hide();
+    emit ui.btnHide->clicked();
 }

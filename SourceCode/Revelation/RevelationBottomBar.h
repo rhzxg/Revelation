@@ -20,7 +20,6 @@ class RevelationBottomBar : public RevelationSidebar
     void TaskItemCreated(TaskPrototype task, TaskStatus from, TaskStatus to);
 
   public slots:
-    void OnCentralWidgetMoved(const QPoint& point, const QSize& size);
     void OnBtnConfirmClicked();
 
   private:

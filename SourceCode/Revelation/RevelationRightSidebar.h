@@ -25,9 +25,6 @@ class RevelationRightSidebar : public RevelationSidebar
     void TaskItemDeleted(const TaskPrototype& task);
 
   public slots:
-    void OnCentralWidgetMoved(const QPoint& point, const QSize& size);
-    void OnCentralWidgetResized(const QSize& size);
-
     void OnTaskItemSelected(TaskPrototype task);
     void OnTaskItemEdited();
     void OnBtnDeleteTaskItemClicked();

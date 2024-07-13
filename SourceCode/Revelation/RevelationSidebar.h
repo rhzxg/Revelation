@@ -2,7 +2,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include "IRevelationInterface.h"
-#include "FluControls/FluWidget.h"
+#include "FluWidget.h"
 
 class RevelationSidebar : public QWidget
 {

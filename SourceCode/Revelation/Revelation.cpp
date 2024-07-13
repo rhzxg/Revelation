@@ -11,7 +11,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 
-#include "FluControls/FluCalendarView.h"
+#include "FluCalendarView.h"
 
 Revelation::Revelation(IRevelationInterface* intf, QWidget* parent)
     : m_interface(intf), QWidget(parent)
@@ -62,11 +62,11 @@ void Revelation::mouseMoveEvent(QMouseEvent* event)
 
 void Revelation::resizeEvent(QResizeEvent* event)
 {
-    m_leftSidebarWrapper->resize(m_leftSidebarWrapper->width(), this->height() - 30);
-    m_leftSidebarWrapper->move(18, 15);
+    m_leftSidebarWrapper->resize(m_leftSidebarWrapper->width(), this->height() + 2);
+    m_leftSidebarWrapper->move(-1, -1);
 
-    m_rightSidebarWrapper->resize(m_rightSidebarWrapper->width(), this->height() - 30);
-    m_rightSidebarWrapper->move(this->width() - m_rightSidebarWrapper->width() - 18, 15);
+    m_rightSidebarWrapper->resize(m_rightSidebarWrapper->width(), this->height() + 2);
+    m_rightSidebarWrapper->move(this->width() - m_rightSidebarWrapper->width() + 1, -1);
 
     m_bottomBarWrapper->move(this->width() / 2 - m_bottomBarWrapper->width() / 2,
                              this->height() - 100);
@@ -98,9 +98,9 @@ void Revelation::InitWidget()
         mainWindow->setWindowTitle("Revelation");
     }
 
+    GetSidebarWrapper(RevelationSidebar::Bottom)->hide();
     GetSidebarWrapper(RevelationSidebar::Left)->hide();
     GetSidebarWrapper(RevelationSidebar::Right)->hide();
-    GetSidebarWrapper(RevelationSidebar::Bottom)->hide();
 
     std::vector<QLabel*>    labels{ui.labelTitleTodo, ui.labelTitleDoing, ui.labelTitleTesting, ui.labelTitleDone};
     std::vector<QWidget*>   widgets{ui.taskWidgetTodo, ui.taskWidgetDoing, ui.taskWidgetTesting, ui.taskWidgetDone};
