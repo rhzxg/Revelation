@@ -27,7 +27,7 @@ void RevelationMainWindow::SetCentralWidget(Revelation* widget)
     this->resize(widget->size());
     
     QScreen* screen = QGuiApplication::primaryScreen();
-    if (screen)
+    if (nullptr != screen)
     {
         QRect screenGeometry = screen->geometry();
         int   x              = (screenGeometry.width() - this->width()) / 2;
@@ -49,12 +49,4 @@ void RevelationMainWindow::InitWidget()
     this->m_titleBar->chromePalette()->setTitleBarActiveForegroundColor(Qt::black);
     this->m_titleBar->chromePalette()->setTitleBarInactiveForegroundColor(Qt::black);
     this->m_titleBar->setFixedHeight(30);
-}
-
-void RevelationMainWindow::moveEvent(QMoveEvent* event)
-{
-    if (nullptr != m_revelationWidget)
-    {
-        emit m_revelationWidget->CentralWidgetMoved(mapToGlobal(m_revelationWidget->pos()), m_revelationWidget->size());
-    }
 }

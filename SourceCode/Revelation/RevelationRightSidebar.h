@@ -31,6 +31,7 @@ class RevelationRightSidebar : public RevelationSidebar
 
   private:
     Ui::RevelationRightSidebarClass ui;
+    IRevelationInterface*           m_interface = nullptr;
 
     TaskPrototype m_task;
     bool          m_taskValid = false;

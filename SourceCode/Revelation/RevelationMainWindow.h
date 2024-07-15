@@ -18,8 +18,5 @@ class RevelationMainWindow : public FluFrameLessWidget
     void InitWidget();
 
   private:
-    virtual void moveEvent(QMoveEvent* event) override;
-
-  private:
     Revelation* m_revelationWidget = nullptr;
 };

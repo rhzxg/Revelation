@@ -32,10 +32,6 @@ class Revelation : public QWidget
 
     RevelationSidebarWrapper* GetSidebarWrapper(RevelationSidebar::Side side);
 
-  signals:
-    void CentralWidgetMoved(const QPoint& point, const QSize& size);
-    void CentralWidgetResized(const QSize& size);
-
   public slots:
     void OnTaskItemReparenting(TaskPrototype task, TaskStatus from, TaskStatus to);
     void OnTaskItemEdited(const TaskPrototype& task);

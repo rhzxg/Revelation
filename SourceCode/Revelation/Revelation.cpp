@@ -11,8 +11,6 @@
 #include <QMainWindow>
 #include <QMessageBox>
 
-#include "FluCalendarView.h"
-
 Revelation::Revelation(IRevelationInterface* intf, QWidget* parent)
     : m_interface(intf), QWidget(parent)
 {

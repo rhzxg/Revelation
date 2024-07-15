@@ -29,7 +29,7 @@ void RevelationListItem::InitWidget()
     this->setWindowFlag(Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
 
-    ui.frame->setStyleSheet("QFrame { background: #f0f0f0; border-radius: 8px 8px 8px 8px; }");
+    ui.frame->setStyleSheet("QFrame { background: #F0F0F0; border-radius: 8px 8px 8px 8px; }");
 }
 
 void RevelationListItem::InitSignalSlots()
