@@ -28,8 +28,14 @@ class RevelationRightSidebar : public RevelationSidebar
     void OnTaskItemSelected(TaskPrototype task);
     void OnTaskItemEdited();
     void OnBtnDeleteTaskItemClicked();
+    void OnBtnSelectStartTimeClicked(QDate date);
+    void OnBtnSelectFinishTimeClicked(QDate date);
+    void OnBtnSelectDeadlineClicked(QDate date);
 
   private:
+    void BlockSignals(bool block);
+
+private:
     Ui::RevelationRightSidebarClass ui;
     IRevelationInterface*           m_interface = nullptr;
 

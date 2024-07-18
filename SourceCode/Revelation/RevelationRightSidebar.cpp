@@ -36,6 +36,10 @@ void RevelationRightSidebar::InitSignalSlots()
     });
 
     connect(ui.btnDelete, &QPushButton::clicked, this, &RevelationRightSidebar::OnBtnDeleteTaskItemClicked);
+
+    connect(ui.btnSelectStartTime, &FluCalendarDatePicker::selectedDate, this, &RevelationRightSidebar::OnBtnSelectStartTimeClicked);
+    connect(ui.btnSelectFinishTime, &FluCalendarDatePicker::selectedDate, this, &RevelationRightSidebar::OnBtnSelectFinishTimeClicked);
+    connect(ui.btnSelectDeadline, &FluCalendarDatePicker::selectedDate, this, &RevelationRightSidebar::OnBtnSelectDeadlineClicked);
 }
 
 void RevelationRightSidebar::showEvent(QShowEvent* event)
@@ -50,6 +54,7 @@ void RevelationRightSidebar::hideEvent(QHideEvent* event)
 
 void RevelationRightSidebar::closeEvent(QCloseEvent* event)
 {
+    // TODO: fix crash caused by database editing thread while closing the software
     OnTaskItemEdited();
 }
 
@@ -59,7 +64,7 @@ void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
     OnTaskItemEdited();
     m_taskValid = true;
 
-    this->blockSignals(true);
+    BlockSignals(true);
 
     m_task = task;
 
@@ -75,7 +80,7 @@ void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
     ui.labelTag->setText(lutTags[(int)task.m_taskTag]);
 
     auto ConvertToQDate = [&](const std::string& timeString) {
-        auto timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
+        auto        timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
         std::string yyyymmdd      = timeFormatter->ParsePartDateTimeFromString(timeString, TimeMask::YMD);
         if (yyyymmdd.empty())
         {
@@ -93,7 +98,7 @@ void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
 
     ui.labelCreateTime->setText(tr("Created: ") + QString::fromStdString(task.m_createTime));
 
-    this->blockSignals(false);
+    BlockSignals(false);
     this->parentWidget()->show();
 }
 
@@ -107,8 +112,6 @@ void RevelationRightSidebar::OnTaskItemEdited()
     m_task.m_title = ui.editTitle->text().toStdString();
     m_task.m_desc  = ui.editDesc->toPlainText().toStdString();
 
-    // TODO: other params
-
     // change render cache, memory cache, and database
     emit TaskItemEdited(m_task);
 }
@@ -120,4 +123,39 @@ void RevelationRightSidebar::OnBtnDeleteTaskItemClicked()
     emit TaskItemDeleted(m_task);
 
     emit ui.btnHide->clicked();
+}
+
+void RevelationRightSidebar::OnBtnSelectStartTimeClicked(QDate date)
+{
+    m_task.m_startTime = date.toString("yyyy-MM-dd").toStdString();
+
+    // hour minute second?
+    // change render cache, memory cache, and database
+    emit TaskItemEdited(m_task);
+}
+
+void RevelationRightSidebar::OnBtnSelectFinishTimeClicked(QDate date)
+{
+    m_task.m_finishTime = date.toString("yyyy-MM-dd").toStdString();
+
+    // hour minute second?
+    // change render cache, memory cache, and database
+    emit TaskItemEdited(m_task);
+}
+
+void RevelationRightSidebar::OnBtnSelectDeadlineClicked(QDate date)
+{
+    m_task.m_deadline = date.toString("yyyy-MM-dd").toStdString();
+
+    // hour minute second?
+    // change render cache, memory cache, and database
+    emit TaskItemEdited(m_task);
+}
+
+void RevelationRightSidebar::BlockSignals(bool block)
+{
+    this->blockSignals(block);
+    ui.btnSelectStartTime->blockSignals(block);
+    ui.btnSelectFinishTime->blockSignals(block);
+    ui.btnSelectDeadline->blockSignals(block);
 }
