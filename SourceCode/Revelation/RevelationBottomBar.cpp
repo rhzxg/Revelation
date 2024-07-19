@@ -22,13 +22,6 @@ void RevelationBottomBar::Initialize()
 
 void RevelationBottomBar::InitWidget()
 {
-    // this->setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
-    this->setWindowFlag(Qt::NoDropShadowWindowHint);
-    this->setWindowFlag(Qt::FramelessWindowHint);
-    // this->setWindowFlag(Qt::Popup);
-
-    this->setAttribute(Qt::WA_TranslucentBackground);
-
     ui.frame->setStyleSheet("QFrame { background: #FB637E; border-radius: 10px 10px 10px 10px; }");
     ui.editTask->setStyleSheet("QLineEdit { background: transparent; border: none; color: black; }");
     ui.btnConfirm->setStyleSheet("QPushButton { background: transparent; border: none; color: black; }");
@@ -40,6 +33,18 @@ void RevelationBottomBar::InitWidget()
 void RevelationBottomBar::InitSignalSlots()
 {
     connect(ui.btnConfirm, &QPushButton::clicked, this, &RevelationBottomBar::OnBtnConfirmClicked);
+}
+
+void RevelationBottomBar::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
+    {
+        OnBtnConfirmClicked();
+    }
+    else
+    {
+        QWidget::keyPressEvent(event);
+    }
 }
 
 void RevelationBottomBar::OnBtnConfirmClicked()
@@ -65,6 +70,7 @@ void RevelationBottomBar::OnBtnConfirmClicked()
     task.m_createTime = now;
     task.m_taskStatus = TaskStatus::Todo;
     task.m_taskType   = TaskType::None;
+    task.m_taskTag    = TaskTag::None;
 
     emit TaskItemCreated(task, TaskStatus::None, TaskStatus::Todo);
 
