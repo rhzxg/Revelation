@@ -43,6 +43,7 @@ std::string DateTimeFormatter::GetCurrentDateTimeString(TimeMask::DetailLevel de
 
 std::string DateTimeFormatter::ParsePartDateTimeFromString(const std::string& dataTimeStr, TimeMask::DetailLevel detailLevel)
 {
+    // format: yyyy-MM-dd hh:mm::ss.ms
     static const std::unordered_map<TimeMask::DetailLevel, std::pair<size_t, size_t>> formatMap = {
         {TimeMask::Year, {0, 4}},
         {TimeMask::Month, {5, 2}},
@@ -53,7 +54,10 @@ std::string DateTimeFormatter::ParsePartDateTimeFromString(const std::string& da
         {TimeMask::YMD, {0, 10}},
         {TimeMask::YMDH, {0, 13}},
         {TimeMask::YMDHM, {0, 16}},
-        {TimeMask::YMDHMS, {0, 19}}};
+        {TimeMask::YMDHMS, {0, 19}},
+        {TimeMask::HM, {11, 5}},
+        {TimeMask::HMS, {11, 8}},
+        {TimeMask::HMSM, {11, 12}}};
 
     auto finder = formatMap.find(detailLevel);
     if (finder != formatMap.end())

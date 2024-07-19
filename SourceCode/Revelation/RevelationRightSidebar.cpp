@@ -79,22 +79,42 @@ void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
     ui.labelType->setText(lutTypes[(int)task.m_taskType]);
     ui.labelTag->setText(lutTags[(int)task.m_taskTag]);
 
-    auto ConvertToQDate = [&](const std::string& timeString) {
+    auto ConvertToQDate = [&](const std::string& timeString, QDate& date, QTime& time) {
         auto        timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
         std::string yyyymmdd      = timeFormatter->ParsePartDateTimeFromString(timeString, TimeMask::YMD);
+        std::string hhmmss        = timeFormatter->ParsePartDateTimeFromString(timeString, TimeMask::HMS);
         if (yyyymmdd.empty())
         {
-            return QDate::currentDate();
+            return false;
         }
         else
         {
-            return QDate::fromString(QString::fromStdString(yyyymmdd), "yyyy-MM-dd");
+            date = QDate::fromString(QString::fromStdString(yyyymmdd), "yyyy-MM-dd");
+            time = QTime::fromString(QString::fromStdString(hhmmss.empty() ? "00:00:00" : hhmmss), "hh:mm:ss");
+            return date.isValid();
         }
     };
 
-    ui.btnSelectStartTime->setCurDate(ConvertToQDate(task.m_startTime));
-    ui.btnSelectFinishTime->setCurDate(ConvertToQDate(task.m_finishTime));
-    ui.btnSelectDeadline->setCurDate(ConvertToQDate(task.m_deadline));
+    QDate startDate, finishDate, deadlineDate;
+    QTime startTime, finishTime, deadlineTime;
+    bool  startTimeValid  = ConvertToQDate(task.m_startTime, startDate, startTime);
+    bool  finishTimeValid = ConvertToQDate(task.m_finishTime, finishDate, finishTime);
+    bool  deadlineValid   = ConvertToQDate(task.m_deadline, deadlineDate, deadlineTime);
+
+    if (startTimeValid)
+    {
+        ui.btnSelectStartTime->setCurDate(startDate);
+    }
+
+    if (finishTimeValid)
+    {
+        ui.btnSelectFinishTime->setCurDate(finishDate);
+    }
+
+    if (deadlineValid)
+    {
+        ui.btnSelectDeadline->setCurDate(deadlineDate);
+    }
 
     ui.labelCreateTime->setText(tr("Created: ") + QString::fromStdString(task.m_createTime));
 

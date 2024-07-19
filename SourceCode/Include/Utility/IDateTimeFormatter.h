@@ -18,6 +18,10 @@ struct TimeMask
         YMDHM   = YMDH | Minute,
         YMDHMS  = YMDHM | Second,
         YMDHMSM = YMDHMS | MiliSecond,
+
+        HM   = Hour | Minute,
+        HMS  = HM | Second,
+        HMSM = HMS | MiliSecond,
     };
 };
 
