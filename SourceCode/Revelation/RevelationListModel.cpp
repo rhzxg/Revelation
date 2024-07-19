@@ -31,8 +31,8 @@ void RevelationListModel::InsertTaskItem(TaskPrototype& task, bool fromDatabase 
     // shared cache
     s_taskCache.emplace(task.m_id, task);
 
-    auto                        timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
-    auto                        it            = std::lower_bound(m_tasks.begin(), m_tasks.end(), task, [&](TaskPrototype t1, TaskPrototype t2) {
+    auto timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
+    auto it            = std::lower_bound(m_tasks.begin(), m_tasks.end(), task, [&](TaskPrototype t1, TaskPrototype t2) {
         time_t t1Time = timeFormatter->ConvertDateTimeFromString(t1.m_createTime);
         time_t t2Time = timeFormatter->ConvertDateTimeFromString(t2.m_createTime);
 
@@ -54,7 +54,7 @@ void RevelationListModel::ChangeTaskItem(const TaskPrototype& task)
         sharedCacheFinder->second = task;
     }
 
-    auto                        renderDataFinder = std::find(m_tasks.begin(), m_tasks.end(), task);
+    auto renderDataFinder = std::find(m_tasks.begin(), m_tasks.end(), task);
     if (renderDataFinder != m_tasks.end())
     {
         *renderDataFinder = task;
@@ -67,7 +67,7 @@ void RevelationListModel::RemoveTaskItem(const TaskPrototype& task)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
 
-    auto                        finder = std::find(m_tasks.begin(), m_tasks.end(), task);
+    auto finder = std::find(m_tasks.begin(), m_tasks.end(), task);
     if (finder != m_tasks.end())
     {
         m_tasks.erase(finder);
@@ -109,9 +109,14 @@ QVariant RevelationListModel::data(const QModelIndex& index, int role /*= Qt::Di
     if (!index.isValid() || index.row() >= m_tasks.size())
         return QVariant();
 
+    TaskPrototype task = m_tasks.at(index.row());
     if (role == Qt::DisplayRole)
     {
-        return QString::fromStdString(m_tasks.at(index.row()).m_title);
+        return QString::fromStdString(task.m_title);
+    }
+    else if (role == Qt::ToolTipRole)
+    {
+        return QString::fromStdString(task.m_title);
     }
 
     return QVariant();

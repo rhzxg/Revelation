@@ -14,7 +14,13 @@ RevelationListItem::~RevelationListItem()
 
 void RevelationListItem::SetTaskData(TaskPrototype task)
 {
-    ui.labelTitle->setText(QString::fromStdString(task.m_title));
+    QString fullText = QString::fromStdString(task.m_title);
+    QFontMetrics metrics(ui.labelTitle->font());
+    int maxWidth = this->width() - 20;
+    QString elidedText = metrics.elidedText(fullText, Qt::ElideRight, maxWidth);
+
+    ui.labelTitle->setText(elidedText);
+    ui.labelTitle->setToolTip(fullText);
     ui.labelDeadline->setText(QString::fromStdString(task.m_deadline));
 }
 
