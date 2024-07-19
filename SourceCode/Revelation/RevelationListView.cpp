@@ -66,11 +66,16 @@ void RevelationListView::startDrag(Qt::DropActions supportedActions)
         Uint64 taskID = m_model->m_tasks.at(index.row()).m_id;
         dataStream << taskID;
 
-        QRect   rect = this->visualRect(index);
-        QPixmap pixmap(rect.size());
+        QRect rect = this->visualRect(index);
+        qreal devicePixelRatio = this->devicePixelRatio();
+        QSize   pixmapSize = rect.size() * devicePixelRatio;
+        QPixmap pixmap(pixmapSize);
+        pixmap.setDevicePixelRatio(devicePixelRatio);
         pixmap.fill(Qt::transparent);
 
         QPainter painter(&pixmap);
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        painter.setRenderHint(QPainter::TextAntialiasing, true);
         this->viewport()->render(&painter, QPoint(), QRegion(rect));
         painter.end();
 
@@ -78,7 +83,7 @@ void RevelationListView::startDrag(Qt::DropActions supportedActions)
         mimeData->setData("revelation/task_data", itemData);
 
         QDrag* drag = new QDrag(this);
-        drag->setHotSpot(pixmap.rect().center());
+        drag->setHotSpot(pixmap.rect().center() / devicePixelRatio);
         drag->setMimeData(mimeData);
         drag->setPixmap(pixmap);
         drag->exec(Qt::MoveAction);

@@ -31,10 +31,14 @@ void RevelationListDelegate::paint(QPainter* painter, const QStyleOptionViewItem
     widget.setGeometry(opt.rect);
     widget.setStyleSheet("background: transparent;");
 
-    QPixmap pixmap(opt.rect.size());
+    qreal devicePixelRatio = painter->device()->devicePixelRatio();
+    QSize   pixmapSize = opt.rect.size() * devicePixelRatio;
+    QPixmap pixmap(pixmapSize);
+    pixmap.setDevicePixelRatio(devicePixelRatio);
     pixmap.fill(Qt::transparent);
-
-    widget.render(&pixmap);
+    widget.render(&pixmap, QPoint(), QRegion(), QWidget::DrawChildren);
+    painter->setRenderHint(QPainter::Antialiasing, true);
+    painter->setRenderHint(QPainter::TextAntialiasing, true);
     painter->drawPixmap(opt.rect, pixmap);
 }
 
