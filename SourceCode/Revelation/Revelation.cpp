@@ -92,8 +92,8 @@ void Revelation::InitWidget()
     auto mainWindow = (QMainWindow*)m_interface->GetMainWindow();
     if (std::filesystem::exists(iconPath) && nullptr != mainWindow)
     {
-        QPixmap pixmap(QString::fromStdString(iconPath.u8string()));
-        mainWindow->setWindowIcon(pixmap);
+        QIcon icon(QString::fromStdString(iconPath.u8string()));
+        mainWindow->setWindowIcon(icon);
         mainWindow->setWindowTitle("Revelation");
     }
 
