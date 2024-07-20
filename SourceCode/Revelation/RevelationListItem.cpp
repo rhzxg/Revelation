@@ -12,16 +12,28 @@ RevelationListItem::~RevelationListItem()
 {
 }
 
-void RevelationListItem::SetTaskData(TaskPrototype task)
+void RevelationListItem::SetTaskData(const TaskPrototype& task)
 {
-    QString fullText = QString::fromStdString(task.m_title);
+    m_task = task;
+
+    QString      fullText = QString::fromStdString(task.m_title);
     QFontMetrics metrics(ui.labelTitle->font());
-    int maxWidth = this->width() - 20;
-    QString elidedText = metrics.elidedText(fullText, Qt::ElideRight, maxWidth);
+    int          maxWidth   = this->width() - 20;
+    QString      elidedText = metrics.elidedText(fullText, Qt::ElideRight, maxWidth);
 
     ui.labelTitle->setText(elidedText);
-    ui.labelTitle->setToolTip(fullText);
     ui.labelDeadline->setText(QString::fromStdString(task.m_deadline));
+}
+
+void RevelationListItem::ResizeWidget(const QSize& size)
+{
+    QString      fullText = QString::fromStdString(m_task.m_title);
+    QFontMetrics metrics(ui.labelTitle->font());
+    int          maxWidth   = size.width() - 20;
+    QString      elidedText = metrics.elidedText(fullText, Qt::ElideRight, maxWidth);
+
+    ui.labelTitle->setText(elidedText);
+    this->setFixedSize(size);
 }
 
 void RevelationListItem::Initialize()

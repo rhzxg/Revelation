@@ -11,7 +11,8 @@ class RevelationListItem : public QWidget
     RevelationListItem(QWidget* parent = nullptr);
     ~RevelationListItem();
 
-    void SetTaskData(TaskPrototype task);
+    void SetTaskData(const TaskPrototype& task);
+    void ResizeWidget(const QSize& size);
 
   private:
     void Initialize();
@@ -20,4 +21,6 @@ class RevelationListItem : public QWidget
 
   private:
     Ui::RevelationListItemClass ui;
+
+    TaskPrototype m_task;
 };

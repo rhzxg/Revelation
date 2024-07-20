@@ -26,12 +26,13 @@ void RevelationListDelegate::paint(QPainter* painter, const QStyleOptionViewItem
     QStyleOptionViewItem opt = option;
     opt.rect.adjust(2, 1, -2, -1);
 
+    qreal devicePixelRatio = painter->device()->devicePixelRatio();
+
     RevelationListItem widget;
     widget.SetTaskData(task);
+    widget.ResizeWidget(opt.rect.size() * devicePixelRatio);
     widget.setGeometry(opt.rect);
-    widget.setStyleSheet("background: transparent;");
 
-    qreal devicePixelRatio = painter->device()->devicePixelRatio();
     QSize   pixmapSize = opt.rect.size() * devicePixelRatio;
     QPixmap pixmap(pixmapSize);
     pixmap.setDevicePixelRatio(devicePixelRatio);

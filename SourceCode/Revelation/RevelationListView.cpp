@@ -40,6 +40,8 @@ void RevelationListView::InitWidget()
     this->setAcceptDrops(true);
     this->setDropIndicatorShown(false);
     this->setDragDropMode(QAbstractItemView::DragDrop);
+    this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     this->setStyleSheet("QListView { background: transparent; border: none; }");
 
