@@ -286,9 +286,9 @@ void DataPersistenceInterface::CollectInheritedRecords()
         return;
     }
 
-    // collect records of: ([not done] or [routine] or [inherited])
+    // collect records of: ([not done] or [routine])
     std::string   collectSql = R"(
-        SELECT * FROM t_tasks WHERE (f_status <> 4 OR f_tag IN (1, 2));
+        SELECT * FROM t_tasks WHERE (f_status <> 4 OR f_tag == 1);
     )";
     sqlite3_stmt* stmt;
     auto          rc = sqlite3_prepare_v2(mostRecentDatabase, collectSql.c_str(), -1, &stmt, nullptr);
@@ -317,6 +317,11 @@ void DataPersistenceInterface::CollectInheritedRecords()
             if (task.m_taskStatus != TaskStatus::Done)
             {
                 task.m_taskTag = TaskTag::Inherited;
+            }
+
+            if (task.m_taskTag == TaskTag::Routine)
+            {
+                task.m_taskStatus = TaskStatus::Todo;
             }
 
             InsertOrReplaceTaskInDatabase(task);
