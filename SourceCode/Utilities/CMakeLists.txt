@@ -15,6 +15,8 @@ add_library(${PROJECT_NAME} SHARED
 			DateTimeFormatter.h
 			SnowflakeGenerator.cpp
 			SnowflakeGenerator.h
+            TaskCreator.cpp
+            TaskCreator.h
 )
 
 if(MSVC)

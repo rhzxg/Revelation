@@ -54,7 +54,6 @@ void RevelationRightSidebar::hideEvent(QHideEvent* event)
 
 void RevelationRightSidebar::closeEvent(QCloseEvent* event)
 {
-    // TODO: fix crash caused by database editing thread while closing the software
     OnTaskItemEdited();
 }
 
@@ -106,10 +105,8 @@ void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
         ui.btnSelectStartTime->setCurDate(startDate);
     }
 
-    if (finishTimeValid)
-    {
-        ui.btnSelectFinishTime->setCurDate(finishDate);
-    }
+    ui.btnSelectFinishTime->setCurDate(finishDate);
+    ui.btnSelectFinishTime->setEnabled(finishTimeValid);
 
     if (deadlineValid)
     {

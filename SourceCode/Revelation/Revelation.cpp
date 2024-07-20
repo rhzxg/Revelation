@@ -5,6 +5,7 @@
 #include "RevelationLeftSidebar.h"
 #include "RevelationRightSidebar.h"
 #include "RevelationBottomBar.h"
+#include "Utility/IUtilityInterface.h"
 #include "DataPersistence/IDataPersistenceInterface.h"
 #include <QLabel>
 #include <QString>
@@ -217,13 +218,13 @@ void Revelation::OnTaskItemReparenting(TaskPrototype task, TaskStatus from, Task
         model->InsertTaskItem(task);
     }
 
+    auto taskCreator         = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetTaskCreator();
     auto dataPersistenceIntf = m_interface->GetInterfaceById<IDataPersistenceInterface>("DataPersistence");
-    if (nullptr != dataPersistenceIntf)
+    if (nullptr != taskCreator && nullptr != dataPersistenceIntf)
     {
-        std::thread databaseThread([=]() {
+        taskCreator->RunAsyncTask([=]() {
             dataPersistenceIntf->InsertOrReplaceTaskInDatabase(task);
         });
-        databaseThread.detach();
     }
 }
 
@@ -237,13 +238,13 @@ void Revelation::OnTaskItemEdited(const TaskPrototype& task)
         model->ChangeTaskItem(task);
     }
 
+    auto taskCreator         = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetTaskCreator();
     auto dataPersistenceIntf = m_interface->GetInterfaceById<IDataPersistenceInterface>("DataPersistence");
-    if (nullptr != dataPersistenceIntf)
+    if (nullptr != taskCreator && nullptr != dataPersistenceIntf)
     {
-        std::thread databaseThread([=]() {
+        taskCreator->RunAsyncTask([=]() {
             dataPersistenceIntf->InsertOrReplaceTaskInDatabase(task);
         });
-        databaseThread.detach();
     }
 }
 
@@ -257,12 +258,12 @@ void Revelation::OnTaskItemDeleted(const TaskPrototype& task)
         model->RemoveTaskItem(task);
     }
 
+    auto taskCreator         = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetTaskCreator();
     auto dataPersistenceIntf = m_interface->GetInterfaceById<IDataPersistenceInterface>("DataPersistence");
-    if (nullptr != dataPersistenceIntf)
+    if (nullptr != taskCreator && nullptr != dataPersistenceIntf)
     {
-        std::thread databaseThread([=]() {
+        taskCreator->RunAsyncTask([=]() {
             dataPersistenceIntf->RemoveTaskFromDatabase(task);
         });
-        databaseThread.detach();
     }
 }

@@ -1,4 +1,5 @@
 #include "RevelationInterface.h"
+#include "Utility/IUtilityInterface.h"
 #include <regex>
 
 RevelationInterface::RevelationInterface(void* mainWindow)
@@ -46,6 +47,10 @@ void RevelationInterface::Initialize()
 
 void RevelationInterface::Uninitialize()
 {
+    // wait all async tasks complete
+    auto taskCreator = GetInterfaceById<IUtilityInterface>("Utility")->GetTaskCreator();
+    taskCreator->WaitAllAsyncTasksComplete();
+
     for (auto& interfacePair : m_interfaces)
     {
         IExtensionInterface* extensionIntf = interfacePair.second;
