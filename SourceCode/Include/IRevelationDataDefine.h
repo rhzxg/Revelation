@@ -47,4 +47,9 @@ struct TaskPrototype
     {
         return this->m_id == other.m_id;
     }
+
+    bool operator!=(const TaskPrototype& other) const
+    {
+        return this->m_id != other.m_id;
+    }
 };

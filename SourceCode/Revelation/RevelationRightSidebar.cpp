@@ -59,13 +59,16 @@ void RevelationRightSidebar::closeEvent(QCloseEvent* event)
 
 void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
 {
-    // update previous task data first
-    OnTaskItemEdited();
-    m_taskValid = true;
+    if (m_taskValid && m_task != task)
+    {
+        // update previous task data first
+        OnTaskItemEdited();
+    }
 
     BlockSignals(true);
 
-    m_task = task;
+    m_taskValid = true;
+    m_task      = task;
 
     ui.editTitle->setText(QString::fromStdString(task.m_title));
     ui.editDesc->setText(QString::fromStdString(task.m_desc));
