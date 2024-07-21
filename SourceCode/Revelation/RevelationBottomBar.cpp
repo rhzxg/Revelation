@@ -24,8 +24,10 @@ void RevelationBottomBar::InitWidget()
 {
     ui.frame->setStyleSheet("QFrame { background: #FB637E; border-radius: 10px 10px 10px 10px; }");
     ui.editTask->setStyleSheet("QLineEdit { background: transparent; border: none; color: black; }");
-    ui.btnConfirm->setStyleSheet("QPushButton { background: transparent; border: none; }");
+    ui.btnConfirm->setStyleSheet("QPushButton { background: transparent; border: none; }"
+                                 "QPushButton::hover { background-color: #EC546F; border-radius: 5px;}");
 
+    ui.btnConfirm->setFixedSize(20, 20);
     ui.btnConfirm->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::CaretUpSolid8));
 }
 
