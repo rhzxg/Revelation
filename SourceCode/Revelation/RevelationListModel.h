@@ -31,7 +31,7 @@ class RevelationListModel : public QAbstractListModel
     virtual QVariant      data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-    private:
+  private:
     void UpdateTaskData(TaskPrototype& task);
 
   private:
@@ -39,9 +39,9 @@ class RevelationListModel : public QAbstractListModel
 
     // cache
     static std::unordered_map<Uint64, TaskPrototype> s_taskCache;
+    static std::mutex                                s_mutex;
 
     TaskStatus m_type = TaskStatus::None;
 
-    std::mutex                 m_mutex;
     std::vector<TaskPrototype> m_tasks;
 };

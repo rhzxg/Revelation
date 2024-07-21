@@ -4,6 +4,7 @@
 
 // shared cache
 std::unordered_map<Uint64, TaskPrototype> RevelationListModel::s_taskCache;
+std::mutex                                RevelationListModel::s_mutex;
 
 RevelationListModel::RevelationListModel(IRevelationInterface* intf, QObject* parent /*= nullptr*/)
     : m_interface(intf), QAbstractListModel(parent)
@@ -26,7 +27,7 @@ void RevelationListModel::InsertTaskItem(TaskPrototype& task, bool fromDatabase 
         UpdateTaskData(task);
     }
 
-    std::lock_guard<std::mutex> lock(m_mutex);
+    std::lock_guard<std::mutex> lock(s_mutex);
 
     // shared cache
     s_taskCache.emplace(task.m_id, task);
@@ -45,7 +46,7 @@ void RevelationListModel::InsertTaskItem(TaskPrototype& task, bool fromDatabase 
 
 void RevelationListModel::ChangeTaskItem(const TaskPrototype& task)
 {
-    std::lock_guard<std::mutex> lock(m_mutex);
+    std::lock_guard<std::mutex> lock(s_mutex);
 
     // shared cache
     auto sharedCacheFinder = s_taskCache.find(task.m_id);
@@ -65,7 +66,7 @@ void RevelationListModel::ChangeTaskItem(const TaskPrototype& task)
 
 void RevelationListModel::RemoveTaskItem(const TaskPrototype& task)
 {
-    std::lock_guard<std::mutex> lock(m_mutex);
+    std::lock_guard<std::mutex> lock(s_mutex);
 
     auto finder = std::find(m_tasks.begin(), m_tasks.end(), task);
     if (finder != m_tasks.end())
