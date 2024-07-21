@@ -12,6 +12,11 @@ RevelationListDelegate::~RevelationListDelegate()
 {
 }
 
+void RevelationListDelegate::SetMouseHoverRow(int hoverRow)
+{
+    m_hoverRow = hoverRow;
+}
+
 void RevelationListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     int                  taskIndex = (int)index.internalPointer();
@@ -31,6 +36,7 @@ void RevelationListDelegate::paint(QPainter* painter, const QStyleOptionViewItem
     RevelationListItem widget;
     widget.SetTaskData(task);
     widget.ResizeWidget(opt.rect.size() * devicePixelRatio);
+    widget.SetMouseHoverd(index.row() == m_hoverRow);
     widget.setGeometry(opt.rect);
 
     QSize   pixmapSize = opt.rect.size() * devicePixelRatio;

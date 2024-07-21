@@ -13,6 +13,7 @@ class RevelationListItem : public QWidget
 
     void SetTaskData(const TaskPrototype& task);
     void ResizeWidget(const QSize& size);
+    void SetMouseHoverd(bool hoverd);
 
   private:
     void Initialize();

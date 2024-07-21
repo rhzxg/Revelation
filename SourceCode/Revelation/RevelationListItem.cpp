@@ -36,6 +36,13 @@ void RevelationListItem::ResizeWidget(const QSize& size)
     this->setFixedSize(size);
 }
 
+void RevelationListItem::SetMouseHoverd(bool hoverd)
+{
+    QString hoverdQss    = "QFrame { background: #F7F7F7; border-radius: 8px 8px 8px 8px; }";
+    QString nonhoverdQss = "QFrame { background: #F0F0F0; border-radius: 8px 8px 8px 8px; }";
+    ui.frame->setStyleSheet(hoverd ? hoverdQss : nonhoverdQss);
+}
+
 void RevelationListItem::Initialize()
 {
     InitWidget();

@@ -36,6 +36,7 @@ void RevelationListView::Initialize()
 
 void RevelationListView::InitWidget()
 {
+    this->setMouseTracking(true);
     this->setDragEnabled(true);
     this->setAcceptDrops(true);
     this->setDropIndicatorShown(false);
@@ -68,9 +69,9 @@ void RevelationListView::startDrag(Qt::DropActions supportedActions)
         Uint64 taskID = m_model->m_tasks.at(index.row()).m_id;
         dataStream << taskID;
 
-        QRect rect = this->visualRect(index);
-        qreal devicePixelRatio = this->devicePixelRatio();
-        QSize   pixmapSize = rect.size() * devicePixelRatio;
+        QRect   rect             = this->visualRect(index);
+        qreal   devicePixelRatio = this->devicePixelRatio();
+        QSize   pixmapSize       = rect.size() * devicePixelRatio;
         QPixmap pixmap(pixmapSize);
         pixmap.setDevicePixelRatio(devicePixelRatio);
         pixmap.fill(Qt::transparent);
@@ -97,11 +98,7 @@ void RevelationListView::dragEnterEvent(QDragEnterEvent* event)
     if (event->mimeData()->hasFormat("revelation/task_data"))
     {
         event->acceptProposedAction();
-
-        m_dragging     = true;
-        m_dropPosValid = true;
-        m_dropPos      = event->position().toPoint();
-        viewport()->update();
+        this->viewport()->update();
     }
 }
 
@@ -110,17 +107,13 @@ void RevelationListView::dragMoveEvent(QDragMoveEvent* event)
     if (event->mimeData()->hasFormat("revelation/task_data"))
     {
         event->acceptProposedAction();
-        m_dropPos      = event->position().toPoint();
-        m_dropPosValid = true;
-        viewport()->update();
+        this->viewport()->update();
     }
 }
 
 void RevelationListView::dragLeaveEvent(QDragLeaveEvent* event)
 {
-    m_dragging     = false;
-    m_dropPosValid = false;
-    viewport()->update();
+    this->viewport()->update();
 }
 
 void RevelationListView::dropEvent(QDropEvent* event)
@@ -141,10 +134,31 @@ void RevelationListView::dropEvent(QDropEvent* event)
         }
         TaskPrototype task = finder->second;
 
+        m_dropUpdateFlag = true;
         event->acceptProposedAction();
 
         emit TaskItemReparenting(task, task.m_taskStatus, m_type);
     }
+}
+
+void RevelationListView::mouseMoveEvent(QMouseEvent* event)
+{
+    QModelIndex index = indexAt(event->pos());
+    m_delegate->SetMouseHoverRow(index.isValid() ? index.row() : -1);
+
+    if (m_dropUpdateFlag)
+    {
+        this->viewport()->update();
+        m_dropUpdateFlag = false;
+    }
+
+    QListView::mouseMoveEvent(event);
+}
+
+void RevelationListView::leaveEvent(QEvent* event)
+{
+    m_delegate->SetMouseHoverRow(-1);
+    QListView::leaveEvent(event);
 }
 
 void RevelationListView::OnItemClicked(const QModelIndex& index)

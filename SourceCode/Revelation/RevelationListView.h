@@ -35,6 +35,9 @@ class RevelationListView : public QListView
     virtual void dragLeaveEvent(QDragLeaveEvent* event) override;
     virtual void dropEvent(QDropEvent* event) override;
 
+    virtual void mouseMoveEvent(QMouseEvent* event) override;
+    virtual void leaveEvent(QEvent* event) override;
+
   signals:
     void TaskItemReparenting(TaskPrototype task, TaskStatus from, TaskStatus to);
     void TaskItemSelected(const TaskPrototype& task);
@@ -50,7 +53,5 @@ class RevelationListView : public QListView
 
     TaskStatus m_type = TaskStatus::None;
 
-    bool   m_dragging     = false;
-    bool   m_dropPosValid = false;
-    QPoint m_dropPos;
+    bool m_dropUpdateFlag = false;
 };
