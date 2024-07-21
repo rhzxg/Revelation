@@ -20,6 +20,8 @@ class RevelationRightSidebar : public RevelationSidebar
     virtual void hideEvent(QHideEvent* event) override;
     virtual void closeEvent(QCloseEvent* event) override;
 
+    void SetBtnAddToRoutineState(bool isRoutine);
+
   signals:
     void TaskItemEdited(const TaskPrototype& task);
     void TaskItemDeleted(const TaskPrototype& task);
@@ -27,6 +29,8 @@ class RevelationRightSidebar : public RevelationSidebar
   public slots:
     void OnTaskItemSelected(const TaskPrototype& task);
     void OnTaskItemEdited();
+    
+    void OnBtnAddToRoutineClicled();
     void OnBtnDeleteTaskItemClicked();
     void OnBtnSelectStartTimeClicked(QDate date);
     void OnBtnSelectFinishTimeClicked(QDate date);

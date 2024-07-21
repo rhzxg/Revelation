@@ -47,26 +47,6 @@
       <property name="bottomMargin">
        <number>8</number>
       </property>
-      <item row="0" column="0" colspan="2">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="2" column="0" colspan="3">
-       <widget class="FluLabel" name="labelCreateTime">
-        <property name="text">
-         <string>Created:</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0" colspan="3">
        <widget class="QWidget" name="widget" native="true">
         <layout class="QGridLayout" name="gridLayout_3">
@@ -199,12 +179,39 @@
         </layout>
        </widget>
       </item>
+      <item row="0" column="0">
+       <widget class="FluPushButton" name="btnAddToRoutine">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="2">
        <widget class="FluPushButton" name="btnHide">
         <property name="text">
          <string/>
         </property>
        </widget>
+      </item>
+      <item row="2" column="0" colspan="3">
+       <widget class="FluLabel" name="labelCreateTime">
+        <property name="text">
+         <string>Created:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>

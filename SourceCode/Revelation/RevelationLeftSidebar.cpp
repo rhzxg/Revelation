@@ -26,6 +26,7 @@ void RevelationLeftSidebar::InitWidget()
     ui.btnHide->setStyleSheet("QPushButton { background: transparent; border: none; }"
                               "QPushButton::hover { background-color: #E1E1E1; border-radius: 5px;}");
 
+    ui.btnHide->setToolTip(tr("Hide"));
     ui.btnHide->setFixedSize(20, 20);
     ui.btnHide->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::CaretLeftSolid8));
 }

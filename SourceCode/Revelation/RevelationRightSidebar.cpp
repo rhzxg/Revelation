@@ -25,10 +25,18 @@ void RevelationRightSidebar::InitWidget()
 {
     ui.frame->setObjectName("RevelationFrame");
     ui.frame->setStyleSheet("QFrame#RevelationFrame { background: #F0F0F0; border-radius: 7px; }");
-    ui.btnHide->setStyleSheet("QPushButton { background: transparent; border: none; }"
-                              "QPushButton::hover { background-color: #E1E1E1; border-radius: 5px;}");
 
-    ui.btnHide->setFixedSize(20, 20);
+    std::vector<FluPushButton*> btns{ui.btnAddToRoutine, ui.btnHide};
+    for (FluPushButton* btn : btns)
+    {
+        btn->setStyleSheet("QPushButton { background: transparent; border: none; }"
+                           "QPushButton::hover { background-color: #E1E1E1; border-radius: 5px;}");
+        btn->setFixedSize(20, 20);
+    }
+
+    ui.btnAddToRoutine->setToolTip(tr("Add to daily routine"));
+    ui.btnHide->setToolTip(tr("Hide"));
+    ui.btnAddToRoutine->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::FavoriteStar));
     ui.btnHide->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::CaretRightSolid8));
 
     ui.editDesc->setFontPointSize(9);
@@ -37,6 +45,7 @@ void RevelationRightSidebar::InitWidget()
 
 void RevelationRightSidebar::InitSignalSlots()
 {
+    connect(ui.btnAddToRoutine, &QPushButton::clicked, this, &RevelationRightSidebar::OnBtnAddToRoutineClicled);
     connect(ui.btnHide, &QPushButton::clicked, this, [&]() {
         parentWidget()->hide();
     });
@@ -63,6 +72,20 @@ void RevelationRightSidebar::closeEvent(QCloseEvent* event)
     OnTaskItemEdited();
 }
 
+void RevelationRightSidebar::SetBtnAddToRoutineState(bool isRoutine)
+{
+    m_task.m_taskTag        = isRoutine ? TaskTag::Routine : TaskTag::None;
+    QString        tooltip  = isRoutine ? tr("Remove from daily routine") : tr("Add to daily routine");
+    FluAwesomeType iconType = isRoutine ? FluAwesomeType::FavoriteStarFill : FluAwesomeType::FavoriteStar;
+
+    ui.btnAddToRoutine->setToolTip(tooltip);
+    ui.btnAddToRoutine->setIcon(FluIconUtils::getFluentIcon(iconType));
+
+    // sync tag label
+    std::vector<QString> lutTags{tr("None"), tr("Routine"), tr("Inherited")};
+    ui.labelTag->setText(lutTags[(int)m_task.m_taskTag]);
+}
+
 void RevelationRightSidebar::OnTaskItemSelected(const TaskPrototype& task)
 {
     if (m_taskValid && m_task != task)
@@ -86,6 +109,7 @@ void RevelationRightSidebar::OnTaskItemSelected(const TaskPrototype& task)
     ui.labelStatus->setText(lutStatus[(int)task.m_taskStatus]);
     ui.labelType->setText(lutTypes[(int)task.m_taskType]);
     ui.labelTag->setText(lutTags[(int)task.m_taskTag]);
+    SetBtnAddToRoutineState(task.m_taskTag == TaskTag::Routine);
 
     auto ConvertToQDate = [&](const std::string& timeString, QDate& date, QTime& time) {
         auto        timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
@@ -137,9 +161,12 @@ void RevelationRightSidebar::OnTaskItemEdited()
 
     m_task.m_title = ui.editTitle->text().toStdString();
     m_task.m_desc  = ui.editDesc->toPlainText().toStdString();
+}
 
-    // change render cache, memory cache, and database
-    emit TaskItemEdited(m_task);
+void RevelationRightSidebar::OnBtnAddToRoutineClicled()
+{
+    auto isRoutine = m_task.m_taskTag == TaskTag::Routine;
+    SetBtnAddToRoutineState(!isRoutine);
 }
 
 void RevelationRightSidebar::OnBtnDeleteTaskItemClicked()
@@ -154,33 +181,22 @@ void RevelationRightSidebar::OnBtnDeleteTaskItemClicked()
 void RevelationRightSidebar::OnBtnSelectStartTimeClicked(QDate date)
 {
     m_task.m_startTime = date.toString("yyyy-MM-dd").toStdString();
-
-    // hour minute second?
-    // change render cache, memory cache, and database
-    emit TaskItemEdited(m_task);
 }
 
 void RevelationRightSidebar::OnBtnSelectFinishTimeClicked(QDate date)
 {
     m_task.m_finishTime = date.toString("yyyy-MM-dd").toStdString();
-
-    // hour minute second?
-    // change render cache, memory cache, and database
-    emit TaskItemEdited(m_task);
 }
 
 void RevelationRightSidebar::OnBtnSelectDeadlineClicked(QDate date)
 {
     m_task.m_deadline = date.toString("yyyy-MM-dd").toStdString();
-
-    // hour minute second?
-    // change render cache, memory cache, and database
-    emit TaskItemEdited(m_task);
 }
 
 void RevelationRightSidebar::BlockSignals(bool block)
 {
     this->blockSignals(block);
+    ui.btnAddToRoutine->blockSignals(block);
     ui.btnSelectStartTime->blockSignals(block);
     ui.btnSelectFinishTime->blockSignals(block);
     ui.btnSelectDeadline->blockSignals(block);
