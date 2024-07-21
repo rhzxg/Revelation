@@ -202,7 +202,7 @@
       <item row="0" column="2">
        <widget class="FluPushButton" name="btnHide">
         <property name="text">
-         <string>&gt;</string>
+         <string/>
         </property>
        </widget>
       </item>

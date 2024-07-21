@@ -48,9 +48,9 @@
        <number>8</number>
       </property>
       <item row="0" column="0">
-       <widget class="QPushButton" name="btnHide">
+       <widget class="FluPushButton" name="btnHide">
         <property name="text">
-         <string>&lt;</string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -76,6 +76,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>FluPushButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">FluPushButton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -1,6 +1,6 @@
 #include "RevelationBottomBar.h"
 #include "Utility/IUtilityInterface.h"
-#include <QMainWindow>
+#include "FluIconUtils.h"
 
 RevelationBottomBar::RevelationBottomBar(IRevelationInterface* intf, QWidget* parent)
     : RevelationSidebar(intf, parent)
@@ -24,10 +24,9 @@ void RevelationBottomBar::InitWidget()
 {
     ui.frame->setStyleSheet("QFrame { background: #FB637E; border-radius: 10px 10px 10px 10px; }");
     ui.editTask->setStyleSheet("QLineEdit { background: transparent; border: none; color: black; }");
-    ui.btnConfirm->setStyleSheet("QPushButton { background: transparent; border: none; color: black; }");
+    ui.btnConfirm->setStyleSheet("QPushButton { background: transparent; border: none; }");
 
-    auto iconPath = m_interface->GetResourcePath() / "images" / "up.png";
-    ui.btnConfirm->setIcon(QIcon(QString::fromStdString(iconPath.u8string())));
+    ui.btnConfirm->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::CaretUpSolid8));
 }
 
 void RevelationBottomBar::InitSignalSlots()
