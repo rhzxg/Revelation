@@ -32,6 +32,9 @@ class Revelation : public QWidget
 
     RevelationSidebarWrapper* GetSidebarWrapper(RevelationSidebar::Side side);
 
+  signals:
+    void TaskItemReparenting(const TaskPrototype& task);
+
   public slots:
     void OnTaskItemReparenting(TaskPrototype task, TaskStatus from, TaskStatus to);
     void OnTaskItemEdited(const TaskPrototype& task);

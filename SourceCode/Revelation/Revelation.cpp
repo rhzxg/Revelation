@@ -129,13 +129,13 @@ void Revelation::InitWidget()
 
         m_listViews.emplace(type, view);
 
-        // task re-parenting
+        // [view => this] task re-parenting
         connect(view, SIGNAL(TaskItemReparenting(TaskPrototype, TaskStatus, TaskStatus)),
                 this, SLOT(OnTaskItemReparenting(TaskPrototype, TaskStatus, TaskStatus)));
 
-        // task selection
-        connect(view, SIGNAL(TaskItemSelected(TaskPrototype)),
-                GetSidebarWrapper(RevelationSidebar::Right)->GetSidebar(), SLOT(OnTaskItemSelected(TaskPrototype)));
+        // [view => right sidebar] task selection
+        connect(view, SIGNAL(TaskItemSelected(const TaskPrototype&)),
+                GetSidebarWrapper(RevelationSidebar::Right)->GetSidebar(), SLOT(OnTaskItemSelected(const TaskPrototype&)));
     }
 }
 
@@ -165,13 +165,17 @@ RevelationSidebarWrapper* Revelation::GetSidebarWrapper(RevelationSidebar::Side 
             m_rightSidebarWrapper = new RevelationSidebarWrapper(this);
             m_rightSidebarWrapper->SetSidebar(rightSidebar);
 
-            // task data edited
+            // [right sidebar => this] task data edited
             connect(rightSidebar, SIGNAL(TaskItemEdited(const TaskPrototype&)),
                     this, SLOT(OnTaskItemEdited(const TaskPrototype&)));
 
-            // task data deleted
+            // [right sidebar => this] task data deleted
             connect(rightSidebar, SIGNAL(TaskItemDeleted(const TaskPrototype&)),
                     this, SLOT(OnTaskItemDeleted(const TaskPrototype&)));
+
+            // [this => right sidebar] task re-parenting
+            connect(this, SIGNAL(TaskItemReparenting(const TaskPrototype&)),
+                    rightSidebar,  SLOT(OnTaskItemSelected(const TaskPrototype&)));
         }
         sidebarWrapper = m_rightSidebarWrapper;
     }
@@ -185,7 +189,7 @@ RevelationSidebarWrapper* Revelation::GetSidebarWrapper(RevelationSidebar::Side 
 
             m_bottomBarWrapper->setFixedSize(bottomBar->width(), 60);
 
-            // task creation
+            // [bottom bar => this] task creation
             connect(bottomBar, SIGNAL(TaskItemCreated(TaskPrototype, TaskStatus, TaskStatus)),
                     this, SLOT(OnTaskItemReparenting(TaskPrototype, TaskStatus, TaskStatus)));
         }
@@ -218,6 +222,10 @@ void Revelation::OnTaskItemReparenting(TaskPrototype task, TaskStatus from, Task
         model->InsertTaskItem(task);
     }
 
+    // refresh right sidebar item status
+    emit TaskItemReparenting(task);
+
+    // change data in database
     auto taskCreator         = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetTaskCreator();
     auto dataPersistenceIntf = m_interface->GetInterfaceById<IDataPersistenceInterface>("DataPersistence");
     if (nullptr != taskCreator && nullptr != dataPersistenceIntf)

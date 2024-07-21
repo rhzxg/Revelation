@@ -25,7 +25,7 @@ class RevelationRightSidebar : public RevelationSidebar
     void TaskItemDeleted(const TaskPrototype& task);
 
   public slots:
-    void OnTaskItemSelected(TaskPrototype task);
+    void OnTaskItemSelected(const TaskPrototype& task);
     void OnTaskItemEdited();
     void OnBtnDeleteTaskItemClicked();
     void OnBtnSelectStartTimeClicked(QDate date);

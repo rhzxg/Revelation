@@ -57,7 +57,7 @@ void RevelationRightSidebar::closeEvent(QCloseEvent* event)
     OnTaskItemEdited();
 }
 
-void RevelationRightSidebar::OnTaskItemSelected(TaskPrototype task)
+void RevelationRightSidebar::OnTaskItemSelected(const TaskPrototype& task)
 {
     if (m_taskValid && m_task != task)
     {
