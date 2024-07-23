@@ -22,11 +22,14 @@ class RevelationRightSidebar : public RevelationSidebar
 
     void SetBtnAddToRoutineState(bool isRoutine);
 
+    void RefreshTaskData(const TaskPrototype& task);
+
   signals:
     void TaskItemEdited(const TaskPrototype& task);
     void TaskItemDeleted(const TaskPrototype& task);
 
   public slots:
+    void OnTaskReparenting(const TaskPrototype& task);
     void OnTaskItemSelected(const TaskPrototype& task);
     void OnTaskItemEdited();
     

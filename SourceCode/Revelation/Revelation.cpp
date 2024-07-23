@@ -175,7 +175,7 @@ RevelationSidebarWrapper* Revelation::GetSidebarWrapper(RevelationSidebar::Side 
 
             // [this => right sidebar] task re-parenting
             connect(this, SIGNAL(TaskItemReparenting(const TaskPrototype&)),
-                    rightSidebar,  SLOT(OnTaskItemSelected(const TaskPrototype&)));
+                    rightSidebar, SLOT(OnTaskReparenting(const TaskPrototype&)));
         }
         sidebarWrapper = m_rightSidebarWrapper;
     }

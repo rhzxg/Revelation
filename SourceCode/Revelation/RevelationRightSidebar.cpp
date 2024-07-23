@@ -86,18 +86,9 @@ void RevelationRightSidebar::SetBtnAddToRoutineState(bool isRoutine)
     ui.labelTag->setText(lutTags[(int)m_task.m_taskTag]);
 }
 
-void RevelationRightSidebar::OnTaskItemSelected(const TaskPrototype& task)
+void RevelationRightSidebar::RefreshTaskData(const TaskPrototype& task)
 {
-    if (m_taskValid && m_task != task)
-    {
-        // update previous task data first
-        OnTaskItemEdited();
-    }
-
     BlockSignals(true);
-
-    m_taskValid = true;
-    m_task      = task;
 
     ui.editTitle->setText(QString::fromStdString(task.m_title));
     ui.editDesc->setText(QString::fromStdString(task.m_desc));
@@ -149,6 +140,29 @@ void RevelationRightSidebar::OnTaskItemSelected(const TaskPrototype& task)
     ui.labelCreateTime->setText(tr("Created: ") + QString::fromStdString(task.m_createTime));
 
     BlockSignals(false);
+}
+
+void RevelationRightSidebar::OnTaskReparenting(const TaskPrototype& task)
+{
+    if (this->parentWidget()->isVisible())
+    {
+        RefreshTaskData(task);
+    }
+}
+
+void RevelationRightSidebar::OnTaskItemSelected(const TaskPrototype& task)
+{
+    if (m_taskValid && m_task != task)
+    {
+        // update previous task data first
+        OnTaskItemEdited();
+    }
+
+    m_taskValid = true;
+    m_task      = task;
+
+    RefreshTaskData(task);
+
     this->parentWidget()->show();
 }
 
