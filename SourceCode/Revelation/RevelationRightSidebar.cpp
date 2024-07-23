@@ -39,7 +39,7 @@ void RevelationRightSidebar::InitWidget()
     ui.btnAddToRoutine->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::FavoriteStar));
     ui.btnHide->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::CaretRightSolid8));
 
-    ui.editDesc->setFontPointSize(9);
+    ui.editDesc->setFontPointSize(ui.editTitle->font().pointSize());
     ui.labelCreateTime->setAlignment(Qt::AlignCenter);
 }
 
