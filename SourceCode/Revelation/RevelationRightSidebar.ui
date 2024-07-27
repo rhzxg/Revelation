@@ -128,21 +128,21 @@
             </widget>
            </item>
            <item row="3" column="1">
-            <widget class="FluCalendarDatePicker" name="btnSelectStartTime">
+            <widget class="FluCalendarDateTimePicker" name="btnSelectStartTime">
              <property name="text">
               <string/>
              </property>
             </widget>
            </item>
            <item row="4" column="1">
-            <widget class="FluCalendarDatePicker" name="btnSelectFinishTime">
+            <widget class="FluCalendarDateTimePicker" name="btnSelectFinishTime">
              <property name="text">
               <string/>
              </property>
             </widget>
            </item>
            <item row="5" column="1">
-            <widget class="FluCalendarDatePicker" name="btnSelectDeadline">
+            <widget class="FluCalendarDateTimePicker" name="btnSelectDeadline">
              <property name="text">
               <string/>
              </property>
@@ -231,11 +231,6 @@
    <header location="global">FluPushButton.h</header>
   </customwidget>
   <customwidget>
-   <class>FluCalendarDatePicker</class>
-   <extends>QPushButton</extends>
-   <header location="global">FluCalendarDatePicker.h</header>
-  </customwidget>
-  <customwidget>
    <class>FluTextEdit</class>
    <extends>QTextEdit</extends>
    <header location="global">FluTextEdit.h</header>
@@ -244,6 +239,11 @@
    <class>FluLineEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">FluLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FluCalendarDateTimePicker</class>
+   <extends>QPushButton</extends>
+   <header location="global">FluCalendarDateTimePicker.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

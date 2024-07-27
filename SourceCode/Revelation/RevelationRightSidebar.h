@@ -3,6 +3,7 @@
 #include "ui_RevelationRightSidebar.h"
 #include "IRevelationDataDefine.h"
 
+class IDateTimeFormatter;
 class RevelationRightSidebar : public RevelationSidebar
 {
     Q_OBJECT
@@ -32,19 +33,23 @@ class RevelationRightSidebar : public RevelationSidebar
     void OnTaskReparenting(const TaskPrototype& task);
     void OnTaskItemSelected(const TaskPrototype& task);
     void OnTaskItemEdited();
-    
+
     void OnBtnAddToRoutineClicled();
     void OnBtnDeleteTaskItemClicked();
-    void OnBtnSelectStartTimeClicked(QDate date);
-    void OnBtnSelectFinishTimeClicked(QDate date);
-    void OnBtnSelectDeadlineClicked(QDate date);
+    void OnStartDateSelected(QDate date);
+    void OnFinishDateSelected(QDate date);
+    void OnDeadlineDateSelected(QDate date);
+    void OnStartTimeSelected(QTime time);
+    void OnFinishTimeSelected(QTime time);
+    void OnDeadlineTimeSelected(QTime time);
 
   private:
     void BlockSignals(bool block);
 
-private:
+  private:
     Ui::RevelationRightSidebarClass ui;
-    IRevelationInterface*           m_interface = nullptr;
+    IRevelationInterface*           m_interface     = nullptr;
+    IDateTimeFormatter*             m_timeFormatter = nullptr;
 
     TaskPrototype m_task;
     bool          m_taskValid = false;

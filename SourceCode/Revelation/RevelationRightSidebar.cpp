@@ -17,6 +17,8 @@ RevelationRightSidebar::~RevelationRightSidebar()
 
 void RevelationRightSidebar::Initialize()
 {
+    m_timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
+
     InitWidget();
     InitSignalSlots();
 }
@@ -52,9 +54,12 @@ void RevelationRightSidebar::InitSignalSlots()
 
     connect(ui.btnDelete, &QPushButton::clicked, this, &RevelationRightSidebar::OnBtnDeleteTaskItemClicked);
 
-    connect(ui.btnSelectStartTime, &FluCalendarDatePicker::selectedDate, this, &RevelationRightSidebar::OnBtnSelectStartTimeClicked);
-    connect(ui.btnSelectFinishTime, &FluCalendarDatePicker::selectedDate, this, &RevelationRightSidebar::OnBtnSelectFinishTimeClicked);
-    connect(ui.btnSelectDeadline, &FluCalendarDatePicker::selectedDate, this, &RevelationRightSidebar::OnBtnSelectDeadlineClicked);
+    connect(ui.btnSelectStartTime, &FluCalendarDateTimePicker::selectedDate, this, &RevelationRightSidebar::OnStartDateSelected);
+    connect(ui.btnSelectFinishTime, &FluCalendarDateTimePicker::selectedDate, this, &RevelationRightSidebar::OnFinishDateSelected);
+    connect(ui.btnSelectDeadline, &FluCalendarDateTimePicker::selectedDate, this, &RevelationRightSidebar::OnDeadlineDateSelected);
+    connect(ui.btnSelectStartTime, &FluCalendarDateTimePicker::selectedTime, this, &RevelationRightSidebar::OnStartTimeSelected);
+    connect(ui.btnSelectFinishTime, &FluCalendarDateTimePicker::selectedTime, this, &RevelationRightSidebar::OnFinishTimeSelected);
+    connect(ui.btnSelectDeadline, &FluCalendarDateTimePicker::selectedTime, this, &RevelationRightSidebar::OnDeadlineTimeSelected);
 }
 
 void RevelationRightSidebar::showEvent(QShowEvent* event)
@@ -103,9 +108,8 @@ void RevelationRightSidebar::RefreshTaskData(const TaskPrototype& task)
     SetBtnAddToRoutineState(task.m_taskTag == TaskTag::Routine);
 
     auto ConvertToQDate = [&](const std::string& timeString, QDate& date, QTime& time) {
-        auto        timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
-        std::string yyyymmdd      = timeFormatter->ParsePartDateTimeFromString(timeString, TimeMask::YMD);
-        std::string hhmmss        = timeFormatter->ParsePartDateTimeFromString(timeString, TimeMask::HMS);
+        std::string yyyymmdd = m_timeFormatter->ParsePartDateTimeFromString(timeString, TimeMask::YMD);
+        std::string hhmmss   = m_timeFormatter->ParsePartDateTimeFromString(timeString, TimeMask::HMS);
         if (yyyymmdd.empty())
         {
             return false;
@@ -129,13 +133,20 @@ void RevelationRightSidebar::RefreshTaskData(const TaskPrototype& task)
         ui.btnSelectStartTime->setCurDate(startDate);
     }
 
-    ui.btnSelectFinishTime->setCurDate(finishDate);
+    if (finishTimeValid)
+    {
+        ui.btnSelectFinishTime->setCurDate(finishDate);
+    }
     ui.btnSelectFinishTime->setEnabled(finishTimeValid);
 
     if (deadlineValid)
     {
         ui.btnSelectDeadline->setCurDate(deadlineDate);
     }
+
+    ui.btnSelectStartTime->setCurTime(startTime);
+    ui.btnSelectFinishTime->setCurTime(finishTime);
+    ui.btnSelectDeadline->setCurTime(deadlineTime);
 
     ui.labelCreateTime->setText(tr("Created: ") + QString::fromStdString(task.m_createTime));
 
@@ -192,19 +203,58 @@ void RevelationRightSidebar::OnBtnDeleteTaskItemClicked()
     emit ui.btnHide->clicked();
 }
 
-void RevelationRightSidebar::OnBtnSelectStartTimeClicked(QDate date)
+void RevelationRightSidebar::OnStartDateSelected(QDate date)
 {
-    m_task.m_startTime = date.toString("yyyy-MM-dd").toStdString();
+    std::string oriStartTime = m_timeFormatter->ParsePartDateTimeFromString(m_task.m_startTime, TimeMask::HMS);
+    std::string newDate      = date.toString("yyyy-MM-dd").toStdString();
+    std::string newDateTime  = newDate + oriStartTime;
+
+    m_task.m_startTime = newDateTime;
 }
 
-void RevelationRightSidebar::OnBtnSelectFinishTimeClicked(QDate date)
+void RevelationRightSidebar::OnFinishDateSelected(QDate date)
 {
-    m_task.m_finishTime = date.toString("yyyy-MM-dd").toStdString();
+    std::string oriStartTime = m_timeFormatter->ParsePartDateTimeFromString(m_task.m_finishTime, TimeMask::HMS);
+    std::string newDate      = date.toString("yyyy-MM-dd").toStdString();
+    std::string newDateTime  = newDate + oriStartTime;
+
+    m_task.m_finishTime = newDateTime;
 }
 
-void RevelationRightSidebar::OnBtnSelectDeadlineClicked(QDate date)
+void RevelationRightSidebar::OnDeadlineDateSelected(QDate date)
 {
-    m_task.m_deadline = date.toString("yyyy-MM-dd").toStdString();
+    std::string oriStartTime = m_timeFormatter->ParsePartDateTimeFromString(m_task.m_deadline, TimeMask::HMS);
+    std::string newDate      = date.toString("yyyy-MM-dd").toStdString();
+    std::string newDateTime  = newDate + oriStartTime;
+
+    m_task.m_deadline = newDateTime;
+}
+
+void RevelationRightSidebar::OnStartTimeSelected(QTime time)
+{
+    std::string oriStartDate = m_timeFormatter->ParsePartDateTimeFromString(m_task.m_startTime, TimeMask::YMD);
+    std::string newTime      = time.toString("hh::mm::ss").toStdString();
+    std::string newDateTime  = oriStartDate + newTime;
+
+    m_task.m_startTime = newDateTime;
+}
+
+void RevelationRightSidebar::OnFinishTimeSelected(QTime time)
+{
+    std::string oriStartDate = m_timeFormatter->ParsePartDateTimeFromString(m_task.m_finishTime, TimeMask::YMD);
+    std::string newTime      = time.toString("hh::mm::ss").toStdString();
+    std::string newDateTime  = oriStartDate + newTime;
+
+    m_task.m_finishTime = newDateTime;
+}
+
+void RevelationRightSidebar::OnDeadlineTimeSelected(QTime time)
+{
+    std::string oriStartDate = m_timeFormatter->ParsePartDateTimeFromString(m_task.m_deadline, TimeMask::YMD);
+    std::string newTime      = time.toString("hh::mm::ss").toStdString();
+    std::string newDateTime  = oriStartDate + newTime;
+
+    m_task.m_deadline = newDateTime;
 }
 
 void RevelationRightSidebar::BlockSignals(bool block)

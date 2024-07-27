@@ -14,4 +14,10 @@ FluTimePicker24H {
 #minuteBtn {
     background-color: transparent;
     border: 1px solid transparent;
+    border-right: 1px solid rgb(229, 229, 229);
+}
+
+#secondBtn {
+    background-color: transparent;
+    border: 1px solid transparent;
 }
