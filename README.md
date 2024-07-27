@@ -67,9 +67,9 @@ windeployqt Revelation.exe
 
 ### Copy resource files
 
-Copy files from `./resources` to the binary folder where `Revelation.exe` is located.
+Build `ResourceCopy` project to copy necessary resources
 
-### Open solution and set 'Revelation' as default start up project
+### Open solution and set `Revelation` as default start-up project
 
 # Reference
 + [mowangshuying/CppQtFluentUi888: FluentUI For Cpp Qt.(github.com)](https://github.com/mowangshuying/CppQtFluentUi888)
