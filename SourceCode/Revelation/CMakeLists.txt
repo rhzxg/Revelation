@@ -37,6 +37,10 @@ add_executable(${PROJECT_NAME}
                RevelationListItem.h
 )
 
+if(WIN32)
+    target_sources(${PROJECT_NAME} PRIVATE resource/Revelation.rc)
+endif()
+
 if(MSVC)
 set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER Revelation)
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -63,5 +67,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../FluentUI/FluUtils)
 
 if (WIN32)
-set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON )
+set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON)
 endif()
