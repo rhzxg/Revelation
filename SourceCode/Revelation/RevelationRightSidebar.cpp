@@ -33,13 +33,14 @@ void RevelationRightSidebar::InitWidget()
     {
         btn->setStyleSheet("QPushButton { background: transparent; border: none; }"
                            "QPushButton::hover { background-color: #E1E1E1; border-radius: 5px;}");
-        btn->setFixedSize(20, 20);
+        btn->setIconSize(QSize(24, 24));
+        btn->setFixedSize(32, 32);
     }
 
     ui.btnAddToRoutine->setToolTip(tr("Add to daily routine"));
     ui.btnHide->setToolTip(tr("Hide"));
     ui.btnAddToRoutine->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::FavoriteStar));
-    ui.btnHide->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::CaretRightSolid8));
+    ui.btnHide->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::Cancel));
 
     ui.editDesc->setFontPointSize(ui.editTitle->font().pointSize());
     ui.labelCreateTime->setAlignment(Qt::AlignCenter);

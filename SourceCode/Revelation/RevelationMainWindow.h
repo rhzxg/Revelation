@@ -1,5 +1,7 @@
 #pragma once
 #include "FluFrameLessWidget.h"
+#include "FluVNavigationView.h"
+#include "FluStackedLayout.h"
 
 class Revelation;
 
@@ -11,12 +13,16 @@ class RevelationMainWindow : public FluFrameLessWidget
     RevelationMainWindow(QWidget* parent = nullptr);
     ~RevelationMainWindow();
 
-    void SetCentralWidget(Revelation* widget);
+    void AlignToScreenCenter();
+
+    void AddStackedWidget(QWidget* widget, const QString& name, const QIcon& icon, Qt::AlignmentFlag pos  = Qt::AlignCenter);
+    void AddStackedWidget(QWidget* widget, const QString& name, FluAwesomeType type, Qt::AlignmentFlag pos = Qt::AlignCenter);
 
   private:
     void Initialize();
     void InitWidget();
 
   private:
-    Revelation* m_revelationWidget = nullptr;
+    FluVNavigationView* m_navigationView;
+    FluStackedLayout*   m_stackedLayout;
 };

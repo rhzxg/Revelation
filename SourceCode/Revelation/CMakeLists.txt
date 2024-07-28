@@ -19,8 +19,6 @@ add_executable(${PROJECT_NAME}
                RevelationSplash.cpp
                RevelationSplash.h
                RevelationSidebar.h
-               RevelationLeftSidebar.cpp
-               RevelationLeftSidebar.h
                RevelationRightSidebar.cpp
                RevelationRightSidebar.h
                RevelationBottomBar.cpp

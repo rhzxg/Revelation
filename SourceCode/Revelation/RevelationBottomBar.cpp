@@ -28,8 +28,9 @@ void RevelationBottomBar::InitWidget()
                                  "QPushButton::hover { background-color: #EC546F; border-radius: 5px;}");
 
     ui.btnConfirm->setToolTip(tr("Add"));
-    ui.btnConfirm->setFixedSize(20, 20);
-    ui.btnConfirm->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::CaretUpSolid8));
+    ui.btnConfirm->setIconSize(QSize(24, 24));
+    ui.btnConfirm->setFixedSize(32, 32);
+    ui.btnConfirm->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::Accept));
 }
 
 void RevelationBottomBar::InitSignalSlots()

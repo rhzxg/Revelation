@@ -21,7 +21,6 @@ class Revelation : public QWidget
     void ReteiveDataFromDatabase();
 
   private:
-    virtual void mouseMoveEvent(QMouseEvent* event) override;
     virtual void resizeEvent(QResizeEvent* event) override;
     virtual void showEvent(QShowEvent* event) override;
 
@@ -45,7 +44,6 @@ class Revelation : public QWidget
 
     IRevelationInterface* m_interface = nullptr;
 
-    RevelationSidebarWrapper* m_leftSidebarWrapper  = nullptr;
     RevelationSidebarWrapper* m_rightSidebarWrapper = nullptr;
     RevelationSidebarWrapper* m_bottomBarWrapper    = nullptr;
 

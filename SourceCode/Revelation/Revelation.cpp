@@ -2,7 +2,6 @@
 #include "IRevelationInterface.h"
 #include "RevelationListView.h"
 #include "RevelationListModel.h"
-#include "RevelationLeftSidebar.h"
 #include "RevelationRightSidebar.h"
 #include "RevelationBottomBar.h"
 #include "Utility/IUtilityInterface.h"
@@ -51,21 +50,10 @@ void Revelation::ReteiveDataFromDatabase()
     }
 }
 
-void Revelation::mouseMoveEvent(QMouseEvent* event)
-{
-    if (event->pos().x() < 10 && event->pos().y() < 10)
-    {
-        GetSidebarWrapper(RevelationSidebar::Left)->show();
-    }
-}
-
 void Revelation::resizeEvent(QResizeEvent* event)
 {
-    m_leftSidebarWrapper->resize(m_leftSidebarWrapper->width(), this->height() + 2);
-    m_leftSidebarWrapper->move(-1, -1);
-
-    m_rightSidebarWrapper->resize(m_rightSidebarWrapper->width(), this->height() + 2);
-    m_rightSidebarWrapper->move(this->width() - m_rightSidebarWrapper->width() + 1, -1);
+    m_rightSidebarWrapper->resize(m_rightSidebarWrapper->width(), this->height() + 10);
+    m_rightSidebarWrapper->move(this->width() - m_rightSidebarWrapper->width() + 5, -5);
 
     m_bottomBarWrapper->move(this->width() / 2 - m_bottomBarWrapper->width() / 2,
                              this->height() - 100);
@@ -86,8 +74,6 @@ void Revelation::Initialize()
 
 void Revelation::InitWidget()
 {
-    this->setMouseTracking(true);
-
     auto iconPath   = m_interface->GetResourcePath() / "images" / "icon.ico";
     auto mainWindow = (QMainWindow*)m_interface->GetMainWindow();
     if (std::filesystem::exists(iconPath) && nullptr != mainWindow)
@@ -98,7 +84,6 @@ void Revelation::InitWidget()
     }
 
     GetSidebarWrapper(RevelationSidebar::Bottom)->hide();
-    GetSidebarWrapper(RevelationSidebar::Left)->hide();
     GetSidebarWrapper(RevelationSidebar::Right)->hide();
 
     std::vector<QLabel*>    labels{ui.labelTitleTodo, ui.labelTitleDoing, ui.labelTitleTesting, ui.labelTitleDone};
@@ -147,17 +132,7 @@ RevelationSidebarWrapper* Revelation::GetSidebarWrapper(RevelationSidebar::Side 
 {
     RevelationSidebarWrapper* sidebarWrapper = nullptr;
 
-    if (RevelationSidebar::Left == side)
-    {
-        if (nullptr == m_leftSidebarWrapper)
-        {
-            auto leftSidebar     = new RevelationLeftSidebar(m_interface);
-            m_leftSidebarWrapper = new RevelationSidebarWrapper(this);
-            m_leftSidebarWrapper->SetSidebar(leftSidebar);
-        }
-        sidebarWrapper = m_leftSidebarWrapper;
-    }
-    else if (RevelationSidebar::Right == side)
+    if (RevelationSidebar::Right == side)
     {
         if (nullptr == m_rightSidebarWrapper)
         {
