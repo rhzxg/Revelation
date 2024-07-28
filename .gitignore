@@ -31,6 +31,9 @@
 *.out
 *.app
 
+# Binary
+*.aps
+
 # Build folder
 /build
 x64/
