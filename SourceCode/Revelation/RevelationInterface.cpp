@@ -2,9 +2,10 @@
 #include "Utility/IUtilityInterface.h"
 #include <regex>
 
-RevelationInterface::RevelationInterface(void* mainWindow)
+RevelationInterface::RevelationInterface(void* mainWindow, INavigationViewInterface* navViewItf)
 {
-    m_mainWindow = mainWindow;
+    m_mainWindow  = mainWindow;
+    m_navViewIntf = navViewItf;
 
     Initialize();
 }

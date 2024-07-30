@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include "IExtensionInterface.h"
 
+class INavigationViewInterface;
 class IRevelationInterface
 {
   public:
@@ -25,8 +26,14 @@ class IRevelationInterface
         return m_mainWindow;
     }
 
+    INavigationViewInterface* GetNavViewInterface()
+    {
+        return m_navViewIntf;
+    }
+
   protected:
     std::unordered_map<std::string, IExtensionInterface*> m_interfaces;
 
-    void* m_mainWindow = nullptr;
+    void*                     m_mainWindow  = nullptr;
+    INavigationViewInterface* m_navViewIntf = nullptr;
 };

@@ -4,24 +4,26 @@
 #include "RevelationInterface.h"
 #include "RevelationSplash.h"
 #include "Revelation.h"
-#include <thread>
 #include "RevelationMainWindow.h"
+#include "NavigationViewInterface.h"
+#include <thread>
 
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-    RevelationMainWindow mainWindow;
-    auto                 intf = std::make_shared<RevelationInterface>(&mainWindow);
+    RevelationMainWindow    mainWindow;
+    NavigationViewInterface navViewIntf(&mainWindow);
+    RevelationInterface     intf(&mainWindow, &navViewIntf);
 
-    RevelationSplash splash(intf.get());
-    Revelation       revelation(intf.get());
+    RevelationSplash splash(&intf);
+    Revelation       revelation(&intf);
 
     std::thread initializeThread([&]() {
         using namespace std::chrono;
         auto start = steady_clock::now();
 
-        intf->InitExtensions();
+        intf.InitExtensions();
         revelation.ReteiveDataFromDatabase();
 
         auto end     = steady_clock::now();

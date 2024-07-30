@@ -1,6 +1,7 @@
 #pragma once
 #include "IRevelationInterface.h"
 #include "IExtensionInterface.h"
+#include "INavigationViewInterface.h"
 
 #ifdef WIN32
 #include "windows.h"
@@ -9,7 +10,7 @@
 class RevelationInterface : public IRevelationInterface
 {
   public:
-    RevelationInterface(void* mainWindow);
+    RevelationInterface(void* mainWindow, INavigationViewInterface* navViewIntf);
     ~RevelationInterface();
 
     virtual std::filesystem::path GetApplicationPath() override;
