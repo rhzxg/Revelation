@@ -41,7 +41,7 @@ void RevelationMainWindow::AddStackedWidget(QWidget* widget, const QString& name
     {
         m_navigationView->addItemToTopLayout(item);
     }
-    else if (pos == Qt::AlignJustify)
+    else if (pos == Qt::AlignCenter)
     {
         m_navigationView->addItemToMidLayout(item);
     }
@@ -75,7 +75,7 @@ void RevelationMainWindow::AddStackedWidget(QWidget* widget, const QString& name
     {
         m_navigationView->addItemToTopLayout(item);
     }
-    else if (pos == Qt::AlignJustify)
+    else if (pos == Qt::AlignCenter)
     {
         m_navigationView->addItemToMidLayout(item);
     }
