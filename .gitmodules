@@ -1,6 +1,6 @@
 [submodule "SourceCode/FluentUI"]
 	path = SourceCode/FluentUI
-	url = git@github.com:CodingDogzxg/FluentUI.git
+	url = https://github.com/rhzxg/FluentUI.git
 [submodule "SourceCode/KDChart"]
 	path = SourceCode/KDChart
-	url = git@github.com:CodingDogzxg/KDChart.git
+	url = https://github.com/rhzxg/KDChart.git
