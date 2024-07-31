@@ -4,6 +4,7 @@
 <p align="center">
   A to-do list software tailored for software engineers, inspired by the Revelation album of G.E.M.
 </p>
+<img src="display.gif">
 
 # Build Steps:
 ## [Windows]
