@@ -17,6 +17,7 @@ class RevelationInterface : public IRevelationInterface
     virtual std::filesystem::path GetResourcePath() override;
 
     void InitExtensions();
+    void CollectNavigationViews();
 
   private:
     void Initialize();

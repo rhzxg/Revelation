@@ -34,6 +34,15 @@ void RevelationInterface::InitExtensions()
     }
 }
 
+void RevelationInterface::CollectNavigationViews()
+{
+    for (auto& interfacePair : m_interfaces)
+    {
+        IExtensionInterface* extensionIntf = interfacePair.second;
+        extensionIntf->CollectNavigationViews();
+    }
+}
+
 void RevelationInterface::Initialize()
 {
 #ifdef WIN32
