@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TimeMachineFilterClass</class>
+ <widget class="QWidget" name="TimeMachineFilterClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>150</width>
+    <height>550</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>TimeMachineFilter</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="1" column="0">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>458</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="2" column="0">
+    <widget class="FluPushButton" name="pushButton">
+     <property name="text">
+      <string>Filter</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout" columnstretch="0,1" columnminimumwidth="0,0">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>From:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="FluCalendarDatePicker" name="pushButton_2">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>To:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="FluCalendarDatePicker" name="pushButton_3">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>FluPushButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">FluPushButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FluCalendarDatePicker</class>
+   <extends>QPushButton</extends>
+   <header location="global">FluCalendarDatePicker.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
