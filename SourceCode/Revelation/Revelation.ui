@@ -72,7 +72,7 @@
    <item row="0" column="2">
     <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,1">
      <item>
-      <widget class="QLabel" name="labelTitleTesting">
+      <widget class="QLabel" name="labelTitleVerifying">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -80,12 +80,12 @@
         </size>
        </property>
        <property name="text">
-        <string>Testing</string>
+        <string>Verifying</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QWidget" name="taskWidgetTesting" native="true"/>
+      <widget class="QWidget" name="taskWidgetVerifying" native="true"/>
      </item>
     </layout>
    </item>
