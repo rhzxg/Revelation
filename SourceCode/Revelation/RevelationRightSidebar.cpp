@@ -41,7 +41,7 @@ void RevelationRightSidebar::InitWidget()
     ui.btnHide->setToolTip(tr("Hide"));
     ui.btnAddToRoutine->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::FavoriteStar));
     ui.btnHide->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::Cancel));
-
+    
     ui.editDesc->setFontPointSize(ui.editTitle->font().pointSize());
     ui.labelCreateTime->setAlignment(Qt::AlignCenter);
 }
@@ -187,6 +187,8 @@ void RevelationRightSidebar::OnTaskItemEdited()
 
     m_task.m_title = ui.editTitle->text().toStdString();
     m_task.m_desc  = ui.editDesc->toPlainText().toStdString();
+
+    emit TaskItemEdited(m_task);
 }
 
 void RevelationRightSidebar::OnBtnAddToRoutineClicled()
