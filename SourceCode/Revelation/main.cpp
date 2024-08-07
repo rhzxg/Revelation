@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 
     splash.exec();
 
-    mainWindow.AddStackedWidget(&revelation, "Revelation", FluAwesomeType::Home, Qt::AlignTop);
+    mainWindow.AddStackedWidget(&revelation, "Revelation", FluAwesomeType::Home, Qt::AlignCenter);
     intf.CollectNavigationViews();
 
     mainWindow.AlignToScreenCenter();
