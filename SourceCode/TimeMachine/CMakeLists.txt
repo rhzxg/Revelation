@@ -18,8 +18,12 @@ add_library(${PROJECT_NAME} SHARED
                TimeMachine.h
                TimeMachineFilter.cpp
                TimeMachineFilter.h
-               TimeMachineGantt.cpp
-               TimeMachineGantt.h
+               TimeMachineGanttView.cpp
+               TimeMachineGanttView.h
+               TimeMachineGanttModel.cpp
+               TimeMachineGanttModel.h
+               TimeMachineGanttDelegate.cpp
+               TimeMachineGanttDelegate.h
 )
 
 if(MSVC)
@@ -42,7 +46,9 @@ endif()
 target_link_libraries(${PROJECT_NAME} Qt6::Widgets)
 target_link_libraries(${PROJECT_NAME} FluUtils)
 target_link_libraries(${PROJECT_NAME} FluControls)
+target_link_libraries(${PROJECT_NAME} kdchart)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../Include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../FluentUI/FluControls)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../FluentUI/FluUtils)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../KDChart/src)

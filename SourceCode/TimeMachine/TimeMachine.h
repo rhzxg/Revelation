@@ -4,7 +4,7 @@
 #include "ui_TimeMachine.h"
 
 class TimeMachineFilter;
-class TimeMachineGantt;
+class TimeMachineGanttView;
 
 class TimeMachine : public QWidget
 {
@@ -22,9 +22,6 @@ class TimeMachine : public QWidget
   private:
     Ui::TimeMachineClass ui;
 
-    QGridLayout* m_timeMachineFilterLayout = nullptr;
-    QGridLayout* m_timeMachineGanttLayout  = nullptr;
-
-    TimeMachineFilter* m_timeMachindFilter = nullptr;
-    TimeMachineGantt*  m_timeMachindGantt  = nullptr;
+    TimeMachineFilter*    m_timeMachindFilter    = nullptr;
+    TimeMachineGanttView* m_timeMachindGanttView = nullptr;
 };

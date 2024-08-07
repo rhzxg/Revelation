@@ -1,6 +1,6 @@
 #include "TimeMachine.h"
 #include "TimeMachineFilter.h"
-#include "TimeMachineGantt.h"
+#include "TimeMachineGanttView.h"
 
 TimeMachine::TimeMachine(QWidget* parent)
     : QWidget(parent)
@@ -12,11 +12,6 @@ TimeMachine::TimeMachine(QWidget* parent)
 
 TimeMachine::~TimeMachine()
 {
-    delete m_timeMachineFilterLayout;
-    delete m_timeMachineGanttLayout;
-
-    delete m_timeMachindFilter;
-    delete m_timeMachindGantt;
 }
 
 void TimeMachine::Initialize()
@@ -27,25 +22,30 @@ void TimeMachine::Initialize()
 
 void TimeMachine::InitWidget()
 {
-    m_timeMachindFilter = new TimeMachineFilter;
-    m_timeMachineFilterLayout = new QGridLayout(ui.eFilterWidget);
-    m_timeMachineFilterLayout->setContentsMargins(0, 0, 0, 0);
-    m_timeMachineFilterLayout->addWidget(m_timeMachindFilter);
-    ui.eFilterWidget->setLayout(m_timeMachineFilterLayout);
-    
-    QString widgetStyle = QString("QWidget#widget {background-color:#AAAAAA; color:#FFFFFF; border-radius:8px;}");
-    ui.eFilterWidget->setObjectName("widget");
-    ui.eFilterWidget->setStyleSheet(widgetStyle);
+    m_timeMachindFilter    = new TimeMachineFilter;
+    m_timeMachindGanttView = new TimeMachineGanttView;
 
-    m_timeMachindGantt  = new TimeMachineGantt;
-    m_timeMachineGanttLayout = new QGridLayout(ui.eGanttWidget);
-    m_timeMachineFilterLayout->addWidget(m_timeMachindGantt);
-    m_timeMachineGanttLayout->setContentsMargins(0, 0, 0, 0);
-    ui.eGanttWidget->setLayout(m_timeMachineGanttLayout);
+    std::vector<QWidget*> widgets{m_timeMachindFilter, m_timeMachindGanttView};
+    std::vector<QWidget*> parents{ui.eFilterWidget, ui.eGanttWidget};
+    std::vector<QString>  objects{"TimeMachineFilter", "TimeMachineGantt"};
+    std::vector<QString>  colors{"#CAF0FC", "AAAAAA"};
 
-    QString widgetStyle1 = QString("QWidget#widget {background-color:#AAAAAA; color:#FFFFFF; border-radius:8px;}");
-    ui.eGanttWidget->setObjectName("widget");
-    ui.eGanttWidget->setStyleSheet(widgetStyle1);
+    for (int i = 0; i < 2; ++i)
+    {
+        QWidget* widget = widgets[i];
+        QWidget* parent = parents[i];
+        QString  name   = objects[i];
+        QString  color  = colors[i];
+
+        widget->setObjectName(name);
+        QString widgetStyle = QString("QWidget#%1{background-color: %2; color: #FFFFFF; border-radius: 8px;}").arg(name).arg(color);
+        widget->setStyleSheet(widgetStyle);
+
+        QGridLayout* layout = new QGridLayout(parent);
+        layout->setContentsMargins(0, 0, 0, 0);
+        layout->addWidget(widget);
+        parent->setLayout(layout);
+    }
 }
 
 void TimeMachine::InitSignalSlots()
