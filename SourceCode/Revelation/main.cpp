@@ -12,9 +12,9 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-    RevelationMainWindow    mainWindow;
-    CommonWidgetInterface navViewIntf(&mainWindow);
-    RevelationInterface     intf(&mainWindow, &navViewIntf);
+    RevelationMainWindow  mainWindow;
+    CommonWidgetInterface commonWidgetIntf(&mainWindow);
+    RevelationInterface   intf(&mainWindow, &commonWidgetIntf);
 
     RevelationSplash splash(&intf);
     Revelation       revelation(&intf);
