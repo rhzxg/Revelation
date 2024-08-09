@@ -27,25 +27,19 @@ void TimeMachine::InitWidget()
 
     std::vector<QWidget*> widgets{m_timeMachindFilter, m_timeMachindGanttView};
     std::vector<QWidget*> parents{ui.eFilterWidget, ui.eGanttWidget};
-    std::vector<QString>  objects{"TimeMachineFilter", "TimeMachineGantt"};
-    std::vector<QString>  colors{"#CAF0FC", "AAAAAA"};
-
     for (int i = 0; i < 2; ++i)
     {
         QWidget* widget = widgets[i];
         QWidget* parent = parents[i];
-        QString  name   = objects[i];
-        QString  color  = colors[i];
-
-        widget->setObjectName(name);
-        QString widgetStyle = QString("QWidget#%1{background-color: %2; color: #FFFFFF; border-radius: 8px;}").arg(name).arg(color);
-        widget->setStyleSheet(widgetStyle);
 
         QGridLayout* layout = new QGridLayout(parent);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->addWidget(widget);
         parent->setLayout(layout);
     }
+
+    ui.eFilterWidget->setObjectName("filter");
+    ui.eFilterWidget->setStyleSheet("QWidget#filter {background-color: #CAF0FC; color: #FFFFFF; border-radius: 8px;}");
 }
 
 void TimeMachine::InitSignalSlots()

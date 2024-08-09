@@ -1,6 +1,10 @@
 #include "TimeMachineGanttView.h"
 #include <QItemSelectionModel>
 #include <QGridLayout>
+#include <QTreeView>
+#include <QHeaderView>
+#include <QAbstractItemView>
+#include <KDGanttGraphicsView>
 
 TimeMachineGanttView::TimeMachineGanttView(QWidget* parent)
     : QWidget(parent)
@@ -31,7 +35,13 @@ void TimeMachineGanttView::InitWidget()
     m_view->setSelectionModel(new QItemSelectionModel(m_model));
 
     layout->addWidget(m_view);
-    this->setLayout(layout); 
+    this->setLayout(layout);
+
+    m_view->leftView()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_view->leftView()->setFixedWidth(200);
+    ((QTreeView*)m_view->leftView())->header()->setSectionResizeMode(QHeaderView::Stretch);
+
+    m_view->graphicsView()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 }
 
 void TimeMachineGanttView::InitSignalSlots()
