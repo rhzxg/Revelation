@@ -107,39 +107,45 @@ void DataPersistenceInterface::ReteiveTasksFromDatabase(std::vector<TaskPrototyp
         return;
     }
 
-    // always read
-    std::string reteiveSql = R"(
-        SELECT * FROM t_tasks;
-    )";
+    ReteiveTasksHelper(tasks, m_currentDatabase);
+}
 
-    sqlite3_stmt* stmt;
-    auto          rc = sqlite3_prepare_v2(m_currentDatabase, reteiveSql.c_str(), -1, &stmt, nullptr);
-    if (rc == SQLITE_OK)
+void DataPersistenceInterface::ReteiveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& from, const std::string& to)
+{
+    std::filesystem::path databaseFolderPath = m_revelationIntf->GetApplicationPath() / "databases";
+    if (!std::filesystem::exists(databaseFolderPath))
     {
-        auto toStr = [&](const unsigned char* c) {
-            const char* text = reinterpret_cast<const char*>(c);
-            return std::string(text);
-        };
-
-        while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
-        {
-            TaskPrototype task;
-            task.m_id         = sqlite3_column_int64(stmt, 0);
-            task.m_title      = toStr(sqlite3_column_text(stmt, 1));
-            task.m_desc       = toStr(sqlite3_column_text(stmt, 2));
-            task.m_createTime = toStr(sqlite3_column_text(stmt, 3));
-            task.m_startTime  = toStr(sqlite3_column_text(stmt, 4));
-            task.m_finishTime = toStr(sqlite3_column_text(stmt, 5));
-            task.m_deadline   = toStr(sqlite3_column_text(stmt, 6));
-            task.m_taskStatus = TaskStatus(sqlite3_column_int(stmt, 7));
-            task.m_taskType   = TaskType(sqlite3_column_int(stmt, 8));
-            task.m_taskTag    = TaskTag(sqlite3_column_int(stmt, 9));
-
-            tasks.emplace_back(task);
-        }
+        return;
     }
 
-    sqlite3_finalize(stmt);
+    IUtilityInterface* utilityIntf = m_revelationIntf->GetInterfaceById<IUtilityInterface>("Utility");
+    if (nullptr == utilityIntf)
+    {
+        return;
+    }
+
+    time_t fromDate = utilityIntf->GetDateTimeFormatter()->ConvertDateTimeFromString(from);
+    time_t toDate   = utilityIntf->GetDateTimeFormatter()->ConvertDateTimeFromString(to);
+    for (const auto& entry : std::filesystem::directory_iterator(databaseFolderPath))
+    {
+        if (entry.is_regular_file())
+        {
+            std::filesystem::path filePath         = entry.path();
+            std::string           databaseFileStem = filePath.filename().stem().u8string();
+            time_t                date             = utilityIntf->GetDateTimeFormatter()->ConvertDateTimeFromString(databaseFileStem);
+            if (fromDate <= date || date <= toDate)
+            {
+                sqlite3* database = nullptr;
+                sqlite3_open(filePath.u8string().c_str(), &database);
+                if (nullptr == database)
+                {
+                    continue;
+                }
+
+                ReteiveTasksHelper(tasks, database);
+            }
+        }
+    }
 }
 
 void DataPersistenceInterface::ExecDatabaseCreationRoutine()
@@ -261,10 +267,10 @@ void DataPersistenceInterface::CollectInheritedRecords()
                 continue;
             }
 
-            time_t dataTime = utilityIntf->GetDateTimeFormatter()->ConvertDateTimeFromString(databaseFileStem);
-            if (dataTime > mostRecentDate)
+            time_t dateTime = utilityIntf->GetDateTimeFormatter()->ConvertDateTimeFromString(databaseFileStem);
+            if (dateTime > mostRecentDate)
             {
-                mostRecentDate             = dataTime;
+                mostRecentDate             = dateTime;
                 mostRecentDatabaseFileStem = databaseFileStem;
             }
         }
@@ -330,4 +336,46 @@ void DataPersistenceInterface::CollectInheritedRecords()
 
     sqlite3_finalize(stmt);
     sqlite3_close(mostRecentDatabase);
+}
+
+void DataPersistenceInterface::ReteiveTasksHelper(std::vector<TaskPrototype>& tasks, sqlite3* database)
+{
+    if (nullptr == database)
+    {
+        return;
+    }
+
+    // always read
+    std::string reteiveSql = R"(
+        SELECT * FROM t_tasks;
+    )";
+
+    sqlite3_stmt* stmt;
+    auto          rc = sqlite3_prepare_v2(database, reteiveSql.c_str(), -1, &stmt, nullptr);
+    if (rc == SQLITE_OK)
+    {
+        auto toStr = [&](const unsigned char* c) {
+            const char* text = reinterpret_cast<const char*>(c);
+            return std::string(text);
+        };
+
+        while ((rc = sqlite3_step(stmt)) == SQLITE_ROW)
+        {
+            TaskPrototype task;
+            task.m_id         = sqlite3_column_int64(stmt, 0);
+            task.m_title      = toStr(sqlite3_column_text(stmt, 1));
+            task.m_desc       = toStr(sqlite3_column_text(stmt, 2));
+            task.m_createTime = toStr(sqlite3_column_text(stmt, 3));
+            task.m_startTime  = toStr(sqlite3_column_text(stmt, 4));
+            task.m_finishTime = toStr(sqlite3_column_text(stmt, 5));
+            task.m_deadline   = toStr(sqlite3_column_text(stmt, 6));
+            task.m_taskStatus = TaskStatus(sqlite3_column_int(stmt, 7));
+            task.m_taskType   = TaskType(sqlite3_column_int(stmt, 8));
+            task.m_taskTag    = TaskTag(sqlite3_column_int(stmt, 9));
+
+            tasks.emplace_back(task);
+        }
+    }
+
+    sqlite3_finalize(stmt);
 }
