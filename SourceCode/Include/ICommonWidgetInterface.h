@@ -4,7 +4,7 @@
 #include <QIcon>
 #include "FluDef.h"
 
-class INavigationViewInterface
+class ICommonWidgetInterface
 {
   public:
     virtual void AddStackedWidget(QWidget* widget, const QString& name, const QIcon& icon, Qt::AlignmentFlag pos = Qt::AlignCenter) = 0;

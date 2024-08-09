@@ -1,5 +1,5 @@
 #include "TimeMachineInterface.h"
-#include "INavigationViewInterface.h"
+#include "ICommonWidgetInterface.h"
 #include "TimeMachine.h"
 #include "FluDef.h"
 
@@ -23,10 +23,10 @@ void TimeMachineInterface::Uninitialize()
 
 void TimeMachineInterface::CollectNavigationViews()
 {
-    auto navViewIntf = m_interface->GetNavViewInterface();
-    if (nullptr != navViewIntf)
+    auto commonWidgetIntf = m_interface->GetCommonWidgetInterface();
+    if (nullptr != commonWidgetIntf)
     {
-        m_timeMachine = new TimeMachine;
-        navViewIntf->AddStackedWidget(m_timeMachine, QObject::tr("TimeMachine"), FluAwesomeType::DevUpdate, Qt::AlignCenter);
+        m_timeMachine = new TimeMachine(m_interface);
+        commonWidgetIntf->AddStackedWidget(m_timeMachine, QObject::tr("TimeMachine"), FluAwesomeType::DevUpdate, Qt::AlignCenter);
     }
 }

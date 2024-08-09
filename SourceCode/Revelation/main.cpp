@@ -5,7 +5,7 @@
 #include "RevelationSplash.h"
 #include "Revelation.h"
 #include "RevelationMainWindow.h"
-#include "NavigationViewInterface.h"
+#include "CommonWidgetInterface.h"
 #include <thread>
 
 int main(int argc, char* argv[])
@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
 
     RevelationMainWindow    mainWindow;
-    NavigationViewInterface navViewIntf(&mainWindow);
+    CommonWidgetInterface navViewIntf(&mainWindow);
     RevelationInterface     intf(&mainWindow, &navViewIntf);
 
     RevelationSplash splash(&intf);

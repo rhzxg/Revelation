@@ -1,12 +1,12 @@
 #pragma once
-#include "INavigationViewInterface.h"
+#include "ICommonWidgetInterface.h"
 #include "RevelationMainWindow.h"
 
-class NavigationViewInterface : public INavigationViewInterface
+class CommonWidgetInterface : public ICommonWidgetInterface
 {
   public:
-    NavigationViewInterface(RevelationMainWindow* mainWindow);
-    ~NavigationViewInterface();
+    CommonWidgetInterface(RevelationMainWindow* mainWindow);
+    ~CommonWidgetInterface();
 
     virtual void AddStackedWidget(QWidget* widget, const QString& name, const QIcon& icon, Qt::AlignmentFlag pos = Qt::AlignCenter)   override;
     virtual void AddStackedWidget(QWidget* widget, const QString& name, FluAwesomeType type, Qt::AlignmentFlag pos = Qt::AlignCenter) override;
