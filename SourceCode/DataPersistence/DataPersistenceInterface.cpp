@@ -100,17 +100,37 @@ void DataPersistenceInterface::RemoveTaskFromDatabase(TaskPrototype task)
     sqlite3_finalize(stmt);
 }
 
-void DataPersistenceInterface::ReteiveTasksFromDatabase(std::vector<TaskPrototype>& tasks)
+void DataPersistenceInterface::RetriveTasksFromDatabase(std::vector<TaskPrototype>& tasks)
 {
     if (nullptr == m_currentDatabase)
     {
         return;
     }
 
-    ReteiveTasksHelper(tasks, m_currentDatabase);
+    RetriveTasksHelper(tasks, m_currentDatabase);
 }
 
-void DataPersistenceInterface::ReteiveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& from, const std::string& to)
+void DataPersistenceInterface::RetriveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& date)
+{
+    std::filesystem::path databasePath = m_revelationIntf->GetApplicationPath() / "databases" / (date + ".rev");
+    if (!std::filesystem::exists(databasePath))
+    {
+        return;
+    }
+
+    sqlite3* database = nullptr;
+    sqlite3_open(databasePath.u8string().c_str(), &database);
+    if (nullptr == database)
+    {
+        return;
+    }
+
+    RetriveTasksHelper(tasks, database);
+
+    sqlite3_close(database);
+}
+
+void DataPersistenceInterface::RetriveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& from, const std::string& to)
 {
     std::filesystem::path databaseFolderPath = m_revelationIntf->GetApplicationPath() / "databases";
     if (!std::filesystem::exists(databaseFolderPath))
@@ -142,7 +162,9 @@ void DataPersistenceInterface::ReteiveTasksFromDatabase(std::vector<TaskPrototyp
                     continue;
                 }
 
-                ReteiveTasksHelper(tasks, database);
+                RetriveTasksHelper(tasks, database);
+
+                sqlite3_close(database);
             }
         }
     }
@@ -338,7 +360,7 @@ void DataPersistenceInterface::CollectInheritedRecords()
     sqlite3_close(mostRecentDatabase);
 }
 
-void DataPersistenceInterface::ReteiveTasksHelper(std::vector<TaskPrototype>& tasks, sqlite3* database)
+void DataPersistenceInterface::RetriveTasksHelper(std::vector<TaskPrototype>& tasks, sqlite3* database)
 {
     if (nullptr == database)
     {

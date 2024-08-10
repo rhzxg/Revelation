@@ -17,8 +17,8 @@ class DataPersistenceInterface : public IDataPersistenceInterface
     virtual void InsertOrReplaceTaskInDatabase(TaskPrototype task) override;
     virtual void RemoveTaskFromDatabase(TaskPrototype task) override;
     virtual void ReteiveTasksFromDatabase(std::vector<TaskPrototype>& tasks) override;
-    virtual void ReteiveTasksFromDatabase(std::vector<TaskPrototype>& tasks,
-                                          const std::string& from, const std::string& to) override;
+    virtual void ReteiveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& date) override;
+    virtual void ReteiveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& from, const std::string& to) override;
 
   private:
     void ExecDatabaseCreationRoutine();
