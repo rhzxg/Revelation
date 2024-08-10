@@ -85,13 +85,6 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="FluLabel" name="labelType">
-             <property name="text">
-              <string>None</string>
-             </property>
-            </widget>
-           </item>
            <item row="2" column="0">
             <widget class="FluLabel" name="label_3">
              <property name="text">
@@ -147,6 +140,9 @@
               <string/>
              </property>
             </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="FluComboBox" name="cbType"/>
            </item>
           </layout>
          </item>
@@ -221,14 +217,19 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>FluLabel</class>
-   <extends>QLabel</extends>
-   <header location="global">FluLabel.h</header>
-  </customwidget>
-  <customwidget>
    <class>FluPushButton</class>
    <extends>QPushButton</extends>
    <header location="global">FluPushButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FluComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">FluComboBox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>FluLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">FluLabel.h</header>
   </customwidget>
   <customwidget>
    <class>FluTextEdit</class>

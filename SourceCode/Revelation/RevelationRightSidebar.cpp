@@ -38,11 +38,14 @@ void RevelationRightSidebar::InitWidget()
     }
 
     ui.btnAddToRoutine->setToolTip(tr("Add to daily routine"));
-    ui.btnHide->setToolTip(tr("Hide"));
     ui.btnAddToRoutine->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::FavoriteStar));
+    ui.btnHide->setToolTip(tr("Hide"));
     ui.btnHide->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::Cancel));
-    
+
     ui.editDesc->setFontPointSize(ui.editTitle->font().pointSize());
+
+    ui.cbType->addItems({tr("None"), tr("Bug"), tr("Feature"), tr("Test"), tr("UI")});
+
     ui.labelCreateTime->setAlignment(Qt::AlignCenter);
 }
 
@@ -54,6 +57,8 @@ void RevelationRightSidebar::InitSignalSlots()
     });
 
     connect(ui.btnDelete, &QPushButton::clicked, this, &RevelationRightSidebar::OnBtnDeleteTaskItemClicked);
+
+    connect(ui.cbType, &QComboBox::currentIndexChanged, this, &RevelationRightSidebar::OnCbTypeIndexChanged);
 
     connect(ui.btnSelectStartTime, &FluCalendarDateTimePicker::selectedDate, this, &RevelationRightSidebar::OnStartDateSelected);
     connect(ui.btnSelectFinishTime, &FluCalendarDateTimePicker::selectedDate, this, &RevelationRightSidebar::OnFinishDateSelected);
@@ -104,7 +109,7 @@ void RevelationRightSidebar::RefreshTaskData(const TaskPrototype& task)
     std::vector<QString> lutTags{tr("None"), tr("Routine"), tr("Inherited")};
 
     ui.labelStatus->setText(lutStatus[(int)task.m_taskStatus]);
-    ui.labelType->setText(lutTypes[(int)task.m_taskType]);
+    ui.cbType->setCurrentText(lutTypes[(int)task.m_taskType]);
     ui.labelTag->setText(lutTags[(int)task.m_taskTag]);
     SetBtnAddToRoutineState(task.m_taskTag == TaskTag::Routine);
 
@@ -204,6 +209,11 @@ void RevelationRightSidebar::OnBtnDeleteTaskItemClicked()
     emit TaskItemDeleted(m_task);
 
     emit ui.btnHide->clicked();
+}
+
+void RevelationRightSidebar::OnCbTypeIndexChanged(int index)
+{
+    m_task.m_taskType = TaskType(index);
 }
 
 void RevelationRightSidebar::OnStartDateSelected(QDate date)

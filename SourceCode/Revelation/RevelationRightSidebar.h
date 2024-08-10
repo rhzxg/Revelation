@@ -36,6 +36,7 @@ class RevelationRightSidebar : public RevelationSidebar
 
     void OnBtnAddToRoutineClicled();
     void OnBtnDeleteTaskItemClicked();
+    void OnCbTypeIndexChanged(int index);
     void OnStartDateSelected(QDate date);
     void OnFinishDateSelected(QDate date);
     void OnDeadlineDateSelected(QDate date);
