@@ -32,7 +32,7 @@ void Revelation::ReteiveDataFromDatabase()
     }
 
     std::vector<TaskPrototype> tasks;
-    dataPersistenceIntf->ReteiveTasksFromDatabase(tasks);
+    dataPersistenceIntf->RetrieveTasksFromDatabase(tasks);
 
     for (const auto& viewPr : m_listViews)
     {

@@ -16,9 +16,9 @@ class DataPersistenceInterface : public IDataPersistenceInterface
 
     virtual void InsertOrReplaceTaskInDatabase(TaskPrototype task) override;
     virtual void RemoveTaskFromDatabase(TaskPrototype task) override;
-    virtual void RetriveTasksFromDatabase(std::vector<TaskPrototype>& tasks) override;
-    virtual void RetriveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& date) override;
-    virtual void RetriveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& from, const std::string& to) override;
+    virtual void RetrieveTasksFromDatabase(std::vector<TaskPrototype>& tasks) override;
+    virtual void RetrieveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& date) override;
+    virtual void RetrieveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& from, const std::string& to) override;
 
   private:
     void ExecDatabaseCreationRoutine();
@@ -29,7 +29,7 @@ class DataPersistenceInterface : public IDataPersistenceInterface
     bool CreateTable();
     void CollectInheritedRecords();
 
-    void RetriveTasksHelper(std::vector<TaskPrototype>& tasks, sqlite3* database);
+    void RetrieveTasksHelper(std::vector<TaskPrototype>& tasks, sqlite3* database);
 
   private:
     IRevelationInterface* m_revelationIntf = nullptr;
