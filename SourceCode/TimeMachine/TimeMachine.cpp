@@ -1,9 +1,10 @@
 #include "TimeMachine.h"
 #include "TimeMachineFilter.h"
 #include "TimeMachineGanttView.h"
+#include "IRevelationInterface.h"
 
-TimeMachine::TimeMachine(QWidget* parent)
-    : QWidget(parent)
+TimeMachine::TimeMachine(IRevelationInterface* intf, QWidget* parent)
+    : m_interface(intf), QWidget(parent)
 {
     ui.setupUi(this);
 
@@ -22,7 +23,7 @@ void TimeMachine::Initialize()
 
 void TimeMachine::InitWidget()
 {
-    m_timeMachindFilter    = new TimeMachineFilter;
+    m_timeMachindFilter    = new TimeMachineFilter(m_interface);
     m_timeMachindGanttView = new TimeMachineGanttView;
 
     std::vector<QWidget*> widgets{m_timeMachindFilter, m_timeMachindGanttView};
