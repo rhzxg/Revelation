@@ -71,13 +71,6 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="FluLabel" name="labelStatus">
-             <property name="text">
-              <string>None</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="0">
             <widget class="FluLabel" name="label">
              <property name="text">
@@ -89,13 +82,6 @@
             <widget class="FluLabel" name="label_3">
              <property name="text">
               <string>Tag:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="FluLabel" name="labelTag">
-             <property name="text">
-              <string>None</string>
              </property>
             </widget>
            </item>
@@ -143,6 +129,12 @@
            </item>
            <item row="1" column="1">
             <widget class="FluComboBox" name="cbType"/>
+           </item>
+           <item row="0" column="1">
+            <widget class="FluComboBox" name="cbStatus"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="FluComboBox" name="cbTag"/>
            </item>
           </layout>
          </item>

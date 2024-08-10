@@ -94,7 +94,8 @@ void RevelationRightSidebar::SetBtnAddToRoutineState(bool isRoutine)
 
     // sync tag label
     std::vector<QString> lutTags{tr("None"), tr("Routine"), tr("Inherited")};
-    ui.labelTag->setText(lutTags[(int)m_task.m_taskTag]);
+    ui.cbTag->clear();
+    ui.cbTag->addItem(lutTags[(int)m_task.m_taskTag]);
 }
 
 void RevelationRightSidebar::RefreshTaskData(const TaskPrototype& task)
@@ -108,9 +109,11 @@ void RevelationRightSidebar::RefreshTaskData(const TaskPrototype& task)
     std::vector<QString> lutTypes{tr("None"), tr("Bug"), tr("Feature"), tr("Test"), tr("UI")};
     std::vector<QString> lutTags{tr("None"), tr("Routine"), tr("Inherited")};
 
-    ui.labelStatus->setText(lutStatus[(int)task.m_taskStatus]);
+    ui.cbStatus->clear();
+    ui.cbStatus->addItem(lutStatus[(int)task.m_taskStatus]);
     ui.cbType->setCurrentText(lutTypes[(int)task.m_taskType]);
-    ui.labelTag->setText(lutTags[(int)task.m_taskTag]);
+    ui.cbTag->clear();
+    ui.cbTag->addItem(lutTags[(int)task.m_taskTag]);
     SetBtnAddToRoutineState(task.m_taskTag == TaskTag::Routine);
 
     auto ConvertToQDate = [&](const std::string& timeString, QDate& date, QTime& time) {
