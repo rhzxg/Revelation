@@ -253,6 +253,29 @@ bool TimeMachineGanttModel::insertRows(int row, int count, const QModelIndex& pa
 
 void TimeMachineGanttModel::clear()
 {
+    beginResetModel();
+
+    delete m_root;
+    m_root = new Node;
+
+    endResetModel();
+}
+
+QModelIndex TimeMachineGanttModel::insertNode(Node* node, const QModelIndex& parent /*= QModelIndex()*/)
+{
+    int row = rowCount(parent);
+    beginInsertRows(parent, row, row);
+
+    Node* p = m_root;
+    if (parent.isValid())
+    {
+        p = static_cast<Node*>(parent.internalPointer());
+    }
+
+    p->insertChild(row, node);
+
+    endInsertRows();
+    return index(row, 0, parent);
 }
 
 Qt::ItemFlags TimeMachineGanttModel::flags(const QModelIndex& idx) const

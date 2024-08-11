@@ -138,7 +138,8 @@ class TimeMachineGanttModel : public QAbstractItemModel
 
     virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
-    void clear();
+    void        clear();
+    QModelIndex insertNode(Node* node, const QModelIndex& parent = QModelIndex());
 
   private:
     Node* m_root;

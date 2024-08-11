@@ -51,6 +51,35 @@ void TimeMachineGanttView::InitSignalSlots()
 
 void TimeMachineGanttView::OnTaskFiltered(const std::map<std::string, std::vector<TaskPrototype>>& dateToTasks)
 {
+    auto SetNodeByTask = [](Node* node, const TaskPrototype& task) {
+        if (task.m_startTime.empty())
+        {
+            QDateTime dateTime = QDateTime::currentDateTime();
+            dateTime.setTime(QTime::fromString("00:00:00", "hh:mm:ss"));
+            node->setStart(dateTime);
+
+            auto a = dateTime.toString();
+        }
+        else
+        {
+            node->setStart(QDateTime::fromString(QString::fromStdString(task.m_startTime), "yyyy-MM-dd hh:mm:ss"));
+        }
+
+        if (task.m_finishTime.empty())
+        {
+            QDateTime dateTime = QDateTime::currentDateTime();
+            dateTime.setTime(QTime::fromString("23:59:59", "hh:mm:ss"));
+            node->setEnd(dateTime);
+
+            // test
+            auto a = dateTime.toString();
+        }
+        else
+        {
+            node->setEnd(QDateTime::fromString(QString::fromStdString(task.m_finishTime), "yyyy-MM-dd hh:mm:ss"));
+        }
+    };
+
     m_model->clear();
     for (const auto& dateToTasksPair : dateToTasks)
     {
@@ -58,20 +87,26 @@ void TimeMachineGanttView::OnTaskFiltered(const std::map<std::string, std::vecto
         std::vector<TaskPrototype> tasks = dateToTasksPair.second;
 
         // parent item:
-        QModelIndex rootIndex  = m_view->rootIndex();
-        int         parentRow  = m_model->rowCount(rootIndex);
-        
-        m_model->insertRows(0, 1, m_view->rootIndex());
+        QModelIndex rootIndex = m_view->rootIndex();
+        int         parentRow = m_model->rowCount(rootIndex);
 
-        //// child items:
-        //QModelIndex parentIndex = m_model->index(parentRow, 0, rootIndex);
-        //for (int row = 0; row < tasks.size(); ++row)
-        //{
-        //    TaskPrototype task = tasks[row];
-        //    Node*         node = new Node;
-        //    node->setType(KDGantt::TypeTask);
+        Node* node = new Node;
+        node->setType(KDGantt::TypeSummary);
+        node->setLabel(QString::fromStdString(date));
+        QModelIndex parent = m_model->insertNode(node);
 
-        //    m_model->insertRow(row, 1, node, parentIndex);
-        //}
+        // child items:
+        for (int row = 0; row < tasks.size(); ++row)
+        {
+            TaskPrototype task = tasks[row];
+            Node*         node = new Node;
+            node->setType(KDGantt::TypeTask);
+            node->setLabel(QString::fromStdString(task.m_title));
+            SetNodeByTask(node, task);
+
+            m_model->insertNode(node, parent);
+        }
     }
+
+    m_view->expandAll();
 }
