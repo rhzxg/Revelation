@@ -139,7 +139,12 @@ void RevelationListModel::UpdateTaskData(TaskPrototype& task)
     task.m_taskStatus = m_type;
 
     auto timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
-    if (m_type == TaskStatus::Doing)
+    if (m_type == TaskStatus::Todo)
+    {
+        task.m_startTime = "";
+    }
+    
+    if (m_type == TaskStatus::Doing || (m_type != TaskStatus::Todo && task.m_startTime.empty()))
     {
         task.m_startTime = timeFormatter->GetCurrentDateTimeString(TimeMask::YMDHMS);
     }

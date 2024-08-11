@@ -223,7 +223,7 @@ void RevelationRightSidebar::OnStartDateSelected(QDate date)
 {
     std::string oriStartTime = m_timeFormatter->ParsePartDateTimeFromString(m_task.m_startTime, TimeMask::HMS);
     std::string newDate      = date.toString("yyyy-MM-dd").toStdString();
-    std::string newDateTime  = newDate + oriStartTime;
+    std::string newDateTime  = newDate + " " + oriStartTime;
 
     m_task.m_startTime = newDateTime;
 }
@@ -232,7 +232,7 @@ void RevelationRightSidebar::OnFinishDateSelected(QDate date)
 {
     std::string oriStartTime = m_timeFormatter->ParsePartDateTimeFromString(m_task.m_finishTime, TimeMask::HMS);
     std::string newDate      = date.toString("yyyy-MM-dd").toStdString();
-    std::string newDateTime  = newDate + oriStartTime;
+    std::string newDateTime  = newDate + " " + oriStartTime;
 
     m_task.m_finishTime = newDateTime;
 }
@@ -241,7 +241,7 @@ void RevelationRightSidebar::OnDeadlineDateSelected(QDate date)
 {
     std::string oriStartTime = m_timeFormatter->ParsePartDateTimeFromString(m_task.m_deadline, TimeMask::HMS);
     std::string newDate      = date.toString("yyyy-MM-dd").toStdString();
-    std::string newDateTime  = newDate + oriStartTime;
+    std::string newDateTime  = newDate + " " + oriStartTime;
 
     m_task.m_deadline = newDateTime;
 }
@@ -249,8 +249,8 @@ void RevelationRightSidebar::OnDeadlineDateSelected(QDate date)
 void RevelationRightSidebar::OnStartTimeSelected(QTime time)
 {
     std::string oriStartDate = m_timeFormatter->ParsePartDateTimeFromString(m_task.m_startTime, TimeMask::YMD);
-    std::string newTime      = time.toString("hh::mm::ss").toStdString();
-    std::string newDateTime  = oriStartDate + newTime;
+    std::string newTime      = time.toString("hh:mm:ss").toStdString();
+    std::string newDateTime  = oriStartDate + " " + newTime;
 
     m_task.m_startTime = newDateTime;
 }
@@ -258,8 +258,8 @@ void RevelationRightSidebar::OnStartTimeSelected(QTime time)
 void RevelationRightSidebar::OnFinishTimeSelected(QTime time)
 {
     std::string oriStartDate = m_timeFormatter->ParsePartDateTimeFromString(m_task.m_finishTime, TimeMask::YMD);
-    std::string newTime      = time.toString("hh::mm::ss").toStdString();
-    std::string newDateTime  = oriStartDate + newTime;
+    std::string newTime      = time.toString("hh:mm:ss").toStdString();
+    std::string newDateTime  = oriStartDate + " " + newTime;
 
     m_task.m_finishTime = newDateTime;
 }
@@ -267,8 +267,8 @@ void RevelationRightSidebar::OnFinishTimeSelected(QTime time)
 void RevelationRightSidebar::OnDeadlineTimeSelected(QTime time)
 {
     std::string oriStartDate = m_timeFormatter->ParsePartDateTimeFromString(m_task.m_deadline, TimeMask::YMD);
-    std::string newTime      = time.toString("hh::mm::ss").toStdString();
-    std::string newDateTime  = oriStartDate + newTime;
+    std::string newTime      = time.toString("hh:mm:ss").toStdString();
+    std::string newDateTime  = oriStartDate + " " + newTime;
 
     m_task.m_deadline = newDateTime;
 }
