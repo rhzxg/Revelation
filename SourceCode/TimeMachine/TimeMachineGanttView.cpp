@@ -6,6 +6,7 @@
 #include <QAbstractItemView>
 #include <KDGanttGraphicsView>
 #include <KDGanttGlobal>
+#include <KDGanttDateTimeGrid>
 
 TimeMachineGanttView::TimeMachineGanttView(QWidget* parent)
     : QWidget(parent)
@@ -34,6 +35,10 @@ void TimeMachineGanttView::InitWidget()
     m_model = new TimeMachineGanttModel(this);
     m_view->setModel(m_model);
     m_view->setSelectionModel(new QItemSelectionModel(m_model));
+
+    auto* const grid = qobject_cast<KDGantt::DateTimeGrid*>(m_view->grid());
+    grid->setScale(KDGantt::DateTimeGrid::ScaleHour);
+    grid->setDayWidth(710);
 
     layout->addWidget(m_view);
     this->setLayout(layout);
