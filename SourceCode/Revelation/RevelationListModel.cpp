@@ -137,10 +137,16 @@ void RevelationListModel::UpdateTaskData(TaskPrototype& task)
 {
     // change task data
     task.m_taskStatus = m_type;
+
+    auto timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
+    if (m_type == TaskStatus::Doing)
+    {
+        task.m_startTime = timeFormatter->GetCurrentDateTimeString(TimeMask::YMDHMS);
+    }
+
     if (m_type == TaskStatus::Done)
     {
-        auto timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
-        task.m_finishTime  = timeFormatter->GetCurrentDateTimeString(TimeMask::YMDHMS);
+        task.m_finishTime = timeFormatter->GetCurrentDateTimeString(TimeMask::YMDHMS);
     }
     else
     {

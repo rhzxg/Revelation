@@ -67,10 +67,10 @@ void RevelationBottomBar::OnBtnConfirmClicked()
     task.m_id         = snowflakeGenerator->GenerateNewSnowId();
     task.m_title      = taskTitle;
     task.m_desc       = "";
-    task.m_startTime  = now;
+    task.m_createTime = now;
+    task.m_startTime  = "";
     task.m_finishTime = "";
     task.m_deadline   = timeFormatter->ParsePartDateTimeFromString(now, TimeMask::YMD);
-    task.m_createTime = now;
     task.m_taskStatus = TaskStatus::Todo;
     task.m_taskType   = TaskType::None;
     task.m_taskTag    = TaskTag::None;
