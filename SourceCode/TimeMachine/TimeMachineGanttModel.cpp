@@ -121,7 +121,7 @@ QVariant TimeMachineGanttModel::headerData(int section, Qt::Orientation orientat
     switch (section)
     {
         case 0:
-            return tr("Name");
+            return tr("Date / Task");
         default:
             return QVariant();
     }
