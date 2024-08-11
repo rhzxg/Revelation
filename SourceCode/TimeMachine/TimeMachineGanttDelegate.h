@@ -1,5 +1,9 @@
 #pragma once
-class TimeMachineGanttDelegate
+
+class GanttLeftViewItemDelegate
 {
 };
 
+class GanttRightViewItemDelegate
+{
+};

@@ -64,9 +64,9 @@ void TimeMachineFilter::OnBtnFilterClicked()
         std::string fromDateStr = fromDate.toString("yyyy-MM-dd").toStdString();
         std::string toDateStr   = toDate.toString("yyyy-MM-dd").toStdString();
 
-        std::vector<std::string>   dates;
-        std::vector<TaskPrototype> tasks;
-        std::filesystem::path      databaseFolder = m_interface->GetApplicationPath() / "databases";
+        std::vector<std::string>                          dates;
+        std::map<std::string, std::vector<TaskPrototype>> dateToTasks;
+        std::filesystem::path                             databaseFolder = m_interface->GetApplicationPath() / "databases";
         for (const auto& entry : std::filesystem::directory_iterator(databaseFolder))
         {
             if (entry.is_regular_file())
@@ -86,16 +86,23 @@ void TimeMachineFilter::OnBtnFilterClicked()
             int perc = (float(i + 1) / dates.size() / 2) * 100;
             commonWidgetIntf->SetProgressBarVisibility(true, perc);
 
-            dataPersistenceIntf->RetrieveTasksFromDatabase(tasks, dates[i]);
+            std::string                date = dates[i];
+            std::vector<TaskPrototype> tasks;
+            dataPersistenceIntf->RetrieveTasksFromDatabase(tasks, date);
+
+            if (!tasks.empty())
+            {
+                dateToTasks.emplace(date, tasks);
+            }
         }
         //////////////////////////////////////////////////////////////////////////
 
         //////////////////////////////////////////////////////////////////////////
         // filter
-        
+
         //////////////////////////////////////////////////////////////////////////
-        
-        emit TaskFiltered(tasks);
+
+        emit TaskFiltered(dateToTasks);
 
         commonWidgetIntf->SetProgressBarVisibility(false);
     });

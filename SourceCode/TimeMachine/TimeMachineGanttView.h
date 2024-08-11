@@ -3,6 +3,7 @@
 #include "ui_TimeMachineGanttView.h"
 #include <KDGanttView>
 #include "TimeMachineGanttModel.h"
+#include "IRevelationDataDefine.h"
 
 class TimeMachineGanttView : public QWidget
 {
@@ -16,6 +17,9 @@ class TimeMachineGanttView : public QWidget
     void Initialize();
     void InitWidget();
     void InitSignalSlots();
+
+  public slots:
+    void OnTaskFiltered(const std::map<std::string, std::vector<TaskPrototype>>& dateToTasks);
 
   private:
     Ui::TimeMachineGanttViewClass ui;

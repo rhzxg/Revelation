@@ -20,7 +20,7 @@ class TimeMachineFilter : public QWidget
     void InitSignalSlots();
 
   signals:
-    void TaskFiltered(const std::vector<TaskPrototype>& tasks);
+    void TaskFiltered(const std::map<std::string, std::vector<TaskPrototype>>& dateToTasks);
 
   private slots:
     void OnBtnFilterClicked();

@@ -45,4 +45,5 @@ void TimeMachine::InitWidget()
 
 void TimeMachine::InitSignalSlots()
 {
+    connect(m_timeMachindFilter, &TimeMachineFilter::TaskFiltered, m_timeMachindGanttView, &TimeMachineGanttView::OnTaskFiltered);
 }
