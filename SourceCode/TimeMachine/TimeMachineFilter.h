@@ -5,6 +5,9 @@
 #include "IRevelationDataDefine.h"
 
 class IRevelationInterface;
+class ICommonWidgetInterface;
+class IDataPersistenceInterface;
+class IDateTimeFormatter;
 
 class TimeMachineFilter : public QWidget
 {
@@ -19,6 +22,10 @@ class TimeMachineFilter : public QWidget
     void InitWidget();
     void InitSignalSlots();
 
+    void ReteiveTasksFromDatabase(std::map<std::string, std::vector<TaskPrototype>>& dateToTasks);
+    void FilterTasksByCondition(std::map<std::string, std::vector<TaskPrototype>>& dateToTasks);
+    void SortTasksByTaskParameter(std::map<std::string, std::vector<TaskPrototype>>& dateToTasks);
+
   signals:
     void TaskFiltered(const std::map<std::string, std::vector<TaskPrototype>>& dateToTasks);
 
@@ -28,5 +35,8 @@ class TimeMachineFilter : public QWidget
   private:
     Ui::TimeMachineFilterClass ui;
 
-    IRevelationInterface* m_interface = nullptr;
+    IRevelationInterface*      m_interface           = nullptr;
+    ICommonWidgetInterface*    m_commonWidgetIntf    = nullptr;
+    IDataPersistenceInterface* m_dataPersistenceIntf = nullptr;
+    IDateTimeFormatter*        m_timeFormatter       = nullptr;
 };
