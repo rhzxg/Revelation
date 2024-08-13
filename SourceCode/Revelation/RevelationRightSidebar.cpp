@@ -172,9 +172,13 @@ void RevelationRightSidebar::OnTaskReparenting(const TaskPrototype& task)
 
 void RevelationRightSidebar::OnTaskItemSelected(const TaskPrototype& task)
 {
-    if (m_taskValid && m_task != task)
+    if (m_taskValid)
     {
-        // update previous task data first
+        if (task == m_task)
+        {
+            return;
+        }
+
         OnTaskItemEdited();
     }
 
