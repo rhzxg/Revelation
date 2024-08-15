@@ -204,6 +204,13 @@ QVariant TimeMachineGanttModel::data(const QModelIndex& idx, int role) const
                 break;
         }
     }
+
+    // hack
+    if (role == KDGantt::TaskStatusRole)
+    {
+        return n->status();
+    }
+
     return QVariant();
 }
 

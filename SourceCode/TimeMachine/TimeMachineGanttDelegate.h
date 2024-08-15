@@ -1,9 +1,10 @@
 #pragma once
+#include <KDGanttItemDelegate>
 
 class GanttLeftViewItemDelegate
 {
 };
 
-class GanttRightViewItemDelegate
+class GanttRightViewItemDelegate : public KDGantt::ItemDelegate
 {
 };

@@ -67,6 +67,10 @@ class Node
         if (!m_end.isValid())
             m_end = m_bEnd;
     }
+    void setStatus(int s)
+    {
+        m_status = static_cast<KDGantt::TaskStatus>(s);
+    }
     void setCompletion(int c)
     {
         m_completion = c;
@@ -95,6 +99,11 @@ class Node
         return m_type;
     }
 
+    KDGantt::TaskStatus status() const
+    {
+        return m_status;
+    }
+
     int completion() const
     {
         return m_completion;
@@ -109,7 +118,8 @@ class Node
     Node*        m_parent;
     QList<Node*> m_children;
 
-    KDGantt::ItemType                       m_type = KDGantt::TypeTask;
+    KDGantt::ItemType                       m_type   = KDGantt::TypeTask;
+    KDGantt::TaskStatus                     m_status = KDGantt::ToDo;
     QDateTime                               m_start, m_end;
     QDateTime                               m_bStart, m_bEnd;
     QString                                 m_label;

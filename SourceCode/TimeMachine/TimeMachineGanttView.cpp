@@ -106,6 +106,7 @@ void TimeMachineGanttView::OnTaskFiltered(const std::map<std::string, std::vecto
             TaskPrototype task = tasks[row];
             Node*         node = new Node;
             node->setType(KDGantt::TypeTask);
+            node->setStatus((int)task.m_taskStatus - 1);
             node->setLabel(QString::fromStdString(task.m_title));
             SetNodeByTask(node, task);
 
