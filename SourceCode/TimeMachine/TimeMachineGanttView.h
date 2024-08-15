@@ -5,12 +5,15 @@
 #include "TimeMachineGanttModel.h"
 #include "IRevelationDataDefine.h"
 
+class IRevelationInterface;
+class IDateTimeFormatter;
+
 class TimeMachineGanttView : public QWidget
 {
     Q_OBJECT
 
   public:
-    TimeMachineGanttView(QWidget* parent = nullptr);
+    TimeMachineGanttView(IRevelationInterface* intf, QWidget* parent = nullptr);
     ~TimeMachineGanttView();
 
   private:
@@ -23,6 +26,9 @@ class TimeMachineGanttView : public QWidget
 
   private:
     Ui::TimeMachineGanttViewClass ui;
+
+    IRevelationInterface* m_interface = nullptr;
+    IDateTimeFormatter*   m_timeFormatter = nullptr;
 
     KDGantt::View*         m_view  = nullptr;
     TimeMachineGanttModel* m_model = nullptr;

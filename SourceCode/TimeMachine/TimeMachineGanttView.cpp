@@ -1,4 +1,7 @@
 #include "TimeMachineGanttView.h"
+#include "IRevelationInterface.h"
+#include "Utility/IUtilityInterface.h"
+#include "Utility/IDateTimeFormatter.h"
 #include <QItemSelectionModel>
 #include <QGridLayout>
 #include <QTreeView>
@@ -8,8 +11,8 @@
 #include <KDGanttGlobal>
 #include <KDGanttDateTimeGrid>
 
-TimeMachineGanttView::TimeMachineGanttView(QWidget* parent)
-    : QWidget(parent)
+TimeMachineGanttView::TimeMachineGanttView(IRevelationInterface* intf, QWidget* parent)
+    : m_interface(intf), QWidget(parent)
 {
     ui.setupUi(this);
 
@@ -22,6 +25,8 @@ TimeMachineGanttView::~TimeMachineGanttView()
 
 void TimeMachineGanttView::Initialize()
 {
+    m_timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
+
     InitWidget();
     InitSignalSlots();
 }
@@ -54,16 +59,19 @@ void TimeMachineGanttView::InitSignalSlots()
 {
 }
 
+#include <QTimeZone>
 void TimeMachineGanttView::OnTaskFiltered(const std::map<std::string, std::vector<TaskPrototype>>& dateToTasks)
 {
-    auto SetNodeByTask = [](Node* node, const TaskPrototype& task) {
+    auto SetNodeByTask = [&](Node* node, const TaskPrototype& task) {
         if (task.m_startTime.empty())
         {
             QDateTime dateTime = QDateTime::currentDateTime();
             dateTime.setTime(QTime::fromString("00:00:00", "hh:mm:ss"));
-            node->setStart(dateTime);
 
-            auto a = dateTime.toString();
+            QDateTime createTime = QDateTime::fromString(QString::fromStdString(task.m_createTime), "yyyy-MM-dd hh:mm:ss");
+            
+            QDateTime chosenTime = dateTime > createTime ? dateTime : createTime;
+            node->setStart(chosenTime);
         }
         else
         {
@@ -73,7 +81,7 @@ void TimeMachineGanttView::OnTaskFiltered(const std::map<std::string, std::vecto
         if (task.m_finishTime.empty())
         {
             QDateTime dateTime = QDateTime::currentDateTime();
-            dateTime.setTime(QTime::fromString("23:59:59", "hh:mm:ss"));
+            dateTime.setTime(QTime::fromString("20:00:00", "hh:mm:ss")); // default finishing time
             node->setEnd(dateTime);
 
             // test

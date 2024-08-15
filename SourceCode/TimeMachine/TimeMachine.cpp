@@ -24,7 +24,7 @@ void TimeMachine::Initialize()
 void TimeMachine::InitWidget()
 {
     m_timeMachindFilter    = new TimeMachineFilter(m_interface);
-    m_timeMachindGanttView = new TimeMachineGanttView;
+    m_timeMachindGanttView = new TimeMachineGanttView(m_interface);
 
     std::vector<QWidget*> widgets{m_timeMachindFilter, m_timeMachindGanttView};
     std::vector<QWidget*> parents{ui.eFilterWidget, ui.eGanttWidget};
