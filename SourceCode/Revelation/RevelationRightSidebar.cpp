@@ -81,6 +81,8 @@ void RevelationRightSidebar::hideEvent(QHideEvent* event)
 void RevelationRightSidebar::closeEvent(QCloseEvent* event)
 {
     OnTaskItemEdited();
+
+    m_taskValid = false;
 }
 
 void RevelationRightSidebar::SetBtnAddToRoutineState(bool isRoutine)
@@ -137,10 +139,13 @@ void RevelationRightSidebar::RefreshTaskData(const TaskPrototype& task)
     bool  finishTimeValid = ConvertToQDate(task.m_finishTime, finishDate, finishTime);
     bool  deadlineValid   = ConvertToQDate(task.m_deadline, deadlineDate, deadlineTime);
 
+    // TODO: refresh btn text
+
     if (startTimeValid)
     {
         ui.btnSelectStartTime->setCurDate(startDate);
     }
+    ui.btnSelectStartTime->setEnabled(startTimeValid);
 
     if (finishTimeValid)
     {
