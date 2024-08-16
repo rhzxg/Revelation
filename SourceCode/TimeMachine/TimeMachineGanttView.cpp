@@ -59,19 +59,24 @@ void TimeMachineGanttView::InitSignalSlots()
 {
 }
 
-#include <QTimeZone>
 void TimeMachineGanttView::OnTaskFiltered(const std::map<std::string, std::vector<TaskPrototype>>& dateToTasks)
 {
-    auto SetNodeByTask = [&](Node* node, const TaskPrototype& task) {
+    auto SetNodeByTask = [&](std::string date, Node* node, const TaskPrototype& task) {
+        // category day
+        QDateTime categoryDateTime;
+        categoryDateTime.setDate(QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd"));
+
+        QDateTime createDateTime = QDateTime::fromString(QString::fromStdString(task.m_createTime), "yyyy-MM-dd hh:mm:ss");
+
         if (task.m_startTime.empty())
         {
-            QDateTime dateTime = QDateTime::currentDateTime();
-            dateTime.setTime(QTime::fromString("00:00:00", "hh:mm:ss"));
+            QDateTime dayBegining     = categoryDateTime;
+            QTime     dayBeginingTime = dayBegining.time();
+            dayBeginingTime.setHMS(0, 0, 0);
+            dayBegining.setTime(dayBeginingTime);
 
-            QDateTime createTime = QDateTime::fromString(QString::fromStdString(task.m_createTime), "yyyy-MM-dd hh:mm:ss");
-            
-            QDateTime chosenTime = dateTime > createTime ? dateTime : createTime;
-            node->setStart(chosenTime);
+            // later one
+            node->setStart(dayBegining > createDateTime ? dayBegining : createDateTime);
         }
         else
         {
@@ -80,17 +85,25 @@ void TimeMachineGanttView::OnTaskFiltered(const std::map<std::string, std::vecto
 
         if (task.m_finishTime.empty())
         {
-            QDateTime dateTime = QDateTime::currentDateTime();
-            dateTime.setTime(QTime::fromString("20:00:00", "hh:mm:ss")); // default finishing time
-            node->setEnd(dateTime);
+            QDateTime dayEnding     = categoryDateTime;
+            QTime     dayEndingTime = dayEnding.time();
+            dayEndingTime.setHMS(23, 59, 59);
+            dayEnding.setTime(dayEndingTime);
+            QDateTime oneHourLater = categoryDateTime;
+            oneHourLater.setTime(createDateTime.time());
+            oneHourLater = oneHourLater.addSecs(3600);
 
-            // test
-            auto a = dateTime.toString();
+            // earlier one
+            node->setEnd(dayEnding < oneHourLater ? dayEnding : oneHourLater);
         }
         else
         {
             node->setEnd(QDateTime::fromString(QString::fromStdString(task.m_finishTime), "yyyy-MM-dd hh:mm:ss"));
         }
+
+        // test
+        QString from = node->start().toString();
+        QString to   = node->end().toString();
     };
 
     m_model->clear();
@@ -116,7 +129,7 @@ void TimeMachineGanttView::OnTaskFiltered(const std::map<std::string, std::vecto
             node->setType(KDGantt::TypeTask);
             node->setStatus((int)task.m_taskStatus - 1);
             node->setLabel(QString::fromStdString(task.m_title));
-            SetNodeByTask(node, task);
+            SetNodeByTask(date, node, task);
 
             m_model->insertNode(node, parent);
         }
