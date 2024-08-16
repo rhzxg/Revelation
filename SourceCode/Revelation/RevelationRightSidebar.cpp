@@ -76,6 +76,9 @@ void RevelationRightSidebar::showEvent(QShowEvent* event)
 void RevelationRightSidebar::hideEvent(QHideEvent* event)
 {
     OnTaskItemEdited();
+
+    m_taskValid = false;
+    m_task      = TaskPrototype();
 }
 
 void RevelationRightSidebar::closeEvent(QCloseEvent* event)
@@ -83,6 +86,7 @@ void RevelationRightSidebar::closeEvent(QCloseEvent* event)
     OnTaskItemEdited();
 
     m_taskValid = false;
+    m_task      = TaskPrototype();
 }
 
 void RevelationRightSidebar::SetBtnAddToRoutineState(bool isRoutine)
