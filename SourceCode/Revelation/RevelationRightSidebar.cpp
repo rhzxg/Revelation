@@ -143,7 +143,10 @@ void RevelationRightSidebar::RefreshTaskData(const TaskPrototype& task)
     bool  finishTimeValid = ConvertToQDate(task.m_finishTime, finishDate, finishTime);
     bool  deadlineValid   = ConvertToQDate(task.m_deadline, deadlineDate, deadlineTime);
 
-    // TODO: refresh btn text
+    // reset btn data
+    ui.btnSelectStartTime->reset();
+    ui.btnSelectFinishTime->reset();
+    ui.btnSelectDeadline->reset();
 
     if (startTimeValid)
     {
