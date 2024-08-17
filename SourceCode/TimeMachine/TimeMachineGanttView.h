@@ -22,7 +22,7 @@ class TimeMachineGanttView : public QWidget
     void InitSignalSlots();
 
   public slots:
-    void OnTaskFiltered(const std::map<std::string, std::vector<TaskPrototype>>& dateToTasks);
+    void OnTaskFiltered(const std::vector<DateToTasks>& dateToTaskVec);
 
   private:
     Ui::TimeMachineGanttViewClass ui;

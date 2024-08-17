@@ -43,7 +43,7 @@ void TimeMachineFilter::InitSignalSlots()
     connect(ui.btnFilter, &QPushButton::clicked, this, &TimeMachineFilter::OnBtnFilterClicked);
 }
 
-void TimeMachineFilter::ReteiveTasksFromDatabase(std::map<std::string, std::vector<TaskPrototype>>& dateToTasks)
+void TimeMachineFilter::ReteiveTasksFromDatabase(std::vector<DateToTasks>& dateToTaskVec)
 {
     QDate       fromDate    = ui.btnSelectFromDate->getCurDate();
     QDate       toDate      = ui.btnSelectToDate->getCurDate();
@@ -77,17 +77,17 @@ void TimeMachineFilter::ReteiveTasksFromDatabase(std::map<std::string, std::vect
 
         if (!tasks.empty())
         {
-            dateToTasks.emplace(date, tasks);
+            dateToTaskVec.push_back(std::make_pair(date, tasks));
         }
     }
 }
 
-void TimeMachineFilter::FilterTasksByCondition(std::map<std::string, std::vector<TaskPrototype>>& dateToTasks)
+void TimeMachineFilter::FilterTasksByCondition(std::vector<DateToTasks>& dateToTaskVec)
 {
     // TODO
 }
 
-void TimeMachineFilter::SortTasksByTaskParameter(std::map<std::string, std::vector<TaskPrototype>>& dateToTasks)
+void TimeMachineFilter::SortTasksByTaskParameter(std::vector<DateToTasks>& dateToTaskVec)
 {
     auto mySort = [&](const TaskPrototype& t1, const TaskPrototype& t2) {
         if (t1.m_taskStatus == TaskStatus::Todo && t2.m_taskStatus != TaskStatus::Todo)
@@ -116,7 +116,7 @@ void TimeMachineFilter::SortTasksByTaskParameter(std::map<std::string, std::vect
         return false;
     };
 
-    for (auto& pair : dateToTasks)
+    for (auto& pair : dateToTaskVec)
     {
         std::vector<TaskPrototype>& vec = pair.second;
         std::sort(vec.begin(), vec.end(), mySort);
@@ -141,18 +141,18 @@ void TimeMachineFilter::OnBtnFilterClicked()
     std::thread filterThread([=]() {
         m_commonWidgetIntf->SetProgressBarVisibility(true, 0);
 
-        std::map<std::string, std::vector<TaskPrototype>> dateToTasks;
+        std::vector<DateToTasks> dateToTaskVec;
 
         // retrieve
-        ReteiveTasksFromDatabase(dateToTasks);
+        ReteiveTasksFromDatabase(dateToTaskVec);
 
         // filter
-        FilterTasksByCondition(dateToTasks);
+        FilterTasksByCondition(dateToTaskVec);
 
         // sort
-        SortTasksByTaskParameter(dateToTasks);
+        SortTasksByTaskParameter(dateToTaskVec);
 
-        emit TaskFiltered(dateToTasks);
+        emit TaskFiltered(dateToTaskVec);
 
         m_commonWidgetIntf->SetProgressBarVisibility(false);
     });

@@ -22,12 +22,12 @@ class TimeMachineFilter : public QWidget
     void InitWidget();
     void InitSignalSlots();
 
-    void ReteiveTasksFromDatabase(std::map<std::string, std::vector<TaskPrototype>>& dateToTasks);
-    void FilterTasksByCondition(std::map<std::string, std::vector<TaskPrototype>>& dateToTasks);
-    void SortTasksByTaskParameter(std::map<std::string, std::vector<TaskPrototype>>& dateToTasks);
+    void ReteiveTasksFromDatabase(std::vector<DateToTasks>& dateToTaskVec);
+    void FilterTasksByCondition(std::vector<DateToTasks>& dateToTaskVec);
+    void SortTasksByTaskParameter(std::vector<DateToTasks>& dateToTaskVec);
 
   signals:
-    void TaskFiltered(const std::map<std::string, std::vector<TaskPrototype>>& dateToTasks);
+    void TaskFiltered(const std::vector<DateToTasks>& dateToTaskVec);
 
   private slots:
     void OnBtnFilterClicked();

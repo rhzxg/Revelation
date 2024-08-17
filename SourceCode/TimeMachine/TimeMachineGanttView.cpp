@@ -60,7 +60,7 @@ void TimeMachineGanttView::InitSignalSlots()
 {
 }
 
-void TimeMachineGanttView::OnTaskFiltered(const std::map<std::string, std::vector<TaskPrototype>>& dateToTasks)
+void TimeMachineGanttView::OnTaskFiltered(const std::vector<DateToTasks>& dateToTaskVec)
 {
     auto SetNodeByTask = [&](std::string date, Node* node, const TaskPrototype& task) {
         // category day
@@ -103,7 +103,7 @@ void TimeMachineGanttView::OnTaskFiltered(const std::map<std::string, std::vecto
     };
 
     m_model->clear();
-    for (const auto& dateToTasksPair : dateToTasks)
+    for (const auto& dateToTasksPair : dateToTaskVec)
     {
         std::string                date  = dateToTasksPair.first;
         std::vector<TaskPrototype> tasks = dateToTasksPair.second;

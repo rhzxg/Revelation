@@ -53,3 +53,5 @@ struct TaskPrototype
         return this->m_id != other.m_id;
     }
 };
+
+using DateToTasks = std::pair<std::string, std::vector<TaskPrototype>>;
