@@ -53,6 +53,7 @@ void TimeMachineGanttView::InitWidget()
     ((QTreeView*)m_view->leftView())->header()->setSectionResizeMode(QHeaderView::Stretch);
 
     m_view->graphicsView()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    m_view->graphicsView()->setReadOnly(true);
 }
 
 void TimeMachineGanttView::InitSignalSlots()
@@ -89,12 +90,7 @@ void TimeMachineGanttView::OnTaskFiltered(const std::map<std::string, std::vecto
             QTime     dayEndingTime = dayEnding.time();
             dayEndingTime.setHMS(23, 59, 59);
             dayEnding.setTime(dayEndingTime);
-            QDateTime oneHourLater = categoryDateTime;
-            oneHourLater.setTime(createDateTime.time());
-            oneHourLater = oneHourLater.addSecs(3600);
-
-            // earlier one
-            node->setEnd(dayEnding < oneHourLater ? dayEnding : oneHourLater);
+            node->setEnd(dayEnding);
         }
         else
         {
