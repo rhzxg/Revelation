@@ -2,13 +2,15 @@
 #include "IRevelationInterface.h"
 #include "Utility/IUtilityInterface.h"
 #include "Utility/IDateTimeFormatter.h"
-#include <QItemSelectionModel>
-#include <QGridLayout>
+#include <QMenu>
 #include <QTreeView>
+#include <QClipboard>
 #include <QHeaderView>
+#include <QGridLayout>
 #include <QAbstractItemView>
-#include <KDGanttGraphicsView>
+#include <QItemSelectionModel>
 #include <KDGanttGlobal>
+#include <KDGanttGraphicsView>
 #include <KDGanttDateTimeGrid>
 
 TimeMachineGanttView::TimeMachineGanttView(IRevelationInterface* intf, QWidget* parent)
@@ -33,10 +35,10 @@ void TimeMachineGanttView::Initialize()
 
 void TimeMachineGanttView::InitWidget()
 {
-    QGridLayout* layout = new QGridLayout(this);
-    layout->setContentsMargins(0, 0, 4, 0);
+    m_view      = new KDGantt::View();
+    m_leftView  = (QTreeView*)m_view->leftView();
+    m_rightView = m_view->graphicsView();
 
-    m_view  = new KDGantt::View();
     m_model = new TimeMachineGanttModel(this);
     m_view->setModel(m_model);
     m_view->setSelectionModel(new QItemSelectionModel(m_model));
@@ -45,19 +47,50 @@ void TimeMachineGanttView::InitWidget()
     grid->setScale(KDGantt::DateTimeGrid::ScaleHour);
     grid->setDayWidth(710);
 
+    QGridLayout* layout = new QGridLayout(this);
+    layout->setContentsMargins(0, 0, 4, 0);
     layout->addWidget(m_view);
     this->setLayout(layout);
 
-    m_view->leftView()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_view->leftView()->setFixedWidth(200);
-    ((QTreeView*)m_view->leftView())->header()->setSectionResizeMode(QHeaderView::Stretch);
+    m_leftView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_leftView->setFixedWidth(200);
+    m_leftView->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_leftView->header()->setSectionResizeMode(QHeaderView::Stretch);
 
-    m_view->graphicsView()->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    m_view->graphicsView()->setReadOnly(true);
+    m_rightView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    m_rightView->setReadOnly(true);
 }
 
 void TimeMachineGanttView::InitSignalSlots()
 {
+    connect(m_leftView, &QTreeView::customContextMenuRequested, this, &TimeMachineGanttView::OnContextMenuEvent);
+}
+
+void TimeMachineGanttView::SummarizeTasks(Node* summaryNode)
+{
+    if (nullptr == summaryNode)
+    {
+        return;
+    }
+
+    QString summary;
+    for (int i = 0; i < summaryNode->childCount(); ++i)
+    {
+        Node* taskNode = summaryNode->child(i);
+        if (nullptr == taskNode)
+        {
+            continue;
+        }
+
+        summary += taskNode->label();
+        if (i != summaryNode->childCount() - 1)
+        {
+            summary += "\n";
+        }
+    }
+
+    QClipboard* clipboard = QApplication::clipboard();
+    clipboard->setText(summary);
 }
 
 void TimeMachineGanttView::OnTaskFiltered(const std::vector<DateToTasks>& dateToTaskVec)
@@ -132,4 +165,32 @@ void TimeMachineGanttView::OnTaskFiltered(const std::vector<DateToTasks>& dateTo
     }
 
     m_view->expandAll();
+}
+
+void TimeMachineGanttView::OnContextMenuEvent(const QPoint& pos)
+{
+    QModelIndex currentIndex = m_leftView->selectionModel()->currentIndex();
+    if (!currentIndex.isValid())
+    {
+        return;
+    }
+
+    Node* node = static_cast<Node*>(currentIndex.internalPointer());
+    if (nullptr == node || node->type() != KDGantt::TypeSummary)
+    {
+        return;
+    }
+
+    QMenu menu;
+
+    QAction summarizeTasks(tr("Summarize tasks"));
+    connect(&summarizeTasks, &QAction::triggered, this, [=]() {
+        SummarizeTasks(node);
+    });
+
+    menu.addAction(&summarizeTasks);
+
+    QPoint globalPos  = mapToGlobal(pos);
+    QPoint correctPos = QPoint(globalPos.x(), globalPos.y() + 50);
+    menu.exec(correctPos);
 }

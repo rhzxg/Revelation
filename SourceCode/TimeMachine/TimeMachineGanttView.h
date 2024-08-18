@@ -2,6 +2,7 @@
 #include <QWidget>
 #include "ui_TimeMachineGanttView.h"
 #include <KDGanttView>
+#include <QTreeView>
 #include "TimeMachineGanttModel.h"
 #include "IRevelationDataDefine.h"
 
@@ -21,15 +22,21 @@ class TimeMachineGanttView : public QWidget
     void InitWidget();
     void InitSignalSlots();
 
+    void SummarizeTasks(Node* summaryNode);
+
   public slots:
     void OnTaskFiltered(const std::vector<DateToTasks>& dateToTaskVec);
+    void OnContextMenuEvent(const QPoint& pos);
 
   private:
     Ui::TimeMachineGanttViewClass ui;
 
-    IRevelationInterface* m_interface = nullptr;
+    IRevelationInterface* m_interface     = nullptr;
     IDateTimeFormatter*   m_timeFormatter = nullptr;
 
-    KDGantt::View*         m_view  = nullptr;
+    KDGantt::View*         m_view      = nullptr;
+    QTreeView*             m_leftView  = nullptr;
+    KDGantt::GraphicsView* m_rightView = nullptr;
+
     TimeMachineGanttModel* m_model = nullptr;
 };
