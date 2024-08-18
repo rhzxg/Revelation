@@ -66,14 +66,14 @@ void TimeMachineGanttView::InitSignalSlots()
     connect(m_leftView, &QTreeView::customContextMenuRequested, this, &TimeMachineGanttView::OnContextMenuEvent);
 }
 
-void TimeMachineGanttView::SummarizeTasks(Node* summaryNode)
+void TimeMachineGanttView::CopyTasksToClipboard(Node* summaryNode)
 {
     if (nullptr == summaryNode)
     {
         return;
     }
 
-    QString summary;
+    QStringList summaries;
     for (int i = 0; i < summaryNode->childCount(); ++i)
     {
         Node* taskNode = summaryNode->child(i);
@@ -82,15 +82,22 @@ void TimeMachineGanttView::SummarizeTasks(Node* summaryNode)
             continue;
         }
 
-        summary += taskNode->label();
-        if (i != summaryNode->childCount() - 1)
+        QStringList summary;
+        summary << taskNode->start().time().toString("hh:mm");
+        summary << " ->";
+        summary << taskNode->end().time().toString("hh:mm");
+        summary << " ";
+        summary << taskNode->label();
+        if (taskNode->status() != KDGantt::Done)
         {
-            summary += "\n";
+            summary << " " + tr("(Not done)");
         }
+
+        summaries << summary.join("");
     }
 
     QClipboard* clipboard = QApplication::clipboard();
-    clipboard->setText(summary);
+    clipboard->setText(summaries.join("\n"));
 }
 
 void TimeMachineGanttView::OnTaskFiltered(const std::vector<DateToTasks>& dateToTaskVec)
@@ -188,12 +195,12 @@ void TimeMachineGanttView::OnContextMenuEvent(const QPoint& pos)
 
     QMenu menu;
 
-    QAction summarizeTasks(tr("Summarize tasks"));
-    connect(&summarizeTasks, &QAction::triggered, this, [=]() {
-        SummarizeTasks(node);
+    QAction copyTasksToClipboard(tr("Copy tasks to clipboard"));
+    connect(&copyTasksToClipboard, &QAction::triggered, this, [=]() {
+        CopyTasksToClipboard(node);
     });
 
-    menu.addAction(&summarizeTasks);
+    menu.addAction(&copyTasksToClipboard);
 
     QPoint globalPos  = mapToGlobal(pos);
     QPoint correctPos = QPoint(globalPos.x(), globalPos.y() + 50);

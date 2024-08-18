@@ -22,7 +22,7 @@ class TimeMachineGanttView : public QWidget
     void InitWidget();
     void InitSignalSlots();
 
-    void SummarizeTasks(Node* summaryNode);
+    void CopyTasksToClipboard(Node* summaryNode);
 
   public slots:
     void OnTaskFiltered(const std::vector<DateToTasks>& dateToTaskVec);
