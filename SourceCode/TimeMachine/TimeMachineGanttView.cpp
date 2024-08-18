@@ -102,7 +102,7 @@ void TimeMachineGanttView::OnTaskFiltered(const std::vector<DateToTasks>& dateTo
 
         QDateTime createDateTime = QDateTime::fromString(QString::fromStdString(task.m_createTime), "yyyy-MM-dd hh:mm:ss");
 
-        if (task.m_startTime.empty())
+        // start
         {
             QDateTime dayBegining     = categoryDateTime;
             QTime     dayBeginingTime = dayBegining.time();
@@ -110,13 +110,18 @@ void TimeMachineGanttView::OnTaskFiltered(const std::vector<DateToTasks>& dateTo
             dayBegining.setTime(dayBeginingTime);
 
             // later one
-            node->setStart(dayBegining > createDateTime ? dayBegining : createDateTime);
-        }
-        else
-        {
-            node->setStart(QDateTime::fromString(QString::fromStdString(task.m_startTime), "yyyy-MM-dd hh:mm:ss"));
+            if (task.m_startTime.empty())
+            {
+                node->setStart(dayBegining > createDateTime ? dayBegining : createDateTime);
+            }
+            else
+            {
+                QDateTime startTime = QDateTime::fromString(QString::fromStdString(task.m_startTime), "yyyy-MM-dd hh:mm:ss");
+                node->setStart(dayBegining > startTime ? dayBegining : startTime);
+            }
         }
 
+        // end
         if (task.m_finishTime.empty())
         {
             QDateTime dayEnding     = categoryDateTime;
@@ -130,9 +135,9 @@ void TimeMachineGanttView::OnTaskFiltered(const std::vector<DateToTasks>& dateTo
             node->setEnd(QDateTime::fromString(QString::fromStdString(task.m_finishTime), "yyyy-MM-dd hh:mm:ss"));
         }
 
-        // test
-        QString from = node->start().toString();
-        QString to   = node->end().toString();
+        //// test
+        // QString from = node->start().toString();
+        // QString to   = node->end().toString();
     };
 
     m_model->clear();
