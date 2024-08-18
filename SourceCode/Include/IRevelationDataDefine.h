@@ -1,6 +1,7 @@
 // defines data prototypes
 #pragma once
 #include <string>
+#include <vector>
 
 using Int64  = int64_t;
 using Uint64 = uint64_t;
