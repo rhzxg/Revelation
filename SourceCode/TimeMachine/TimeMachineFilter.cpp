@@ -90,13 +90,9 @@ void TimeMachineFilter::FilterTasksByCondition(std::vector<DateToTasks>& dateToT
 void TimeMachineFilter::SortTasksByTaskParameter(std::vector<DateToTasks>& dateToTaskVec)
 {
     auto mySort = [&](const TaskPrototype& t1, const TaskPrototype& t2) {
-        if (t1.m_taskStatus == TaskStatus::Todo && t2.m_taskStatus != TaskStatus::Todo)
+        if (t1.m_taskStatus != t2.m_taskStatus)
         {
-            return false;
-        }
-        else if (t1.m_taskStatus != TaskStatus::Todo && t2.m_taskStatus == TaskStatus::Todo)
-        {
-            return true;
+            return t1.m_taskStatus < t2.m_taskStatus;
         }
 
         auto t1StartTime = m_timeFormatter->ConvertDateTimeFromString(t1.m_startTime);
