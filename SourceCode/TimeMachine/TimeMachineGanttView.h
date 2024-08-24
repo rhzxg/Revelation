@@ -2,6 +2,7 @@
 #include <QWidget>
 #include "ui_TimeMachineGanttView.h"
 #include <KDGanttView>
+#include <KDGanttConstraintModel>
 #include <QTreeView>
 #include "TimeMachineGanttModel.h"
 #include "IRevelationDataDefine.h"
@@ -24,6 +25,9 @@ class TimeMachineGanttView : public QWidget
 
     void CopyTasksToClipboard(Node* summaryNode);
 
+    void SetupNodeTimeByTask(const std::string& date, Node* node, const TaskPrototype& task);
+    void SetupNodeConstraints(const std::vector<Node*>& nodes, std::vector<QModelIndex>& indexes);
+
   public slots:
     void OnTaskFiltered(const std::vector<DateToTasks>& dateToTaskVec);
     void OnContextMenuEvent(const QPoint& pos);
@@ -39,4 +43,9 @@ class TimeMachineGanttView : public QWidget
     KDGantt::GraphicsView* m_rightView = nullptr;
 
     TimeMachineGanttModel* m_model = nullptr;
+
+    // cache using in constraints setup
+    KDGantt::ConstraintModel m_constraintModel;
+    std::vector<Node*>       m_prevNodes;
+    std::vector<QModelIndex> m_prevIndexes;
 };

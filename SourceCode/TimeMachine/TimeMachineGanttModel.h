@@ -44,6 +44,10 @@ class Node
         m_parent = p;
     }
 
+    void setID(uint64_t id)
+    {
+        m_id = id;
+    }
     void setStart(const QDateTime& dt)
     {
         m_bStart = m_start;
@@ -80,6 +84,10 @@ class Node
         m_position = p;
     }
 
+    uint64_t id() const
+    {
+        return m_id;
+    }
     QDateTime start() const
     {
         return m_start;
@@ -118,6 +126,7 @@ class Node
     Node*        m_parent;
     QList<Node*> m_children;
 
+    uint64_t                                m_id     = -1;
     KDGantt::ItemType                       m_type   = KDGantt::TypeTask;
     KDGantt::TaskStatus                     m_status = KDGantt::ToDo;
     QDateTime                               m_start, m_end;

@@ -100,53 +100,104 @@ void TimeMachineGanttView::CopyTasksToClipboard(Node* summaryNode)
     clipboard->setText(summaries.join("\n"));
 }
 
-void TimeMachineGanttView::OnTaskFiltered(const std::vector<DateToTasks>& dateToTaskVec)
+void TimeMachineGanttView::SetupNodeTimeByTask(const std::string& date, Node* node, const TaskPrototype& task)
 {
-    auto SetNodeByTask = [&](std::string date, Node* node, const TaskPrototype& task) {
-        // category day
-        QDateTime categoryDateTime;
-        categoryDateTime.setDate(QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd"));
+    // category day
+    QDateTime categoryDateTime;
+    categoryDateTime.setDate(QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd"));
 
-        QDateTime createDateTime = QDateTime::fromString(QString::fromStdString(task.m_createTime), "yyyy-MM-dd hh:mm:ss");
+    QDateTime createDateTime = QDateTime::fromString(QString::fromStdString(task.m_createTime), "yyyy-MM-dd hh:mm:ss");
 
-        // start
+    // start
+    {
+        QDateTime dayBegining     = categoryDateTime;
+        QTime     dayBeginingTime = dayBegining.time();
+        dayBeginingTime.setHMS(0, 0, 0);
+        dayBegining.setTime(dayBeginingTime);
+
+        // later one
+        if (task.m_startTime.empty())
         {
-            QDateTime dayBegining     = categoryDateTime;
-            QTime     dayBeginingTime = dayBegining.time();
-            dayBeginingTime.setHMS(0, 0, 0);
-            dayBegining.setTime(dayBeginingTime);
-
-            // later one
-            if (task.m_startTime.empty())
-            {
-                node->setStart(dayBegining > createDateTime ? dayBegining : createDateTime);
-            }
-            else
-            {
-                QDateTime startTime = QDateTime::fromString(QString::fromStdString(task.m_startTime), "yyyy-MM-dd hh:mm:ss");
-                node->setStart(dayBegining > startTime ? dayBegining : startTime);
-            }
-        }
-
-        // end
-        if (task.m_finishTime.empty())
-        {
-            QDateTime dayEnding     = categoryDateTime;
-            QTime     dayEndingTime = dayEnding.time();
-            dayEndingTime.setHMS(23, 59, 59);
-            dayEnding.setTime(dayEndingTime);
-            node->setEnd(dayEnding);
+            node->setStart(dayBegining > createDateTime ? dayBegining : createDateTime);
         }
         else
         {
-            node->setEnd(QDateTime::fromString(QString::fromStdString(task.m_finishTime), "yyyy-MM-dd hh:mm:ss"));
+            QDateTime startTime = QDateTime::fromString(QString::fromStdString(task.m_startTime), "yyyy-MM-dd hh:mm:ss");
+            node->setStart(dayBegining > startTime ? dayBegining : startTime);
+        }
+    }
+
+    // end
+    if (task.m_finishTime.empty())
+    {
+        QDateTime dayEnding     = categoryDateTime;
+        QTime     dayEndingTime = dayEnding.time();
+        dayEndingTime.setHMS(23, 59, 59);
+        dayEnding.setTime(dayEndingTime);
+        node->setEnd(dayEnding);
+    }
+    else
+    {
+        node->setEnd(QDateTime::fromString(QString::fromStdString(task.m_finishTime), "yyyy-MM-dd hh:mm:ss"));
+    }
+
+    //// test
+    // QString from = node->start().toString();
+    // QString to   = node->end().toString();
+}
+
+void TimeMachineGanttView::SetupNodeConstraints(const std::vector<Node*>& nodes, std::vector<QModelIndex>& indexes)
+{
+    if (m_prevIndexes.empty())
+    {
+        m_prevNodes   = nodes;
+        m_prevIndexes = indexes;
+    }
+    else
+    {
+        // find same tasks
+        std::vector<int>        sameTaskIndexes;
+        std::map<uint64_t, int> prevID2IndexMap, currID2IndexMap;
+        for (int index = 0; index < m_prevNodes.size(); ++index)
+        {
+            prevID2IndexMap.emplace(m_prevNodes[index]->id(), index);
+        }
+        for (int index = 0; index < nodes.size(); ++index)
+        {
+            currID2IndexMap.emplace(nodes[index]->id(), index);
         }
 
-        //// test
-        // QString from = node->start().toString();
-        // QString to   = node->end().toString();
-    };
+        m_constraintModel.clear();
+        for (const auto& id2IndexPair : prevID2IndexMap)
+        {
+            Int64       prevID     = id2IndexPair.first;
+            int         prevIndex  = id2IndexPair.second;
+            QModelIndex prevQIndex = m_prevIndexes[prevIndex];
 
+            auto finder = currID2IndexMap.find(prevID);
+            if (finder != currID2IndexMap.end())
+            {
+                int         currIndex  = finder->second;
+                QModelIndex currQIndex = indexes[currIndex];
+
+                KDGantt::Constraint constraint(prevQIndex, currQIndex);
+                m_constraintModel.addConstraint(constraint);
+            }
+        }
+        m_view->setConstraintModel(&m_constraintModel);
+
+        m_prevNodes   = nodes;
+        m_prevIndexes = indexes;
+    }
+}
+
+void TimeMachineGanttView::OnTaskFiltered(const std::vector<DateToTasks>& dateToTaskVec)
+{
+    // clear cache
+    m_prevNodes.clear();
+    m_prevIndexes.clear();
+
+    // refresh model
     m_model->clear();
     for (const auto& dateToTasksPair : dateToTaskVec)
     {
@@ -157,23 +208,33 @@ void TimeMachineGanttView::OnTaskFiltered(const std::vector<DateToTasks>& dateTo
         QModelIndex rootIndex = m_view->rootIndex();
         int         parentRow = m_model->rowCount(rootIndex);
 
-        Node* node = new Node;
-        node->setType(KDGantt::TypeSummary);
-        node->setLabel(QString::fromStdString(date));
-        QModelIndex parent = m_model->insertNode(node);
+        Node* parentNode = new Node;
+        parentNode->setType(KDGantt::TypeSummary);
+        parentNode->setLabel(QString::fromStdString(date));
+        QModelIndex parent = m_model->insertNode(parentNode);
 
         // child items:
+        std::vector<Node*>       nodes;
+        std::vector<QModelIndex> indexes;
         for (int row = 0; row < tasks.size(); ++row)
         {
-            TaskPrototype task = tasks[row];
-            Node*         node = new Node;
-            node->setType(KDGantt::TypeTask);
-            node->setStatus((int)task.m_taskStatus - 1);
-            node->setLabel(QString::fromStdString(task.m_title));
-            SetNodeByTask(date, node, task);
+            TaskPrototype task      = tasks[row];
+            Node*         childNode = new Node;
 
-            m_model->insertNode(node, parent);
+            childNode->setID(task.m_id);
+            childNode->setType(KDGantt::TypeTask);
+            childNode->setStatus((int)task.m_taskStatus - 1);
+            childNode->setLabel(QString::fromStdString(task.m_title));
+
+            SetupNodeTimeByTask(date, childNode, task);
+
+            QModelIndex childIndex = m_model->insertNode(childNode, parent);
+
+            nodes.push_back(childNode);
+            indexes.push_back(childIndex);
         }
+
+        SetupNodeConstraints(nodes, indexes);
     }
 
     m_view->expandAll();
