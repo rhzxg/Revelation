@@ -136,8 +136,8 @@ RevelationSidebarWrapper* Revelation::GetSidebarWrapper(RevelationSidebar::Side 
     {
         if (nullptr == m_rightSidebarWrapper)
         {
-            auto rightSidebar     = new RevelationRightSidebar(m_interface);
             m_rightSidebarWrapper = new RevelationSidebarWrapper(this);
+            auto rightSidebar     = new RevelationRightSidebar(m_interface, m_rightSidebarWrapper);
             m_rightSidebarWrapper->SetSidebar(rightSidebar);
 
             // [right sidebar => this] task data edited
@@ -158,8 +158,8 @@ RevelationSidebarWrapper* Revelation::GetSidebarWrapper(RevelationSidebar::Side 
     {
         if (nullptr == m_bottomBarWrapper)
         {
-            auto bottomBar     = new RevelationBottomBar(m_interface);
             m_bottomBarWrapper = new RevelationSidebarWrapper(this);
+            auto bottomBar     = new RevelationBottomBar(m_interface, m_bottomBarWrapper);
             m_bottomBarWrapper->SetSidebar(bottomBar);
 
             m_bottomBarWrapper->setFixedSize(bottomBar->width(), 60);

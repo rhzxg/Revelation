@@ -15,10 +15,6 @@ RevelationListView::RevelationListView(IRevelationInterface* intf, QWidget* pare
 
 RevelationListView::~RevelationListView()
 {
-    this->setModel(nullptr);
-    this->setItemDelegate(nullptr);
-    delete m_model;
-    delete m_delegate;
 }
 
 void RevelationListView::SetViewType(TaskStatus viewType)

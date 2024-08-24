@@ -48,9 +48,6 @@ class RevelationSidebarWrapper : public FluWidget
 
     ~RevelationSidebarWrapper()
     {
-        this->setLayout(nullptr);
-        delete m_layout;
-        delete m_sidebar;
     }
 
     void SetSidebar(RevelationSidebar* sidebar)
