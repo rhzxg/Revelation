@@ -17,6 +17,8 @@ add_executable(${PROJECT_NAME}
                CommonWidgetInterface.cpp
                CommonWidgetInterface.h
 
+               RevelationConfig.cpp
+               RevelationConfig.h
                RevelationMainWindow.cpp
                RevelationMainWindow.h
                RevelationSplash.cpp

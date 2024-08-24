@@ -60,6 +60,7 @@ void RevelationMainWindow::AddStackedWidget(QWidget* widget, const QString& name
         item->clearAllItemsSelectState();
         item->updateSelected(true);
         item->updateAllItemsStyleSheet();
+        m_stackedLayout->setCurrentWidget(name);
     }
 }
 
@@ -94,6 +95,7 @@ void RevelationMainWindow::AddStackedWidget(QWidget* widget, const QString& name
         item->clearAllItemsSelectState();
         item->updateSelected(true);
         item->updateAllItemsStyleSheet();
+        m_stackedLayout->setCurrentWidget(name);
     }
 }
 

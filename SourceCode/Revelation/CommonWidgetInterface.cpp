@@ -1,4 +1,5 @@
 #include "CommonWidgetInterface.h"
+#include "RevelationConfig.h"
 
 CommonWidgetInterface::CommonWidgetInterface(RevelationMainWindow* mainWindow)
     : m_mainWindow(mainWindow)
@@ -20,6 +21,11 @@ void CommonWidgetInterface::AddStackedWidget(QWidget* widget, const QString& nam
 void CommonWidgetInterface::AddStackedWidget(QWidget* widget, const QString& name, FluAwesomeType type, Qt::AlignmentFlag pos /*= Qt::AlignCenter*/)
 {
     m_mainWindow->AddStackedWidget(widget, name, type, pos);
+}
+
+void CommonWidgetInterface::AddSettingItem(QWidget* widget)
+{
+    m_config->AddSettingItem(widget);
 }
 
 void CommonWidgetInterface::SetProgressBarVisibility(bool visible, int value /*= 0*/)
@@ -46,6 +52,9 @@ void CommonWidgetInterface::Initialize()
 
 void CommonWidgetInterface::InitWidget()
 {
+    m_config = new RevelationConfig(m_mainWindow);
+    AddStackedWidget(m_config, QObject::tr("Settings"), FluAwesomeType::Settings, Qt::AlignBottom);
+
     m_progressBar = new FluProgressBar;
     m_progressBar->setWindowFlag(Qt::FramelessWindowHint);
     m_progressBar->setFixedWidth(200);

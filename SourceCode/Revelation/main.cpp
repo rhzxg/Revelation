@@ -4,6 +4,7 @@
 #include "RevelationInterface.h"
 #include "RevelationSplash.h"
 #include "Revelation.h"
+#include "RevelationConfig.h"
 #include "RevelationMainWindow.h"
 #include "CommonWidgetInterface.h"
 #include <thread>
@@ -41,7 +42,7 @@ int main(int argc, char* argv[])
 
     mainWindow.AddStackedWidget(&revelation, "Revelation", FluAwesomeType::Home, Qt::AlignCenter);
     intf.CollectNavigationViews();
-
+    
     mainWindow.AlignToScreenCenter();
     mainWindow.show();
 

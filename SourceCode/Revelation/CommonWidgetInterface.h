@@ -3,6 +3,8 @@
 #include "RevelationMainWindow.h"
 #include "FluProgressBar.h"
 
+class RevelationConfig;
+
 class CommonWidgetInterface : public ICommonWidgetInterface
 {
   public:
@@ -12,10 +14,9 @@ class CommonWidgetInterface : public ICommonWidgetInterface
     virtual void AddStackedWidget(QWidget* widget, const QString& name, const QIcon& icon, Qt::AlignmentFlag pos = Qt::AlignCenter) override;
     virtual void AddStackedWidget(QWidget* widget, const QString& name, FluAwesomeType type, Qt::AlignmentFlag pos = Qt::AlignCenter) override;
 
-    virtual void SetProgressBarVisibility(bool visible, int value = 0) override;
+    virtual void AddSettingItem(QWidget* widget) override;
 
-  public:
-    void UpdateProgressBarPos(const QPoint& point);
+    virtual void SetProgressBarVisibility(bool visible, int value = 0) override;
 
   private:
     void Initialize();
@@ -23,6 +24,7 @@ class CommonWidgetInterface : public ICommonWidgetInterface
 
   private:
     RevelationMainWindow* m_mainWindow = nullptr;
+    RevelationConfig*     m_config     = nullptr;
 
     FluProgressBar* m_progressBar = nullptr;
 };

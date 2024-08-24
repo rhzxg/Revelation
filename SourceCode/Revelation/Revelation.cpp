@@ -74,11 +74,10 @@ void Revelation::Initialize()
 
 void Revelation::InitWidget()
 {
-    auto iconPath   = m_interface->GetResourcePath() / "images" / "icon.ico";
     auto mainWindow = (QMainWindow*)m_interface->GetMainWindow();
-    if (std::filesystem::exists(iconPath) && nullptr != mainWindow)
+    if (nullptr != mainWindow)
     {
-        QIcon icon(QString::fromStdString(iconPath.u8string()));
+        QIcon icon("./resources/images/icon.ico");
         mainWindow->setWindowIcon(icon);
         mainWindow->setWindowTitle("Revelation");
     }
