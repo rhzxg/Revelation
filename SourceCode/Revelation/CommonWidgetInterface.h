@@ -1,6 +1,7 @@
 #pragma once
 #include "ICommonWidgetInterface.h"
 #include "RevelationMainWindow.h"
+#include "IRevelationInterface.h"
 #include "FluProgressBar.h"
 
 class RevelationConfig;
@@ -18,13 +19,18 @@ class CommonWidgetInterface : public ICommonWidgetInterface
 
     virtual void SetProgressBarVisibility(bool visible, int value = 0) override;
 
+    void SetInterface(IRevelationInterface* intf);
+    void InitializeConfig();
+
   private:
     void Initialize();
     void InitWidget();
 
   private:
+    IRevelationInterface* m_interface  = nullptr;
     RevelationMainWindow* m_mainWindow = nullptr;
-    RevelationConfig*     m_config     = nullptr;
+
+    RevelationConfig* m_config = nullptr;
 
     FluProgressBar* m_progressBar = nullptr;
 };

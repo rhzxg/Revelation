@@ -81,6 +81,6 @@ bool SettingsToolkit::SetString(const std::string& key, const std::string& field
 
 void SettingsToolkit::Initialize()
 {
-    std::filesystem::path settingsPath = m_interface->GetResourcePath() / "settings.json";
+    std::filesystem::path settingsPath = m_interface->GetResourcePath() / "settings" / "settings.json";
     FileToJson(settingsPath, m_settings);
 }

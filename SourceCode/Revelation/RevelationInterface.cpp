@@ -1,5 +1,6 @@
 #include "RevelationInterface.h"
 #include "Utility/IUtilityInterface.h"
+#include "CommonWidgetInterface.h"
 #include <regex>
 
 RevelationInterface::RevelationInterface(void* mainWindow, ICommonWidgetInterface* commonWidgetIntf)
@@ -45,6 +46,9 @@ void RevelationInterface::CollectNavigationViews()
 
 void RevelationInterface::Initialize()
 {
+    auto commonWidgetIntf = dynamic_cast<CommonWidgetInterface*>(m_commonWidgetIntf);
+    commonWidgetIntf->SetInterface(this);
+
 #ifdef WIN32
     wchar_t buffer[MAX_PATH];
     GetModuleFileNameW(NULL, buffer, MAX_PATH);
@@ -53,6 +57,8 @@ void RevelationInterface::Initialize()
 #endif // WIN32
 
     LoadExtensions();
+
+    commonWidgetIntf->InitializeConfig();
 }
 
 void RevelationInterface::Uninitialize()

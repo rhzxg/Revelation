@@ -43,6 +43,17 @@ void CommonWidgetInterface::SetProgressBarVisibility(bool visible, int value /*=
     }
 }
 
+void CommonWidgetInterface::SetInterface(IRevelationInterface* intf)
+{
+    m_interface = intf;
+}
+
+void CommonWidgetInterface::InitializeConfig()
+{
+    m_config = new RevelationConfig(m_interface, m_mainWindow);
+    AddStackedWidget(m_config, QObject::tr("Settings"), FluAwesomeType::Settings, Qt::AlignBottom);
+}
+
 void CommonWidgetInterface::Initialize()
 {
     InitWidget();
@@ -50,9 +61,6 @@ void CommonWidgetInterface::Initialize()
 
 void CommonWidgetInterface::InitWidget()
 {
-    m_config = new RevelationConfig(m_mainWindow);
-    AddStackedWidget(m_config, QObject::tr("Settings"), FluAwesomeType::Settings, Qt::AlignBottom);
-
     m_progressBar = new FluProgressBar(m_mainWindow);
     m_progressBar->setWindowFlag(Qt::FramelessWindowHint);
     m_progressBar->setFixedWidth(200);

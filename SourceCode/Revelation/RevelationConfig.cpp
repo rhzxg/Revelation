@@ -1,12 +1,12 @@
 #include "RevelationConfig.h"
-#include "FluVScrollView.h"
+#include "Utility/IUtilityInterface.h"
 #include "FluSettingsSelectBox.h"
 #include "FluSettingsVersionBox.h"
 #include "FluLabel.h"
 #include "FluHyperLinkButton.h"
 
-RevelationConfig::RevelationConfig(QWidget* parent)
-    : QWidget(parent)
+RevelationConfig::RevelationConfig(IRevelationInterface* intf, QWidget* parent)
+    : QWidget(parent), m_interface(intf)
 {
     ui.setupUi(this);
 
@@ -48,9 +48,11 @@ void RevelationConfig::SetupApplicationInfoItem()
 {
     auto applicationInfoItem = new FluSettingsVersionBox;
 
+    auto        utilityIntf = m_interface->GetInterfaceById<IUtilityInterface>("Utility");
+    std::string version     = utilityIntf->GetSettingsToolkit()->GetString("Version", "Revelation", "2.0.0");
     applicationInfoItem->getTitleLabel()->setText("Revelation");
     applicationInfoItem->getInfoLabel()->setText("Ope-source license: GPLv3");
-    applicationInfoItem->getVersionLabel()->setText("2.0.4");
+    applicationInfoItem->getVersionLabel()->setText(QString::fromStdString(version));
 
     QIcon icon = QIcon("./resources/images/icon.ico");
     applicationInfoItem->getIconLabel()->setPixmap(icon.pixmap(40, 40));
