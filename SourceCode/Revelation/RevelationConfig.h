@@ -20,7 +20,6 @@ class RevelationConfig : public QWidget
     void InitSignalSlots();
 
     void SetupApplicationInfoItem();
-    void SetupChangeThemeItem();
 
   private:
     Ui::RevelationConfigClass ui;

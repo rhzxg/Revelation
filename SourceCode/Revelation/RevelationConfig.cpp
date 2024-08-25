@@ -37,7 +37,6 @@ void RevelationConfig::InitWidget()
     ui.eScrollAreaWidget->setLayout(layout);
 
     SetupApplicationInfoItem();
-    SetupChangeThemeItem();
 }
 
 void RevelationConfig::InitSignalSlots()
@@ -46,32 +45,66 @@ void RevelationConfig::InitSignalSlots()
 
 void RevelationConfig::SetupApplicationInfoItem()
 {
-    auto applicationInfoItem = new FluSettingsVersionBox;
+    auto revelationItem = new FluSettingsVersionBox;
 
     auto        utilityIntf = m_interface->GetInterfaceById<IUtilityInterface>("Utility");
     std::string version     = utilityIntf->GetSettingsToolkit()->GetString("Version", "Revelation", "2.0.0");
-    applicationInfoItem->getTitleLabel()->setText("Revelation");
-    applicationInfoItem->getInfoLabel()->setText("Open-source license: GPLv3");
-    applicationInfoItem->getVersionLabel()->setText(QString::fromStdString(version));
+    revelationItem->getTitleLabel()->setText("Revelation");
+    revelationItem->getInfoLabel()->setText("Open-source license: GPLv3");
+    revelationItem->getVersionLabel()->setText(QString::fromStdString(version));
 
     QIcon icon = QIcon("./resources/images/icon.ico");
-    applicationInfoItem->getIconLabel()->setPixmap(icon.pixmap(40, 40));
-    applicationInfoItem->getIconLabel()->setFixedSize(40, 40);
+    revelationItem->getIconLabel()->setPixmap(icon.pixmap(40, 40));
+    revelationItem->getIconLabel()->setFixedSize(40, 40);
 
-    auto repoLabel = new FluLabel;
-    repoLabel->setLabelStyle(FluLabelStyle::BodyTextBlockStyle);
-    repoLabel->setText("Github");
+    //////////////////////////////////////////////////////////////////////////
+    auto themeChangeLabel = new FluLabel;
+    themeChangeLabel->setLabelStyle(FluLabelStyle::BodyTextBlockStyle);
+    themeChangeLabel->setText("Application theme: ");
 
-    auto cloneRepoBtn = new FluHyperLinkButton("https://github.com/rhzxg/Revelation");
-    cloneRepoBtn->setText("Github page");
+    FluComboBoxEx* changeThemeCombobox = new FluComboBoxEx;
+    changeThemeCombobox->setFixedWidth(115);
+    changeThemeCombobox->addItem(tr("Light"));
+    changeThemeCombobox->addItem(tr("Dark"));
+    connect(changeThemeCombobox, &FluComboBoxEx::currentIndexChanged, [=](int index) {
+        FluTheme theme = index == 0 ? FluTheme::Light : FluTheme::Dark;                                  
+        // FluThemeUtils::getUtils()->setTheme(FluTheme::Light);
+    });
 
-    applicationInfoItem->addWidget(repoLabel);
-    applicationInfoItem->addWidget(cloneRepoBtn);
-    applicationInfoItem->addVSplitLine();
+    QHBoxLayout* themeItemLayout = new QHBoxLayout;
+    themeItemLayout->setContentsMargins(0, 0, 0, 0);
+    themeItemLayout->addWidget(themeChangeLabel);
+    themeItemLayout->addStretch();
+    themeItemLayout->addWidget(changeThemeCombobox);
+    QWidget* themeItemWidget = new QWidget;
+    themeItemWidget->setLayout(themeItemLayout);
 
-    auto dependAndRef = new FluLabel;
-    dependAndRef->setLabelStyle(FluLabelStyle::BodyTextBlockStyle);
-    dependAndRef->setText("References");
+    revelationItem->addWidget(themeItemWidget);
+    revelationItem->addVSplitLine();
+
+    //////////////////////////////////////////////////////////////////////////
+    auto githubLabel = new FluLabel;
+    githubLabel->setLabelStyle(FluLabelStyle::BodyTextBlockStyle);
+    githubLabel->setText("Github: ");
+
+    auto githubRepoBtn = new FluHyperLinkButton("https://github.com/rhzxg/Revelation");
+    githubRepoBtn->setText("Github page");
+
+    QHBoxLayout* githubItemLayout = new QHBoxLayout;
+    githubItemLayout->setContentsMargins(0, 0, 0, 0);
+    githubItemLayout->addWidget(githubLabel);
+    githubItemLayout->addStretch();
+    githubItemLayout->addWidget(githubRepoBtn);
+    QWidget* githubItemWidget = new QWidget;
+    githubItemWidget->setLayout(githubItemLayout);
+
+    revelationItem->addWidget(githubItemWidget);
+    revelationItem->addVSplitLine();
+
+    //////////////////////////////////////////////////////////////////////////
+    auto referenceLabel = new FluLabel;
+    referenceLabel->setLabelStyle(FluLabelStyle::BodyTextBlockStyle);
+    referenceLabel->setText("References: ");
 
     auto fluentUIReference = new FluHyperLinkButton("https://github.com/mowangshuying/CppQtFluentUi888");
     fluentUIReference->setText("Qt FluentUI");
@@ -79,26 +112,16 @@ void RevelationConfig::SetupApplicationInfoItem()
     auto kdchartReference = new FluHyperLinkButton("https://github.com/KDAB/KDChart");
     kdchartReference->setText("KDChart");
 
-    applicationInfoItem->addWidget(dependAndRef);
-    applicationInfoItem->addWidget(fluentUIReference);
-    applicationInfoItem->addWidget(kdchartReference);
+    QHBoxLayout* referenceItemLayout = new QHBoxLayout;
+    referenceItemLayout->setContentsMargins(0, 0, 0, 0);
+    referenceItemLayout->addWidget(referenceLabel);
+    referenceItemLayout->addStretch();
+    referenceItemLayout->addWidget(fluentUIReference);
+    referenceItemLayout->addWidget(kdchartReference);
+    QWidget* referenceItemWidget = new QWidget;
+    referenceItemWidget->setLayout(referenceItemLayout);
 
-    m_scrollArea->getMainLayout()->addWidget(applicationInfoItem);
-}
+    revelationItem->addWidget(referenceItemWidget);
 
-void RevelationConfig::SetupChangeThemeItem()
-{
-    auto changeThemeItem = new FluSettingsSelectBox;
-    changeThemeItem->setTitleInfo(tr("App theme"), tr("Change application theme color"));
-    changeThemeItem->setIcon(FluAwesomeType::Color);
-
-    changeThemeItem->getComboBox()->addItem(tr("Light"));
-    changeThemeItem->getComboBox()->addItem(tr("Dark"));
-
-    connect(changeThemeItem->getComboBox(), &FluComboBoxEx::currentIndexChanged, [=](int index) {
-        FluTheme theme = index == 0 ? FluTheme::Light : FluTheme::Dark;
-        // FluThemeUtils::getUtils()->setTheme(FluTheme::Light);
-    });
-
-    m_scrollArea->getMainLayout()->addWidget(changeThemeItem);
+    m_scrollArea->getMainLayout()->addWidget(revelationItem);
 }
