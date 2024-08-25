@@ -51,7 +51,7 @@ void RevelationConfig::SetupApplicationInfoItem()
     auto        utilityIntf = m_interface->GetInterfaceById<IUtilityInterface>("Utility");
     std::string version     = utilityIntf->GetSettingsToolkit()->GetString("Version", "Revelation", "2.0.0");
     applicationInfoItem->getTitleLabel()->setText("Revelation");
-    applicationInfoItem->getInfoLabel()->setText("Ope-source license: GPLv3");
+    applicationInfoItem->getInfoLabel()->setText("Open-source license: GPLv3");
     applicationInfoItem->getVersionLabel()->setText(QString::fromStdString(version));
 
     QIcon icon = QIcon("./resources/images/icon.ico");
