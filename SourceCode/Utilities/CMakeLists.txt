@@ -5,6 +5,8 @@ project(Utility)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(jsoncpp CONFIG REQUIRED)
+
 add_library(${PROJECT_NAME} SHARED 
 			dllmain.cpp
 
@@ -13,6 +15,8 @@ add_library(${PROJECT_NAME} SHARED
 
 			DateTimeFormatter.cpp
 			DateTimeFormatter.h
+            SettingsToolkit.cpp
+            SettingsToolkit.h
 			SnowflakeGenerator.cpp
 			SnowflakeGenerator.h
             TaskCreator.cpp
@@ -34,5 +38,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 )
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od")
 endif()
+
+target_link_libraries(${PROJECT_NAME} PRIVATE jsoncpp_lib)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../Include)

@@ -3,6 +3,7 @@
   "name": "revelation",
   "version": "1.0.0",
   "dependencies": [
-    "sqlite3"
+    "sqlite3",
+    "jsoncpp"
   ]
 }
