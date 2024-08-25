@@ -19,6 +19,7 @@ RevelationConfig::~RevelationConfig()
 
 void RevelationConfig::AddSettingItem(QWidget* item)
 {
+    m_scrollArea->getMainLayout()->addWidget(item);
 }
 
 void RevelationConfig::Initialize()

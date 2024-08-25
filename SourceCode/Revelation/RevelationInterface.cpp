@@ -44,6 +44,15 @@ void RevelationInterface::CollectNavigationViews()
     }
 }
 
+void RevelationInterface::CollectSettingsItems()
+{
+    for (auto& interfacePair : m_interfaces)
+    {
+        IExtensionInterface* extensionIntf = interfacePair.second;
+        extensionIntf->CollectSettingsItems();
+    }
+}
+
 void RevelationInterface::Initialize()
 {
     auto commonWidgetIntf = dynamic_cast<CommonWidgetInterface*>(m_commonWidgetIntf);

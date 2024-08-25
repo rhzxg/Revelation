@@ -23,7 +23,7 @@ void CommonWidgetInterface::AddStackedWidget(QWidget* widget, const QString& nam
     m_mainWindow->AddStackedWidget(widget, name, type, pos);
 }
 
-void CommonWidgetInterface::AddSettingItem(QWidget* widget)
+void CommonWidgetInterface::AddSettingsItem(QWidget* widget)
 {
     m_config->AddSettingItem(widget);
 }

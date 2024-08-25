@@ -104,7 +104,7 @@ void TimeMachineGanttView::CopyTasksToClipboard(Node* summaryNode)
 void TimeMachineGanttView::SetupNodeTimeByTask(const std::string& date, Node* node, const TaskPrototype& task)
 {
     std::string defaultStratTimeStr  = m_unityInterface->GetSettingsToolkit()->GetString("StartTime", "TimeMachine", "00:00:00");
-    std::string defaultFinishTimeStr = m_unityInterface->GetSettingsToolkit()->GetString("FinishTime", "TimeMachine", "23:59:59");
+    std::string defaultFinishTimeStr = m_unityInterface->GetSettingsToolkit()->GetString("FinishTime", "TimeMachine", "21:00:00");
     QTime       defaultStartTime     = QTime::fromString(QString::fromStdString(defaultStratTimeStr), "hh:mm:ss");
     QTime       defaultFinishTime    = QTime::fromString(QString::fromStdString(defaultFinishTimeStr), "hh:mm:ss");
 

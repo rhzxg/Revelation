@@ -18,6 +18,7 @@ class RevelationInterface : public IRevelationInterface
 
     void InitExtensions();
     void CollectNavigationViews();
+    void CollectSettingsItems();
 
   private:
     void Initialize();

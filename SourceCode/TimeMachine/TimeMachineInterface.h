@@ -12,7 +12,9 @@ class TimeMachineInterface : public ITimeMachineInterface
 
     virtual void Initialize() override;
     virtual void Uninitialize() override;
+
     virtual void CollectNavigationViews() override;
+    virtual void CollectSettingsItems() override;
 
   private:
     IRevelationInterface* m_interface = nullptr;

@@ -11,4 +11,5 @@ class IExtensionInterface
     virtual void Uninitialize() = 0;
 
     virtual void CollectNavigationViews(){};
+    virtual void CollectSettingsItems(){};
 };

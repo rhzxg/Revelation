@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
 
     mainWindow.AddStackedWidget(&revelation, "Revelation", FluAwesomeType::Home, Qt::AlignCenter);
     intf.CollectNavigationViews();
+    intf.CollectSettingsItems();
     
     mainWindow.AlignToScreenCenter();
     mainWindow.show();

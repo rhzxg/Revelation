@@ -9,7 +9,7 @@ SettingsToolkit::SettingsToolkit(IRevelationInterface* intf)
 
 SettingsToolkit::~SettingsToolkit()
 {
-    std::filesystem::path settingsPath = m_interface->GetResourcePath() / "settings.json";
+    std::filesystem::path settingsPath = m_interface->GetResourcePath() / "settings" / "settings.json";
     JsonToFile(m_settings, settingsPath);
 }
 

@@ -15,7 +15,7 @@ class CommonWidgetInterface : public ICommonWidgetInterface
     virtual void AddStackedWidget(QWidget* widget, const QString& name, const QIcon& icon, Qt::AlignmentFlag pos = Qt::AlignCenter) override;
     virtual void AddStackedWidget(QWidget* widget, const QString& name, FluAwesomeType type, Qt::AlignmentFlag pos = Qt::AlignCenter) override;
 
-    virtual void AddSettingItem(QWidget* widget) override;
+    virtual void AddSettingsItem(QWidget* widget) override;
 
     virtual void SetProgressBarVisibility(bool visible, int value = 0) override;
 

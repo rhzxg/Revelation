@@ -3,6 +3,7 @@
         "Version": "2.0.5"
     },
     "TimeMachine": {
+        "Version": "1.0.0",
         "StartTime": "09:00:00",
         "FinishTime": "21:00:00"
     }
