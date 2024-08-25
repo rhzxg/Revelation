@@ -27,7 +27,8 @@ TimeMachineGanttView::~TimeMachineGanttView()
 
 void TimeMachineGanttView::Initialize()
 {
-    m_timeFormatter = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetDateTimeFormatter();
+    m_unityInterface = m_interface->GetInterfaceById<IUtilityInterface>("Utility");
+    m_timeFormatter  = m_unityInterface->GetDateTimeFormatter();
 
     InitWidget();
     InitSignalSlots();
@@ -102,6 +103,11 @@ void TimeMachineGanttView::CopyTasksToClipboard(Node* summaryNode)
 
 void TimeMachineGanttView::SetupNodeTimeByTask(const std::string& date, Node* node, const TaskPrototype& task)
 {
+    std::string defaultStratTimeStr  = m_unityInterface->GetSettingsToolkit()->GetString("StartTime", "TimeMachine", "00:00:00");
+    std::string defaultFinishTimeStr = m_unityInterface->GetSettingsToolkit()->GetString("FinishTime", "TimeMachine", "23:59:59");
+    QTime       defaultStartTime     = QTime::fromString(QString::fromStdString(defaultStratTimeStr), "hh:mm:ss");
+    QTime       defaultFinishTime    = QTime::fromString(QString::fromStdString(defaultFinishTimeStr), "hh:mm:ss");
+
     // category day
     QDateTime categoryDateTime;
     categoryDateTime.setDate(QDate::fromString(QString::fromStdString(date), "yyyy-MM-dd"));
@@ -110,10 +116,8 @@ void TimeMachineGanttView::SetupNodeTimeByTask(const std::string& date, Node* no
 
     // start
     {
-        QDateTime dayBegining     = categoryDateTime;
-        QTime     dayBeginingTime = dayBegining.time();
-        dayBeginingTime.setHMS(0, 0, 0);
-        dayBegining.setTime(dayBeginingTime);
+        QDateTime dayBegining = categoryDateTime;
+        dayBegining.setTime(defaultStartTime);
 
         // later one
         if (task.m_startTime.empty())
@@ -130,10 +134,8 @@ void TimeMachineGanttView::SetupNodeTimeByTask(const std::string& date, Node* no
     // end
     if (task.m_finishTime.empty())
     {
-        QDateTime dayEnding     = categoryDateTime;
-        QTime     dayEndingTime = dayEnding.time();
-        dayEndingTime.setHMS(23, 59, 59);
-        dayEnding.setTime(dayEndingTime);
+        QDateTime dayEnding = categoryDateTime;
+        dayEnding.setTime(defaultFinishTime);
         node->setEnd(dayEnding);
     }
     else

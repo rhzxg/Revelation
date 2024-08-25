@@ -9,6 +9,7 @@
 
 class IRevelationInterface;
 class IDateTimeFormatter;
+class IUtilityInterface;
 
 class TimeMachineGanttView : public QWidget
 {
@@ -35,8 +36,9 @@ class TimeMachineGanttView : public QWidget
   private:
     Ui::TimeMachineGanttViewClass ui;
 
-    IRevelationInterface* m_interface     = nullptr;
-    IDateTimeFormatter*   m_timeFormatter = nullptr;
+    IRevelationInterface* m_interface      = nullptr;
+    IUtilityInterface*    m_unityInterface = nullptr;
+    IDateTimeFormatter*   m_timeFormatter  = nullptr;
 
     KDGantt::View*         m_view      = nullptr;
     QTreeView*             m_leftView  = nullptr;

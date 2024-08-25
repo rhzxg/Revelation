@@ -9,6 +9,8 @@ CommonWidgetInterface::CommonWidgetInterface(RevelationMainWindow* mainWindow)
 
 CommonWidgetInterface::~CommonWidgetInterface()
 {
+    m_progressBar->hide();
+    m_progressBar->deleteLater();
 }
 
 void CommonWidgetInterface::AddStackedWidget(QWidget* widget, const QString& name, const QIcon& icon, Qt::AlignmentFlag pos /*= Qt::AlignCenter*/)
@@ -61,7 +63,7 @@ void CommonWidgetInterface::Initialize()
 
 void CommonWidgetInterface::InitWidget()
 {
-    m_progressBar = new FluProgressBar(m_mainWindow);
+    m_progressBar = new FluProgressBar;
     m_progressBar->setWindowFlag(Qt::FramelessWindowHint);
     m_progressBar->setFixedWidth(200);
     m_progressBar->setWindowModality(Qt::ApplicationModal);
