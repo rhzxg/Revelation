@@ -4,6 +4,14 @@
 #include "FluSettingsVersionBox.h"
 #include "FluLabel.h"
 #include "FluHyperLinkButton.h"
+#include "FluTextToggleSwitchEx.h"
+#include <QSettings>
+#include <QDir>
+
+#ifdef WIN32
+#include <windows.h>
+#include <ShlObj.h>
+#endif
 
 RevelationConfig::RevelationConfig(IRevelationInterface* intf, QWidget* parent)
     : QWidget(parent), m_interface(intf)
@@ -46,6 +54,8 @@ void RevelationConfig::InitSignalSlots()
 
 void RevelationConfig::SetupApplicationInfoItem()
 {
+    auto settingsToolkit = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetSettingsToolkit();
+
     auto revelationItem = new FluSettingsVersionBox;
 
     auto        utilityIntf = m_interface->GetInterfaceById<IUtilityInterface>("Utility");
@@ -68,7 +78,7 @@ void RevelationConfig::SetupApplicationInfoItem()
     changeThemeCombobox->addItem(tr("Light"));
     changeThemeCombobox->addItem(tr("Dark"));
     connect(changeThemeCombobox, &FluComboBoxEx::currentIndexChanged, [=](int index) {
-        FluTheme theme = index == 0 ? FluTheme::Light : FluTheme::Dark;                                  
+        FluTheme theme = index == 0 ? FluTheme::Light : FluTheme::Dark;
         // FluThemeUtils::getUtils()->setTheme(FluTheme::Light);
     });
 
@@ -82,6 +92,57 @@ void RevelationConfig::SetupApplicationInfoItem()
 
     revelationItem->addWidget(themeItemWidget);
     revelationItem->addVSplitLine();
+
+    //////////////////////////////////////////////////////////////////////////
+#ifdef WIN32
+    bool launchOnBoot = settingsToolkit->GetBoolean("LaunchOnBoot", "Revelation", false);
+
+    auto launchOnBootLabel = new FluLabel;
+    launchOnBootLabel->setLabelStyle(FluLabelStyle::BodyTextBlockStyle);
+    launchOnBootLabel->setText("Launch on boot: ");
+
+    FluTextToggleSwitchEx* launchOnBootSwitch = new FluTextToggleSwitchEx;
+    launchOnBootSwitch->setText("ON", "OFF");
+    launchOnBootSwitch->blockSignals(true);
+    launchOnBootSwitch->setChecked(launchOnBoot);
+    launchOnBootSwitch->blockSignals(false);
+    connect(launchOnBootSwitch, &FluTextToggleSwitchEx::stateChanged, [=](bool checked) {
+        settingsToolkit->SetBoolean("LaunchOnBoot", "Revelation", checked);
+
+        QSettings bootUpSettings("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+        QString   appName = QCoreApplication::applicationName();
+        QString   appPath = QCoreApplication::applicationFilePath();
+
+        PWSTR appDataPath;
+        if (SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &appDataPath) == S_OK)
+        {
+            QString appDataDir = QString::fromUtf16(reinterpret_cast<const char16_t*>(appDataPath));
+            CoTaskMemFree(appDataPath);
+
+            QString startupPath = appDataDir + "/Microsoft/Windows/Start Menu/Programs/Startup/" + appName + ".exe.lnk";
+            if (checked)
+            {
+                QFile::link(appPath, startupPath);
+            }
+            else
+            {
+                QFile file(startupPath);
+                file.remove();
+            }
+        }
+    });
+
+    QHBoxLayout* launchOnBootLayout = new QHBoxLayout;
+    launchOnBootLayout->setContentsMargins(0, 0, 0, 0);
+    launchOnBootLayout->addWidget(launchOnBootLabel);
+    launchOnBootLayout->addStretch();
+    launchOnBootLayout->addWidget(launchOnBootSwitch);
+    QWidget* launchOnBootWidget = new QWidget;
+    launchOnBootWidget->setLayout(launchOnBootLayout);
+
+    revelationItem->addWidget(launchOnBootWidget);
+    revelationItem->addVSplitLine();
+#endif
 
     //////////////////////////////////////////////////////////////////////////
     auto githubLabel = new FluLabel;
