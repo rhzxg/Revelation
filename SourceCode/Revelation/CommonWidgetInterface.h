@@ -19,6 +19,8 @@ class CommonWidgetInterface : public ICommonWidgetInterface
 
     virtual void SetProgressBarVisibility(bool visible, int value = 0) override;
 
+    virtual void DisposeMemoryBindings() override;
+
     void SetInterface(IRevelationInterface* intf);
     void InitializeConfig();
 

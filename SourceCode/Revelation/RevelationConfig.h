@@ -13,6 +13,7 @@ class RevelationConfig : public QWidget
     ~RevelationConfig();
 
     void AddSettingItem(QWidget* item);
+    void RemoveSettingsItems();
 
   private:
     void Initialize();

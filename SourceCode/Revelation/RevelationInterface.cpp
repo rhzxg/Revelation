@@ -84,6 +84,9 @@ void RevelationInterface::Uninitialize()
     }
     m_interfaces.clear();
 
+    // dispose strong memory bindings
+    m_commonWidgetIntf->DisposeMemoryBindings();
+
 #ifdef WIN32
     for (HINSTANCE library : m_libraries)
     {

@@ -4,7 +4,7 @@
 #include "ICommonWidgetInterface.h"
 
 #ifdef WIN32
-#include "windows.h"
+#include <windows.h>
 #endif // WIN32
 
 class RevelationInterface : public IRevelationInterface

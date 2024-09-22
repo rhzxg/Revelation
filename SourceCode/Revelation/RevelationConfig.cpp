@@ -30,6 +30,16 @@ void RevelationConfig::AddSettingItem(QWidget* item)
     m_scrollArea->getMainLayout()->addWidget(item);
 }
 
+void RevelationConfig::RemoveSettingsItems()
+{
+    while (m_scrollArea->getMainLayout()->count() > 0)
+    {
+        QWidget* widget = m_scrollArea->getMainLayout()->itemAt(0)->widget();
+        m_scrollArea->getMainLayout()->removeWidget(widget);
+        delete widget;
+    }
+}
+
 void RevelationConfig::Initialize()
 {
     InitWidget();

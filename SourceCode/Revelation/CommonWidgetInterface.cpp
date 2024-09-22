@@ -45,6 +45,11 @@ void CommonWidgetInterface::SetProgressBarVisibility(bool visible, int value /*=
     }
 }
 
+void CommonWidgetInterface::DisposeMemoryBindings()
+{
+    m_config->RemoveSettingsItems();
+}
+
 void CommonWidgetInterface::SetInterface(IRevelationInterface* intf)
 {
     m_interface = intf;

@@ -13,4 +13,6 @@ class ICommonWidgetInterface
     virtual void AddSettingsItem(QWidget* widget) = 0;
 
     virtual void SetProgressBarVisibility(bool visible, int value = 0) = 0;
+
+    virtual void DisposeMemoryBindings() = 0;
 };
