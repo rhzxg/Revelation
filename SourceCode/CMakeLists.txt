@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.14)
 
 project(Revelation)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 file(GLOB SUBDIRS RELATIVE ${CMAKE_SOURCE_DIR} *)
 foreach(SUBDIR ${SUBDIRS})
     if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${SUBDIR})
