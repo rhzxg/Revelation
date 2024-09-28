@@ -4,7 +4,8 @@
         "LaunchOnBoot": false
     },
     "TimeMachine": {
-        "Version": "1.0.0",
+        "Version": "1.1.0",
+        "SyncHorizontalScroll": true,
         "StartTime": "09:00:00",
         "FinishTime": "21:00:00"
     }

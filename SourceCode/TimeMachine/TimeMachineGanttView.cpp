@@ -58,12 +58,14 @@ void TimeMachineGanttView::InitWidget()
     m_leftView->setFixedWidth(200);
     m_leftView->setContextMenuPolicy(Qt::CustomContextMenu);
     m_leftView->header()->setSectionResizeMode(QHeaderView::Stretch);
+    m_leftView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     m_leftView->setStyleSheet("QTreeView { border-radius: 8px; background-color: #ADE8F6; }"
                               "QHeaderView::section { border-top-left-radius: 8px; border-top-right-radius: 8px; background-color: #ADE8F6; }");
 
-    m_rightView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_rightView->setReadOnly(true);
+    m_rightView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_rightView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     m_rightView->setStyleSheet("border: none;");
 }
@@ -71,6 +73,7 @@ void TimeMachineGanttView::InitWidget()
 void TimeMachineGanttView::InitSignalSlots()
 {
     connect(m_leftView, &QTreeView::customContextMenuRequested, this, &TimeMachineGanttView::OnContextMenuEvent);
+    connect(m_rightView->verticalScrollBar(), &QScrollBar::valueChanged, this, &TimeMachineGanttView::OnRightViewVerticallyScrolled);
 }
 
 void TimeMachineGanttView::CopyTasksToClipboard(Node* summaryNode)
@@ -274,4 +277,32 @@ void TimeMachineGanttView::OnContextMenuEvent(const QPoint& pos)
     QPoint globalPos  = mapToGlobal(pos);
     QPoint correctPos = QPoint(globalPos.x(), globalPos.y() + 50);
     menu.exec(correctPos);
+}
+
+void TimeMachineGanttView::OnRightViewVerticallyScrolled()
+{
+    if (!m_unityInterface->GetSettingsToolkit()->GetBoolean("SyncHorizontalScroll", "TimeMachine", true))
+    {
+        return;
+    }
+
+    QRect       visibleRect    = m_leftView->viewport()->rect();
+    QModelIndex firstRootIndex = QModelIndex();
+    for (int y = visibleRect.top(); y < visibleRect.bottom(); y += 5)
+    {
+        QModelIndex currentIndex = m_leftView->indexAt(QPoint(0, y));
+        if (!currentIndex.isValid() || currentIndex.parent().isValid())
+        {
+            continue;
+        }
+
+        firstRootIndex = currentIndex;
+        break;
+    }
+
+    if (firstRootIndex.isValid() && firstRootIndex != m_rootIndex)
+    {
+        m_view->ensureVisible(firstRootIndex);
+        m_rootIndex = firstRootIndex;
+    }
 }

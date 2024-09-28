@@ -19,7 +19,7 @@ class TimeMachineGanttView : public QWidget
     TimeMachineGanttView(IRevelationInterface* intf, QWidget* parent = nullptr);
     ~TimeMachineGanttView();
 
-  private:
+private:
     void Initialize();
     void InitWidget();
     void InitSignalSlots();
@@ -32,6 +32,7 @@ class TimeMachineGanttView : public QWidget
   public slots:
     void OnTaskFiltered(const std::vector<DateToTasks>& dateToTaskVec);
     void OnContextMenuEvent(const QPoint& pos);
+    void OnRightViewVerticallyScrolled();
 
   private:
     Ui::TimeMachineGanttViewClass ui;
@@ -50,4 +51,7 @@ class TimeMachineGanttView : public QWidget
     KDGantt::ConstraintModel m_constraintModel;
     std::vector<Node*>       m_prevNodes;
     std::vector<QModelIndex> m_prevIndexes;
+
+    // sync horizontal scrolling
+    QModelIndex m_rootIndex;
 };
