@@ -1,12 +1,12 @@
 QFrame {
-    background: #FB637E;
+    background: #76B9ED;
     border-radius: 10px 10px 10px 10px;
 }
 
 QLineEdit {
     background: transparent;
     border: none;
-    color: black;
+    color: #FFFFFF;
 }
 
 QPushButton {
@@ -15,6 +15,6 @@ QPushButton {
 }
 
 QPushButton::hover {
-    background-color: #EC546F;
+    background-color: #72b7ec;
     border-radius: 5px;
 }

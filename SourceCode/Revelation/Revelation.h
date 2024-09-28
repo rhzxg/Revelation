@@ -35,6 +35,7 @@ class Revelation : public QWidget
     void TaskItemReparenting(const TaskPrototype& task);
 
   public slots:
+    void OnThemeChanged();
     void OnTaskItemReparenting(TaskPrototype task, TaskStatus from, TaskStatus to);
     void OnTaskItemEdited(const TaskPrototype& task);
     void OnTaskItemDeleted(const TaskPrototype& task);

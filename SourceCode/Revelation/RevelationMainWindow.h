@@ -21,6 +21,10 @@ class RevelationMainWindow : public FluFrameLessWidget
   private:
     void Initialize();
     void InitWidget();
+    void InitSignalSlots();
+
+  public slots:
+    void OnThemeChanged();
 
   private:
     FluVNavigationView* m_navigationView;

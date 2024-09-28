@@ -1,0 +1,8 @@
+RevelationMainWindow {
+    background-color: #202020;
+}
+
+#titleBar {
+    color: white;
+    background-color: #202020;
+}

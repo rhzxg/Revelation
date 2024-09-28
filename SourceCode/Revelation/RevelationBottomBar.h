@@ -23,6 +23,7 @@ class RevelationBottomBar : public RevelationSidebar
     void TaskItemCreated(TaskPrototype task, TaskStatus from, TaskStatus to);
 
   public slots:
+    void OnThemeChanged();
     void OnBtnConfirmClicked();
 
   private:

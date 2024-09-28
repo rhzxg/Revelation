@@ -1,4 +1,6 @@
 #include "RevelationListItem.h"
+#include "FluThemeUtils.h"
+#include "FluStyleSheetUitls.h"
 
 RevelationListItem::RevelationListItem(QWidget* parent)
     : QWidget(parent)
@@ -38,9 +40,21 @@ void RevelationListItem::ResizeWidget(const QSize& size)
 
 void RevelationListItem::SetMouseHoverd(bool hoverd)
 {
-    QString hoverdQss    = "QFrame { background: #F7F7F7; border-radius: 8px 8px 8px 8px; }";
-    QString nonhoverdQss = "QFrame { background: #F0F0F0; border-radius: 8px 8px 8px 8px; }";
-    ui.frame->setStyleSheet(hoverd ? hoverdQss : nonhoverdQss);
+    QString color = "", qss = "";
+    if (m_lightMode)
+    {
+        color = hoverd ? "#F7F7F7" : "#F0F0F0";
+        qss   = "QFrame { background: %1; border-radius: 8px 8px 8px 8px; }";
+        qss   = qss.arg(color);
+    }
+    else
+    {
+        color = hoverd ? "#404040" : "#333333";
+        qss   = "QFrame { background: %1; border-radius: 8px 8px 8px 8px; color: #FFFFFF}";
+        qss   = qss.arg(color);
+    }
+
+    ui.frame->setStyleSheet(qss);
 }
 
 void RevelationListItem::Initialize()
@@ -54,7 +68,10 @@ void RevelationListItem::InitWidget()
     this->setWindowFlag(Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
 
-    ui.frame->setStyleSheet("QFrame { background: #F0F0F0; border-radius: 8px 8px 8px 8px; }");
+    m_lightMode   = FluThemeUtils::isLightTheme();
+    QString color = m_lightMode ? "#F0F0F0" : "#333333";
+    QString qss   = "QFrame { background: %1; border-radius: 8px 8px 8px 8px; }";
+    ui.frame->setStyleSheet(qss.arg(color));
 }
 
 void RevelationListItem::InitSignalSlots()

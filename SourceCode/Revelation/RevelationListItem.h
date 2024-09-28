@@ -23,5 +23,7 @@ class RevelationListItem : public QWidget
   private:
     Ui::RevelationListItemClass ui;
 
+    bool m_lightMode = true;
+
     TaskPrototype m_task;
 };

@@ -29,7 +29,7 @@ void RevelationMainWindow::AlignToScreenCenter()
     }
 }
 
-void RevelationMainWindow::AddStackedWidget(QWidget* widget, const QString& name, const QIcon& icon, Qt::AlignmentFlag pos/* = Qt::AlignCenter*/)
+void RevelationMainWindow::AddStackedWidget(QWidget* widget, const QString& name, const QIcon& icon, Qt::AlignmentFlag pos /* = Qt::AlignCenter*/)
 {
     if (nullptr == widget)
     {
@@ -102,6 +102,7 @@ void RevelationMainWindow::AddStackedWidget(QWidget* widget, const QString& name
 void RevelationMainWindow::Initialize()
 {
     InitWidget();
+    InitSignalSlots();
 }
 
 void RevelationMainWindow::InitWidget()
@@ -121,4 +122,41 @@ void RevelationMainWindow::InitWidget()
 
     // collapse
     m_navigationView->onMenuItemClicked();
+}
+
+void RevelationMainWindow::InitSignalSlots()
+{
+    connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [=](FluTheme theme) { OnThemeChanged(); });
+}
+
+void RevelationMainWindow::OnThemeChanged()
+{
+    if (FluThemeUtils::isLightTheme())
+    {
+        m_titleBar->chromePalette()->setTitleBarActiveBackgroundColor(Qt::transparent);
+        m_titleBar->chromePalette()->setTitleBarInactiveBackgroundColor(Qt::transparent);
+        m_titleBar->chromePalette()->setTitleBarActiveForegroundColor(Qt::black);
+        m_titleBar->chromePalette()->setTitleBarInactiveForegroundColor(Qt::black);
+#ifndef Q_OS_MACOS
+        m_titleBar->minimizeButton()->setActiveForegroundColor(Qt::black);
+        m_titleBar->closeButton()->setActiveForegroundColor(Qt::black);
+        m_titleBar->maximizeButton()->setActiveForegroundColor(Qt::black);
+#endif
+        m_titleBar->show();
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/light/RevelationMainWindow.qss", this);
+    }
+    else
+    {
+        m_titleBar->chromePalette()->setTitleBarActiveBackgroundColor(Qt::transparent);
+        m_titleBar->chromePalette()->setTitleBarInactiveBackgroundColor(Qt::transparent);
+        m_titleBar->chromePalette()->setTitleBarActiveForegroundColor(Qt::white);
+        m_titleBar->chromePalette()->setTitleBarInactiveForegroundColor(Qt::white);
+#ifndef Q_OS_MACOS
+        m_titleBar->minimizeButton()->setActiveForegroundColor(Qt::white);
+        m_titleBar->closeButton()->setActiveForegroundColor(Qt::white);
+        m_titleBar->maximizeButton()->setActiveForegroundColor(Qt::white);
+#endif
+        m_titleBar->show();
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/dark/RevelationMainWindow.qss", this);
+    }
 }

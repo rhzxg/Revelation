@@ -1,5 +1,5 @@
 QFrame#frame {
-    background: #F0F0F0;
+    background: #202020;
     border-radius: 7px;
 }
 
@@ -9,6 +9,6 @@ QPushButton {
 }
 
 QPushButton::hover {
-    background-color: #E1E1E1;
+    background-color: #000000;
     border-radius: 5px;
 }

@@ -51,6 +51,8 @@ void RevelationRightSidebar::InitWidget()
 
 void RevelationRightSidebar::InitSignalSlots()
 {
+    connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [=](FluTheme theme) { OnThemeChanged(); });
+
     connect(ui.btnAddToRoutine, &QPushButton::clicked, this, &RevelationRightSidebar::OnBtnAddToRoutineClicled);
     connect(ui.btnHide, &QPushButton::clicked, this, [&]() {
         parentWidget()->hide();
@@ -172,6 +174,28 @@ void RevelationRightSidebar::RefreshTaskData(const TaskPrototype& task)
     ui.labelCreateTime->setText(tr("Created: ") + QString::fromStdString(task.m_createTime));
 
     BlockSignals(false);
+}
+
+void RevelationRightSidebar::OnThemeChanged()
+{
+    if (FluThemeUtils::isLightTheme())
+    {
+        std::vector<FluPushButton*> btns{ui.btnAddToRoutine, ui.btnHide};
+        for (FluPushButton* btn : btns)
+        {
+            FluStyleSheetUitls::setQssByFileName("/resources/qss/light/RevelationRightSidebar.qss", btn);
+        }
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/light/RevelationRightSidebar.qss", this);
+    }
+    else
+    {
+        std::vector<FluPushButton*> btns{ui.btnAddToRoutine, ui.btnHide};
+        for (FluPushButton* btn : btns)
+        {
+            FluStyleSheetUitls::setQssByFileName("/resources/qss/dark/RevelationRightSidebar.qss", btn);
+        }
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/dark/RevelationRightSidebar.qss", this);
+    }
 }
 
 void RevelationRightSidebar::OnTaskReparenting(const TaskPrototype& task)

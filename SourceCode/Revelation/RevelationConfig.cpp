@@ -89,7 +89,7 @@ void RevelationConfig::SetupApplicationInfoItem()
     changeThemeCombobox->addItem(tr("Dark"));
     connect(changeThemeCombobox, &FluComboBoxEx::currentIndexChanged, [=](int index) {
         FluTheme theme = index == 0 ? FluTheme::Light : FluTheme::Dark;
-        // FluThemeUtils::getUtils()->setTheme(FluTheme::Light);
+        FluThemeUtils::getUtils()->setTheme(theme);
     });
 
     QHBoxLayout* themeItemLayout = new QHBoxLayout;

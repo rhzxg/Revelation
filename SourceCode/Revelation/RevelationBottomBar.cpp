@@ -33,6 +33,8 @@ void RevelationBottomBar::InitWidget()
 
 void RevelationBottomBar::InitSignalSlots()
 {
+    connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [=](FluTheme theme) { OnThemeChanged(); });
+
     connect(ui.btnConfirm, &QPushButton::clicked, this, &RevelationBottomBar::OnBtnConfirmClicked);
 }
 
@@ -45,6 +47,18 @@ void RevelationBottomBar::keyPressEvent(QKeyEvent* event)
     else
     {
         QWidget::keyPressEvent(event);
+    }
+}
+
+void RevelationBottomBar::OnThemeChanged()
+{
+    if (FluThemeUtils::isLightTheme())
+    {
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/light/RevelationBottomBar.qss", this);
+    }
+    else
+    {
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/dark/RevelationBottomBar.qss", this);
     }
 }
 

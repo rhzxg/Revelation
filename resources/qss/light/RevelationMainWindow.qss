@@ -1,0 +1,7 @@
+RevelationMainWindow {
+    background-color: #F0F0F0;
+}
+
+#titleBar {
+    background-color: #F0F0F0;
+}

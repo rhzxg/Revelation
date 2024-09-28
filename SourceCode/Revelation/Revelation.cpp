@@ -91,9 +91,9 @@ void Revelation::InitWidget()
     std::vector<QString>    objNames{"todo", "doing", "testing", "done"};
     for (int i = 0; i < 4; ++i)
     {
-        QLabel*    label  = labels[i];
-        QWidget*   widget = widgets[i];
-        TaskStatus type   = listTypes[i];
+        QLabel*    label   = labels[i];
+        QWidget*   widget  = widgets[i];
+        TaskStatus type    = listTypes[i];
         QString    objName = objNames[i];
 
         label->setObjectName(objName);
@@ -124,6 +124,7 @@ void Revelation::InitWidget()
 
 void Revelation::InitSignalSlots()
 {
+    connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [=](FluTheme theme) { OnThemeChanged(); });
 }
 
 RevelationSidebarWrapper* Revelation::GetSidebarWrapper(RevelationSidebar::Side side)
@@ -170,6 +171,18 @@ RevelationSidebarWrapper* Revelation::GetSidebarWrapper(RevelationSidebar::Side 
     }
 
     return sidebarWrapper;
+}
+
+void Revelation::OnThemeChanged()
+{
+    if (FluThemeUtils::isLightTheme())
+    {
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/light/Revelation.qss", this);
+    }
+    else
+    {
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/dark/Revelation.qss", this);
+    }
 }
 
 void Revelation::OnTaskItemReparenting(TaskPrototype task, TaskStatus from, TaskStatus to)

@@ -30,6 +30,8 @@ class RevelationRightSidebar : public RevelationSidebar
     void TaskItemDeleted(const TaskPrototype& task);
 
   public slots:
+    void OnThemeChanged();
+
     void OnTaskReparenting(const TaskPrototype& task);
     void OnTaskItemSelected(const TaskPrototype& task);
     void OnTaskItemEdited();
