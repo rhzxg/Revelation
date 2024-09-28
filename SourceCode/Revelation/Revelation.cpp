@@ -85,8 +85,8 @@ void Revelation::InitWidget()
     GetSidebarWrapper(RevelationSidebar::Bottom)->hide();
     GetSidebarWrapper(RevelationSidebar::Right)->hide();
 
-    std::vector<QLabel*>    labels{ui.labelTitleTodo, ui.labelTitleDoing, ui.labelTitleVerifying, ui.labelTitleDone};
-    std::vector<QWidget*>   widgets{ui.taskWidgetTodo, ui.taskWidgetDoing, ui.taskWidgetVerifying, ui.taskWidgetDone};
+    std::vector<QLabel*>    labels{ui.labelTitleTodo, ui.labelTitleDoing, ui.labelTitleTesting, ui.labelTitleDone};
+    std::vector<QWidget*>   widgets{ui.taskWidgetTodo, ui.taskWidgetDoing, ui.taskWidgetTesting, ui.taskWidgetDone};
     std::vector<QString>    colors{"#CAF0FC", "#ADE8F6", "#90E0EF", "#48CAE4"};
     std::vector<TaskStatus> listTypes{TaskStatus::Todo, TaskStatus::Doing, TaskStatus::Testing, TaskStatus::Done};
     for (int i = 0; i < 4; ++i)
