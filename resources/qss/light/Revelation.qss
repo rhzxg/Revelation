@@ -1,0 +1,51 @@
+QLabel#todo {
+    background-color: #CAF0FC;
+    color: #FFFFFF;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+QLabel#doing {
+    background-color: #ADE8F6;
+    color: #FFFFFF;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+QLabel#testing {
+    background-color: #90E0EF;
+    color: #FFFFFF;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+QLabel#done {
+    background-color: #48CAE4;
+    color: #FFFFFF;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+QWidget#todo {
+    background-color: #CAF0FC;
+    color: #FFFFFF;
+    border-radius: 8px;
+}
+
+QWidget#doing {
+    background-color: #ADE8F6;
+    color: #FFFFFF;
+    border-radius: 8px;
+}
+
+QWidget#testing {
+    background-color: #90E0EF;
+    color: #FFFFFF;
+    border-radius: 8px;
+}
+
+QWidget#done {
+    background-color: #48CAE4;
+    color: #FFFFFF;
+    border-radius: 8px;
+}

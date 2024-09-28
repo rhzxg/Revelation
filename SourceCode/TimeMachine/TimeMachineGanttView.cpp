@@ -2,6 +2,7 @@
 #include "IRevelationInterface.h"
 #include "Utility/IUtilityInterface.h"
 #include "Utility/IDateTimeFormatter.h"
+#include "FluStyleSheetUitls.h"
 #include <QMenu>
 #include <QTreeView>
 #include <QClipboard>
@@ -60,14 +61,9 @@ void TimeMachineGanttView::InitWidget()
     m_leftView->header()->setSectionResizeMode(QHeaderView::Stretch);
     m_leftView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    m_leftView->setStyleSheet("QTreeView { border-radius: 8px; background-color: #ADE8F6; }"
-                              "QHeaderView::section { border-top-left-radius: 8px; border-top-right-radius: 8px; background-color: #ADE8F6; }");
-
     m_rightView->setReadOnly(true);
-    m_rightView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_rightView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    m_rightView->setStyleSheet("border: none;");
+    FluStyleSheetUitls::setQssByFileName("/resources/qss/light/TimeMachineGanttView.qss", this);
 }
 
 void TimeMachineGanttView::InitSignalSlots()

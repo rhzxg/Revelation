@@ -1,0 +1,4 @@
+QWidget#filter {
+    background-color: #CAF0FC;
+    border-radius: 8px;
+}

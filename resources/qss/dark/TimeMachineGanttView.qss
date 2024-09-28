@@ -1,0 +1,54 @@
+QTreeView {
+    border-radius: 8px;
+    background-color: #ADE8F6;
+}
+
+QHeaderView::section {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: #ADE8F6;
+}
+
+QGraphicsView {
+    border: none;
+}
+
+QScrollBar:horizontal {
+    height: 4px;
+    border-radius: 2px;
+    background: #f0f0f0;
+}
+
+QScrollBar::handle:horizontal {
+    background: #a0a0a0;
+    border-radius: 2px;
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    background: none;
+}
+
+QScrollBar::groove:horizontal {
+    background: #f0f0f0;
+    border-radius: 2px;
+}
+
+QScrollBar:vertical {
+    width: 4px;
+    border-radius: 2px;
+    background: #f0f0f0;
+}
+
+QScrollBar::handle:vertical {
+    background: #a0a0a0;
+    border-radius: 2px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background: none;
+}
+
+QScrollBar::groove:vertical {
+    background: #f0f0f0;
+    border-radius: 2px;
+}

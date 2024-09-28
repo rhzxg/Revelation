@@ -1,6 +1,7 @@
 #include "RevelationBottomBar.h"
 #include "Utility/IUtilityInterface.h"
 #include "FluIconUtils.h"
+#include "FluStyleSheetUitls.h"
 
 RevelationBottomBar::RevelationBottomBar(IRevelationInterface* intf, QWidget* parent)
     : RevelationSidebar(intf, parent)
@@ -22,15 +23,12 @@ void RevelationBottomBar::Initialize()
 
 void RevelationBottomBar::InitWidget()
 {
-    ui.frame->setStyleSheet("QFrame { background: #FB637E; border-radius: 10px 10px 10px 10px; }");
-    ui.editTask->setStyleSheet("QLineEdit { background: transparent; border: none; color: black; }");
-    ui.btnConfirm->setStyleSheet("QPushButton { background: transparent; border: none; }"
-                                 "QPushButton::hover { background-color: #EC546F; border-radius: 5px;}");
-
     ui.btnConfirm->setToolTip(tr("Add"));
     ui.btnConfirm->setIconSize(QSize(24, 24));
     ui.btnConfirm->setFixedSize(32, 32);
     ui.btnConfirm->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::Accept));
+
+    FluStyleSheetUitls::setQssByFileName("/resources/qss/light/RevelationBottomBar.qss", this);
 }
 
 void RevelationBottomBar::InitSignalSlots()

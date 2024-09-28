@@ -25,16 +25,14 @@ void RevelationRightSidebar::Initialize()
 
 void RevelationRightSidebar::InitWidget()
 {
-    ui.frame->setObjectName("RevelationFrame");
-    ui.frame->setStyleSheet("QFrame#RevelationFrame { background: #F0F0F0; border-radius: 7px; }");
+    ui.frame->setObjectName("frame");
 
     std::vector<FluPushButton*> btns{ui.btnAddToRoutine, ui.btnHide};
     for (FluPushButton* btn : btns)
     {
-        btn->setStyleSheet("QPushButton { background: transparent; border: none; }"
-                           "QPushButton::hover { background-color: #E1E1E1; border-radius: 5px;}");
         btn->setIconSize(QSize(24, 24));
         btn->setFixedSize(32, 32);
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/light/RevelationRightSidebar.qss", btn);
     }
 
     ui.btnAddToRoutine->setToolTip(tr("Add to daily routine"));
@@ -47,6 +45,8 @@ void RevelationRightSidebar::InitWidget()
     ui.cbType->addItems({tr("None"), tr("Bug"), tr("Feature"), tr("Test"), tr("UI")});
 
     ui.labelCreateTime->setAlignment(Qt::AlignCenter);
+
+    FluStyleSheetUitls::setQssByFileName("/resources/qss/light/RevelationRightSidebar.qss", this);
 }
 
 void RevelationRightSidebar::InitSignalSlots()

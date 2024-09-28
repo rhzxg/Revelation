@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QMimeData>
 #include <QDrag>
+#include "FluStyleSheetUitls.h"
 
 RevelationListView::RevelationListView(IRevelationInterface* intf, QWidget* parent /*= nullptr*/)
     : m_interface(intf), QListView(parent)
@@ -40,12 +41,12 @@ void RevelationListView::InitWidget()
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    this->setStyleSheet("QListView { background: transparent; border: none; }");
-
     m_model    = new RevelationListModel(m_interface, this);
     m_delegate = new RevelationListDelegate(m_interface, this);
     this->setModel(m_model);
     this->setItemDelegate(m_delegate);
+
+    FluStyleSheetUitls::setQssByFileName("/resources/qss/light/RevelationListView.qss", this);
 }
 
 void RevelationListView::InitSignalSlots()

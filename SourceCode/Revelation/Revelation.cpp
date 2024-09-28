@@ -87,22 +87,19 @@ void Revelation::InitWidget()
 
     std::vector<QLabel*>    labels{ui.labelTitleTodo, ui.labelTitleDoing, ui.labelTitleTesting, ui.labelTitleDone};
     std::vector<QWidget*>   widgets{ui.taskWidgetTodo, ui.taskWidgetDoing, ui.taskWidgetTesting, ui.taskWidgetDone};
-    std::vector<QString>    colors{"#CAF0FC", "#ADE8F6", "#90E0EF", "#48CAE4"};
     std::vector<TaskStatus> listTypes{TaskStatus::Todo, TaskStatus::Doing, TaskStatus::Testing, TaskStatus::Done};
+    std::vector<QString>    objNames{"todo", "doing", "testing", "done"};
     for (int i = 0; i < 4; ++i)
     {
         QLabel*    label  = labels[i];
         QWidget*   widget = widgets[i];
         TaskStatus type   = listTypes[i];
+        QString    objName = objNames[i];
 
-        QString labelStyle  = QString("QLabel {background-color: %1; color: #FFFFFF; border-radius: 8px; font-size: 16px;}").arg(colors[i]);
-        QString widgetStyle = QString("QWidget#widget {background-color: %1; color: #FFFFFF; border-radius: 8px;}").arg(colors[i]);
-
+        label->setObjectName(objName);
         label->setAlignment(Qt::AlignCenter);
-        label->setStyleSheet(labelStyle);
 
-        widget->setObjectName("widget");
-        widget->setStyleSheet(widgetStyle);
+        widget->setObjectName(objName);
 
         RevelationListView* view = new RevelationListView(m_interface);
         view->SetViewType(type);
@@ -121,6 +118,8 @@ void Revelation::InitWidget()
         connect(view, SIGNAL(TaskItemSelected(const TaskPrototype&)),
                 GetSidebarWrapper(RevelationSidebar::Right)->GetSidebar(), SLOT(OnTaskItemSelected(const TaskPrototype&)));
     }
+
+    FluStyleSheetUitls::setQssByFileName("/resources/qss/light/Revelation.qss", this);
 }
 
 void Revelation::InitSignalSlots()
