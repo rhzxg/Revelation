@@ -40,7 +40,7 @@ void TimeMachine::InitWidget()
     }
 
     ui.eFilterWidget->setObjectName("filter");
-    ui.eFilterWidget->setStyleSheet("QWidget#filter {background-color: #CAF0FC; color: #FFFFFF; border-radius: 8px;}");
+    ui.eFilterWidget->setStyleSheet("QWidget#filter {background-color: #CAF0FC; border-radius: 8px;}");
 }
 
 void TimeMachine::InitSignalSlots()
