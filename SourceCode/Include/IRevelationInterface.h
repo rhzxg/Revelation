@@ -10,6 +10,8 @@ class IRevelationInterface
     virtual std::filesystem::path GetApplicationPath() = 0;
     virtual std::filesystem::path GetResourcePath()    = 0;
 
+    virtual void Broadcast(BroadcastType broadcastType, const std::any& param = std::any()) = 0;
+
     template <typename T>
     T* GetInterfaceById(const std::string& id)
     {

@@ -26,30 +26,21 @@ std::filesystem::path RevelationInterface::GetResourcePath()
     return m_resourcePath;
 }
 
+void RevelationInterface::Broadcast(BroadcastType broadcastType, const std::any& param /*= std::any()*/)
+{
+    for (auto& interfacePair : m_interfaces)
+    {
+        IExtensionInterface* extensionIntf = interfacePair.second;
+        extensionIntf->HandleBroadcast(broadcastType, param);
+    }
+}
+
 void RevelationInterface::InitExtensions()
 {
     for (auto& interfacePair : m_interfaces)
     {
         IExtensionInterface* extensionIntf = interfacePair.second;
         extensionIntf->Initialize();
-    }
-}
-
-void RevelationInterface::CollectNavigationViews()
-{
-    for (auto& interfacePair : m_interfaces)
-    {
-        IExtensionInterface* extensionIntf = interfacePair.second;
-        extensionIntf->CollectNavigationViews();
-    }
-}
-
-void RevelationInterface::CollectSettingsItems()
-{
-    for (auto& interfacePair : m_interfaces)
-    {
-        IExtensionInterface* extensionIntf = interfacePair.second;
-        extensionIntf->CollectSettingsItems();
     }
 }
 

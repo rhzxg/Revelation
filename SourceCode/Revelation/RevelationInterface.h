@@ -16,9 +16,9 @@ class RevelationInterface : public IRevelationInterface
     virtual std::filesystem::path GetApplicationPath() override;
     virtual std::filesystem::path GetResourcePath() override;
 
+    virtual void Broadcast(BroadcastType broadcastType, const std::any& param = std::any()) override;
+
     void InitExtensions();
-    void CollectNavigationViews();
-    void CollectSettingsItems();
 
   private:
     void Initialize();

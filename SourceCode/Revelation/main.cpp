@@ -41,8 +41,8 @@ int main(int argc, char* argv[])
     splash.exec();
 
     mainWindow.AddStackedWidget(&revelation, "Revelation", FluAwesomeType::Home, Qt::AlignCenter);
-    intf.CollectNavigationViews();
-    intf.CollectSettingsItems();
+    intf.Broadcast(BroadcastType::CollectNavigationView);
+    intf.Broadcast(BroadcastType::CollectSettingsItem);
     
     mainWindow.AlignToScreenCenter();
     mainWindow.show();

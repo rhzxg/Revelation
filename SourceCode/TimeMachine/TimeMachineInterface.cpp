@@ -26,7 +26,24 @@ void TimeMachineInterface::Uninitialize()
 {
 }
 
-void TimeMachineInterface::CollectNavigationViews()
+void TimeMachineInterface::HandleBroadcast(BroadcastType broadcastType, const std::any& param /* = std::any() */)
+{
+    if (broadcastType == BroadcastType::CollectNavigationView)
+    {
+        AddNavigationView();
+    }
+    else if (broadcastType == BroadcastType::CollectSettingsItem)
+    {
+        AddSettingsItem();
+    }
+    else if (broadcastType == BroadcastType::ChangeTheme)
+    {
+        FluTheme theme = std::any_cast<FluTheme>(param);
+        FluThemeUtils::getUtils()->setTheme(theme);
+    }
+}
+
+void TimeMachineInterface::AddNavigationView()
 {
     auto commonWidgetIntf = m_interface->GetCommonWidgetInterface();
     if (nullptr != commonWidgetIntf)
@@ -36,7 +53,7 @@ void TimeMachineInterface::CollectNavigationViews()
     }
 }
 
-void TimeMachineInterface::CollectSettingsItems()
+void TimeMachineInterface::AddSettingsItem()
 {
     auto settingsToolkit = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetSettingsToolkit();
 

@@ -1,4 +1,6 @@
 #pragma once
+#include "BroadcastTypes.h"
+#include <any>
 
 #define DLL_EXPORT extern "C" __declspec(dllexport)
 
@@ -10,6 +12,5 @@ class IExtensionInterface
     virtual void Initialize()   = 0;
     virtual void Uninitialize() = 0;
 
-    virtual void CollectNavigationViews(){};
-    virtual void CollectSettingsItems(){};
+    virtual void HandleBroadcast(BroadcastType broadcastType, const std::any& param = std::any()){};
 };

@@ -13,8 +13,11 @@ class TimeMachineInterface : public ITimeMachineInterface
     virtual void Initialize() override;
     virtual void Uninitialize() override;
 
-    virtual void CollectNavigationViews() override;
-    virtual void CollectSettingsItems() override;
+    virtual void HandleBroadcast(BroadcastType broadcastType, const std::any& param /* = std::any() */) override;
+
+  private:
+    void AddNavigationView();
+    void AddSettingsItem();
 
   private:
     IRevelationInterface* m_interface = nullptr;
