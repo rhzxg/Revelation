@@ -43,6 +43,6 @@ FluSettingsVersionBox {
 }
 
 #versionLabel {
-    font-size: 15px;
+    font-size: 13px;
     color: rgb(210, 210, 210);
 }
