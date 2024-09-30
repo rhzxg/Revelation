@@ -12,8 +12,28 @@ FluPushButton:hover {
     background-color: rgb(50, 50, 50);
 }
 
+FluPushButton:hover {
+    border: 1px solid rgb(53, 53, 53);
+    border-bottom: 1px solid rgb(48, 48, 48);
+    background-color: rgb(50, 50, 50);
+}
+
 FluPushButton:pressed {
     border: 1px solid rgb(53, 53, 53);
     border-bottom: 1px solid rgb(53, 53, 53);
+    background-color: rgb(39, 39, 39);
+}
+
+FluPushButton#icon {
+    border: none;
+    background-color: transparent;
+    border-radius: 4px;
+}
+
+FluPushButton#icon:hover {
+    background-color: rgb(50, 50, 50);
+}
+
+FluPushButton#icon:pressed {
     background-color: rgb(39, 39, 39);
 }

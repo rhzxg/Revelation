@@ -34,7 +34,6 @@ void RevelationRightSidebar::InitWidget()
     {
         btn->setIconSize(QSize(24, 24));
         btn->setFixedSize(32, 32);
-        FluStyleSheetUitls::setQssByFileName("/resources/qss/light/RevelationRightSidebar.qss", btn);
     }
 
     ui.btnAddToRoutine->setToolTip(tr("Add to daily routine"));
