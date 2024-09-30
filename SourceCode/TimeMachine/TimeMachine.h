@@ -20,6 +20,9 @@ class TimeMachine : public QWidget
     void InitWidget();
     void InitSignalSlots();
 
+  private slots:
+    void OnThemeChanged();
+
   private:
     Ui::TimeMachineClass ui;
 

@@ -30,6 +30,7 @@ class TimeMachineFilter : public QWidget
     void TaskFiltered(const std::vector<DateToTasks>& dateToTaskVec);
 
   private slots:
+    void OnThemeChanged();
     void OnBtnFilterClicked();
 
   private:

@@ -2,6 +2,20 @@ QFrame#frame {
     background: #202020;
 }
 
+FluPushButton#icon {
+    border: none;
+    background-color: transparent;
+    border-radius: 4px;
+}
+
+FluPushButton#icon:hover {
+    background-color: rgb(50, 50, 50);
+}
+
+FluPushButton#icon:pressed {
+    background-color: rgb(39, 39, 39);
+}
+
 QLineEdit {
     color: #FFFFFF;
 }

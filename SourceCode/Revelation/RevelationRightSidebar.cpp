@@ -26,6 +26,8 @@ void RevelationRightSidebar::Initialize()
 void RevelationRightSidebar::InitWidget()
 {
     ui.frame->setObjectName("frame");
+    ui.btnAddToRoutine->setObjectName("icon");
+    ui.btnHide->setObjectName("icon");
 
     std::vector<FluPushButton*> btns{ui.btnAddToRoutine, ui.btnHide};
     for (FluPushButton* btn : btns)
@@ -99,9 +101,6 @@ void RevelationRightSidebar::SetBtnAddToRoutineState(bool isRoutine)
 
     ui.btnAddToRoutine->setToolTip(tooltip);
     ui.btnAddToRoutine->setIcon(FluIconUtils::getFluentIcon(iconType, FluThemeUtils::getUtils()->getTheme()));
-
-    ui.btnAddToRoutine->setObjectName("icon");
-    ui.btnHide->setObjectName("icon");
 
     // sync tag label
     std::vector<QString> lutTags{tr("None"), tr("Routine"), tr("Inherited")};

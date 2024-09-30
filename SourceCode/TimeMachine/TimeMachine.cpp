@@ -45,5 +45,19 @@ void TimeMachine::InitWidget()
 
 void TimeMachine::InitSignalSlots()
 {
+    connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [=](FluTheme theme) { OnThemeChanged(); });
+
     connect(m_timeMachindFilter, &TimeMachineFilter::TaskFiltered, m_timeMachindGanttView, &TimeMachineGanttView::OnTaskFiltered);
+}
+
+void TimeMachine::OnThemeChanged()
+{
+    if (FluThemeUtils::isLightTheme())
+    {
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/light/TimeMachine.qss", this);
+    }
+    else
+    {
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/dark/TimeMachine.qss", this);
+    }
 }
