@@ -52,7 +52,17 @@ void RevelationRightSidebar::InitWidget()
 
 void RevelationRightSidebar::InitSignalSlots()
 {
-    connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [=](FluTheme theme) { OnThemeChanged(); });
+    connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [&](FluTheme theme) {
+        OnThemeChanged();
+
+        ui.cbType->onThemeChanged();
+        ui.cbStatus->onThemeChanged();
+        ui.cbTag->onThemeChanged();
+
+        ui.btnSelectStartTime->onThemeChanged();
+        ui.btnSelectFinishTime->onThemeChanged();
+        ui.btnSelectDeadline->onThemeChanged();
+    });
 
     connect(ui.btnAddToRoutine, &QPushButton::clicked, this, &RevelationRightSidebar::OnBtnAddToRoutineClicled);
     connect(ui.btnHide, &QPushButton::clicked, this, [&]() {
@@ -188,7 +198,7 @@ void RevelationRightSidebar::OnThemeChanged()
     {
         FluStyleSheetUitls::setQssByFileName("/resources/qss/dark/RevelationRightSidebar.qss", this);
     }
-    
+
     ui.btnAddToRoutine->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::FavoriteStar, theme));
     ui.btnHide->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::Cancel, theme));
 }

@@ -126,7 +126,7 @@ void RevelationMainWindow::InitWidget()
 
 void RevelationMainWindow::InitSignalSlots()
 {
-    connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [=](FluTheme theme) { OnThemeChanged(); });
+    connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [&](FluTheme theme) { OnThemeChanged(); });
 }
 
 void RevelationMainWindow::OnThemeChanged()

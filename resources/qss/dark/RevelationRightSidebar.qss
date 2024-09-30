@@ -3,5 +3,5 @@ QFrame#frame {
 }
 
 QLineEdit {
-    color: #FFFFFF;
+    color: #EFEFEF;
 }

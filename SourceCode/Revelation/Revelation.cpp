@@ -124,7 +124,7 @@ void Revelation::InitWidget()
 
 void Revelation::InitSignalSlots()
 {
-    connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [=](FluTheme theme) { OnThemeChanged(); });
+    connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [&](FluTheme theme) { OnThemeChanged(); });
 }
 
 RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
