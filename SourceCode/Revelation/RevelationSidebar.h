@@ -4,11 +4,11 @@
 #include "IRevelationInterface.h"
 #include "FluWidget.h"
 
-class RevelationSidebar : public QWidget
+class RevelationSidebar : public FluWidget
 {
   public:
     RevelationSidebar(IRevelationInterface* intf, QWidget* parent = nullptr)
-        : m_interface(intf), QWidget(parent)
+        : m_interface(intf), FluWidget(parent)
     {
     }
 
@@ -36,41 +36,4 @@ class RevelationSidebar : public QWidget
 
   protected:
     IRevelationInterface* m_interface = nullptr;
-};
-
-class RevelationSidebarWrapper : public FluWidget
-{
-  public:
-    RevelationSidebarWrapper(QWidget* parent = nullptr)
-        : FluWidget(parent)
-    {
-    }
-
-    ~RevelationSidebarWrapper()
-    {
-    }
-
-    void SetSidebar(RevelationSidebar* sidebar)
-    {
-        if (nullptr == sidebar)
-        {
-            return;
-        }
-
-        m_sidebar = sidebar;
-        this->resize(sidebar->size());
-        m_layout  = new QVBoxLayout(this);
-        m_layout->addWidget(sidebar);
-        this->setLayout(m_layout);
-    }
-
-    RevelationSidebar* GetSidebar()
-    {
-        return m_sidebar;
-    }
-
-  private:
-    QVBoxLayout* m_layout = nullptr;
-
-    RevelationSidebar* m_sidebar = nullptr;
 };

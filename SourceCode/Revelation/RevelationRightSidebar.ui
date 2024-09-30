@@ -39,13 +39,13 @@
        <number>4</number>
       </property>
       <property name="topMargin">
-       <number>0</number>
+       <number>4</number>
       </property>
       <property name="rightMargin">
-       <number>0</number>
+       <number>4</number>
       </property>
       <property name="bottomMargin">
-       <number>0</number>
+       <number>4</number>
       </property>
       <item row="1" column="0" colspan="3">
        <widget class="QWidget" name="widget" native="true">

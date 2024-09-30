@@ -1,14 +1,7 @@
 QFrame#frame {
     background: #202020;
-    border-radius: 7px;
 }
 
-QPushButton {
-    background: transparent;
-    border: none;
-}
-
-QPushButton::hover {
-    background-color: #000000;
-    border-radius: 5px;
+QLineEdit {
+    color: #FFFFFF;
 }

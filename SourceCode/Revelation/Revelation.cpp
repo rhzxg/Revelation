@@ -52,18 +52,18 @@ void Revelation::ReteiveDataFromDatabase()
 
 void Revelation::resizeEvent(QResizeEvent* event)
 {
-    m_rightSidebarWrapper->resize(m_rightSidebarWrapper->width(), this->height() + 10);
-    m_rightSidebarWrapper->move(this->width() - m_rightSidebarWrapper->width() + 5, -5);
+    m_rightSidebar->resize(m_rightSidebar->width(), this->height());
+    m_rightSidebar->move(this->width() - m_rightSidebar->width(), 0);
 
-    m_bottomBarWrapper->move(this->width() / 2 - m_bottomBarWrapper->width() / 2,
-                             this->height() - 100);
+    m_bottomBar->move(this->width() / 2 - m_bottomBar->width() / 2,
+                      this->height() - 100);
 }
 
 void Revelation::showEvent(QShowEvent* event)
 {
     QWidget::showEvent(event);
 
-    GetSidebarWrapper(RevelationSidebar::Bottom)->show();
+    GetSidebar(RevelationSidebar::Bottom)->show();
 }
 
 void Revelation::Initialize()
@@ -82,8 +82,8 @@ void Revelation::InitWidget()
         mainWindow->setWindowTitle("Revelation");
     }
 
-    GetSidebarWrapper(RevelationSidebar::Bottom)->hide();
-    GetSidebarWrapper(RevelationSidebar::Right)->hide();
+    GetSidebar(RevelationSidebar::Bottom)->hide();
+    GetSidebar(RevelationSidebar::Right)->hide();
 
     std::vector<QLabel*>    labels{ui.labelTitleTodo, ui.labelTitleDoing, ui.labelTitleTesting, ui.labelTitleDone};
     std::vector<QWidget*>   widgets{ui.taskWidgetTodo, ui.taskWidgetDoing, ui.taskWidgetTesting, ui.taskWidgetDone};
@@ -116,7 +116,7 @@ void Revelation::InitWidget()
 
         // [view => right sidebar] task selection
         connect(view, SIGNAL(TaskItemSelected(const TaskPrototype&)),
-                GetSidebarWrapper(RevelationSidebar::Right)->GetSidebar(), SLOT(OnTaskItemSelected(const TaskPrototype&)));
+                GetSidebar(RevelationSidebar::Right), SLOT(OnTaskItemSelected(const TaskPrototype&)));
     }
 
     FluStyleSheetUitls::setQssByFileName("/resources/qss/light/Revelation.qss", this);
@@ -127,50 +127,44 @@ void Revelation::InitSignalSlots()
     connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [=](FluTheme theme) { OnThemeChanged(); });
 }
 
-RevelationSidebarWrapper* Revelation::GetSidebarWrapper(RevelationSidebar::Side side)
+RevelationSidebar* Revelation::GetSidebar(RevelationSidebar::Side side)
 {
-    RevelationSidebarWrapper* sidebarWrapper = nullptr;
+    RevelationSidebar* sidebar = nullptr;
 
     if (RevelationSidebar::Right == side)
     {
-        if (nullptr == m_rightSidebarWrapper)
+        if (nullptr == m_rightSidebar)
         {
-            m_rightSidebarWrapper = new RevelationSidebarWrapper(this);
-            auto rightSidebar     = new RevelationRightSidebar(m_interface, m_rightSidebarWrapper);
-            m_rightSidebarWrapper->SetSidebar(rightSidebar);
+            m_rightSidebar = new RevelationRightSidebar(m_interface, this);
 
             // [right sidebar => this] task data edited
-            connect(rightSidebar, SIGNAL(TaskItemEdited(const TaskPrototype&)),
+            connect(m_rightSidebar, SIGNAL(TaskItemEdited(const TaskPrototype&)),
                     this, SLOT(OnTaskItemEdited(const TaskPrototype&)));
 
             // [right sidebar => this] task data deleted
-            connect(rightSidebar, SIGNAL(TaskItemDeleted(const TaskPrototype&)),
+            connect(m_rightSidebar, SIGNAL(TaskItemDeleted(const TaskPrototype&)),
                     this, SLOT(OnTaskItemDeleted(const TaskPrototype&)));
 
             // [this => right sidebar] task re-parenting
             connect(this, SIGNAL(TaskItemReparenting(const TaskPrototype&)),
-                    rightSidebar, SLOT(OnTaskReparenting(const TaskPrototype&)));
+                    m_rightSidebar, SLOT(OnTaskReparenting(const TaskPrototype&)));
         }
-        sidebarWrapper = m_rightSidebarWrapper;
+        sidebar = m_rightSidebar;
     }
     else if (RevelationSidebar::Bottom == side)
     {
-        if (nullptr == m_bottomBarWrapper)
+        if (nullptr == m_bottomBar)
         {
-            m_bottomBarWrapper = new RevelationSidebarWrapper(this);
-            auto bottomBar     = new RevelationBottomBar(m_interface, m_bottomBarWrapper);
-            m_bottomBarWrapper->SetSidebar(bottomBar);
-
-            m_bottomBarWrapper->setFixedSize(bottomBar->width(), 60);
+            m_bottomBar = new RevelationBottomBar(m_interface, this);
 
             // [bottom bar => this] task creation
-            connect(bottomBar, SIGNAL(TaskItemCreated(TaskPrototype, TaskStatus, TaskStatus)),
+            connect(m_bottomBar, SIGNAL(TaskItemCreated(TaskPrototype, TaskStatus, TaskStatus)),
                     this, SLOT(OnTaskItemReparenting(TaskPrototype, TaskStatus, TaskStatus)));
         }
-        sidebarWrapper = m_bottomBarWrapper;
+        sidebar = m_bottomBar;
     }
 
-    return sidebarWrapper;
+    return sidebar;
 }
 
 void Revelation::OnThemeChanged()

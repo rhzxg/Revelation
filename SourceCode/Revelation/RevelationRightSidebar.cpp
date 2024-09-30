@@ -55,7 +55,7 @@ void RevelationRightSidebar::InitSignalSlots()
 
     connect(ui.btnAddToRoutine, &QPushButton::clicked, this, &RevelationRightSidebar::OnBtnAddToRoutineClicled);
     connect(ui.btnHide, &QPushButton::clicked, this, [&]() {
-        parentWidget()->hide();
+        this->hide();
     });
 
     connect(ui.btnDelete, &QPushButton::clicked, this, &RevelationRightSidebar::OnBtnDeleteTaskItemClicked);
@@ -98,7 +98,10 @@ void RevelationRightSidebar::SetBtnAddToRoutineState(bool isRoutine)
     FluAwesomeType iconType = isRoutine ? FluAwesomeType::FavoriteStarFill : FluAwesomeType::FavoriteStar;
 
     ui.btnAddToRoutine->setToolTip(tooltip);
-    ui.btnAddToRoutine->setIcon(FluIconUtils::getFluentIcon(iconType));
+    ui.btnAddToRoutine->setIcon(FluIconUtils::getFluentIcon(iconType, FluThemeUtils::getUtils()->getTheme()));
+
+    ui.btnAddToRoutine->setObjectName("icon");
+    ui.btnHide->setObjectName("icon");
 
     // sync tag label
     std::vector<QString> lutTags{tr("None"), tr("Routine"), tr("Inherited")};
@@ -178,29 +181,23 @@ void RevelationRightSidebar::RefreshTaskData(const TaskPrototype& task)
 
 void RevelationRightSidebar::OnThemeChanged()
 {
-    if (FluThemeUtils::isLightTheme())
+    FluTheme theme = FluThemeUtils::getUtils()->getTheme();
+    if (theme == FluTheme::Light)
     {
-        std::vector<FluPushButton*> btns{ui.btnAddToRoutine, ui.btnHide};
-        for (FluPushButton* btn : btns)
-        {
-            FluStyleSheetUitls::setQssByFileName("/resources/qss/light/RevelationRightSidebar.qss", btn);
-        }
         FluStyleSheetUitls::setQssByFileName("/resources/qss/light/RevelationRightSidebar.qss", this);
     }
     else
     {
-        std::vector<FluPushButton*> btns{ui.btnAddToRoutine, ui.btnHide};
-        for (FluPushButton* btn : btns)
-        {
-            FluStyleSheetUitls::setQssByFileName("/resources/qss/dark/RevelationRightSidebar.qss", btn);
-        }
         FluStyleSheetUitls::setQssByFileName("/resources/qss/dark/RevelationRightSidebar.qss", this);
     }
+    
+    ui.btnAddToRoutine->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::FavoriteStar, theme));
+    ui.btnHide->setIcon(FluIconUtils::getFluentIcon(FluAwesomeType::Cancel, theme));
 }
 
 void RevelationRightSidebar::OnTaskReparenting(const TaskPrototype& task)
 {
-    if (this->parentWidget()->isVisible())
+    if (this->isVisible())
     {
         RefreshTaskData(task);
     }
@@ -223,7 +220,7 @@ void RevelationRightSidebar::OnTaskItemSelected(const TaskPrototype& task)
 
     RefreshTaskData(task);
 
-    this->parentWidget()->show();
+    this->show();
 }
 
 void RevelationRightSidebar::OnTaskItemEdited()
