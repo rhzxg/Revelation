@@ -26,6 +26,8 @@ class RevelationInterface : public IRevelationInterface
 
     void LoadExtensions();
 
+    void HandleBroadcast(BroadcastType broadcastType, const std::any& param = std::any());
+
   private:
 #ifdef WIN32
     std::vector<HINSTANCE> m_libraries;

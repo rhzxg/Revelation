@@ -85,12 +85,22 @@ void RevelationConfig::SetupApplicationInfoItem()
 
     FluComboBoxEx* changeThemeCombobox = new FluComboBoxEx;
     changeThemeCombobox->setFixedWidth(115);
-    changeThemeCombobox->addItem(tr("Light"));
-    changeThemeCombobox->addItem(tr("Dark"));
+    std::vector<std::string> themeLut{"Light", "Dark"};
+    std::vector<QString>     themeTranslations{tr("Light"), tr("Dark")};
+    for (QString& translation : themeTranslations)
+    {
+        changeThemeCombobox->addItem(translation);
+    }
+
+    std::string theme = settingsToolkit->GetString("Theme", "Revelation", "Light");
+    int         index = std::distance(themeLut.begin(), std::find(themeLut.begin(), themeLut.end(), theme));
+    changeThemeCombobox->setIndex(index);
+
     connect(changeThemeCombobox, &FluComboBoxEx::currentIndexChanged, [=](int index) {
         FluTheme theme = index == 0 ? FluTheme::Light : FluTheme::Dark;
         FluThemeUtils::getUtils()->setTheme(theme);
 
+        settingsToolkit->SetString("Theme", "Revelation", themeLut[index]);
         m_interface->Broadcast(BroadcastType::ChangeTheme, theme);
     });
 

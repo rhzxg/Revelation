@@ -7,4 +7,6 @@ enum class BroadcastType
     CollectNavigationView, // None
     CollectSettingsItem,   // None
     ChangeTheme,           // FluTheme
+    ExtInitialized,        // None
+    WidgetInitialized,     // None
 };

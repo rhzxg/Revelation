@@ -1,7 +1,8 @@
 {
     "Revelation": {
         "Version": "2.0.6",
-        "LaunchOnBoot": false
+        "LaunchOnBoot": false,
+        "Theme": "Light"
     },
     "TimeMachine": {
         "Version": "1.1.0",

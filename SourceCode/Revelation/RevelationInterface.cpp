@@ -33,6 +33,8 @@ void RevelationInterface::Broadcast(BroadcastType broadcastType, const std::any&
         IExtensionInterface* extensionIntf = interfacePair.second;
         extensionIntf->HandleBroadcast(broadcastType, param);
     }
+
+    HandleBroadcast(broadcastType, param);
 }
 
 void RevelationInterface::InitExtensions()
@@ -42,6 +44,8 @@ void RevelationInterface::InitExtensions()
         IExtensionInterface* extensionIntf = interfacePair.second;
         extensionIntf->Initialize();
     }
+
+    Broadcast(BroadcastType::ExtInitialized);
 }
 
 void RevelationInterface::Initialize()
@@ -141,4 +145,19 @@ void RevelationInterface::LoadExtensions()
 #ifdef WIN32
     SetCurrentDirectoryW(currDir);
 #endif // WIN32
+}
+
+void RevelationInterface::HandleBroadcast(BroadcastType broadcastType, const std::any& param /*= std::any()*/)
+{
+    if (broadcastType == BroadcastType::WidgetInitialized)
+    {
+        auto settingsToolkit = GetInterfaceById<IUtilityInterface>("Utility")->GetSettingsToolkit();
+        auto themeStr        = settingsToolkit->GetString("Theme", "Revelation", "Light");
+
+        if (themeStr == "Dark")
+        {
+            FluThemeUtils::getUtils()->setTheme(FluTheme::Dark);
+            Broadcast(BroadcastType::ChangeTheme, FluTheme::Dark);
+        }
+    }
 }

@@ -64,6 +64,8 @@ void Revelation::showEvent(QShowEvent* event)
     QWidget::showEvent(event);
 
     GetSidebar(RevelationSidebar::Bottom)->show();
+
+    m_interface->Broadcast(BroadcastType::WidgetInitialized);
 }
 
 void Revelation::Initialize()
