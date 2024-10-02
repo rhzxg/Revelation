@@ -15,40 +15,34 @@ QGraphicsView {
 
 QScrollBar:horizontal {
     height: 4px;
-    border-radius: 2px;
-    background: #f0f0f0;
+    background: #F0F0F0;
 }
 
 QScrollBar::handle:horizontal {
-    background: #a0a0a0;
+    background: #A0A0A0;
     border-radius: 2px;
 }
 
-QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal,
+QScrollBar::add-page:horizontal,
+QScrollBar::sub-page:horizontal {
     background: none;
-}
-
-QScrollBar::groove:horizontal {
-    background: #f0f0f0;
-    border-radius: 2px;
 }
 
 QScrollBar:vertical {
     width: 4px;
-    border-radius: 2px;
-    background: #f0f0f0;
+    background: #F0F0F0;
 }
 
 QScrollBar::handle:vertical {
-    background: #a0a0a0;
+    background: #A0A0A0;
     border-radius: 2px;
 }
 
-QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical,
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
     background: none;
-}
-
-QScrollBar::groove:vertical {
-    background: #f0f0f0;
-    border-radius: 2px;
 }

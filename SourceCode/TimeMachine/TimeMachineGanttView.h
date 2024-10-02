@@ -30,6 +30,7 @@ private:
     void SetupNodeConstraints(const std::vector<Node*>& nodes, std::vector<QModelIndex>& indexes);
 
   public slots:
+    void OnThemeChanged();
     void OnTaskFiltered(const std::vector<DateToTasks>& dateToTaskVec);
     void OnContextMenuEvent(const QPoint& pos);
     void OnRightViewVerticallyScrolled();

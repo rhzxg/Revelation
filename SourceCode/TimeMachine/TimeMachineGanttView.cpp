@@ -68,6 +68,8 @@ void TimeMachineGanttView::InitWidget()
 
 void TimeMachineGanttView::InitSignalSlots()
 {
+    connect(FluThemeUtils::getUtils(), &FluThemeUtils::themeChanged, [=](FluTheme theme) { OnThemeChanged(); });
+
     connect(m_leftView, &QTreeView::customContextMenuRequested, this, &TimeMachineGanttView::OnContextMenuEvent);
     connect(m_rightView->verticalScrollBar(), &QScrollBar::valueChanged, this, &TimeMachineGanttView::OnRightViewVerticallyScrolled);
 }
@@ -195,6 +197,20 @@ void TimeMachineGanttView::SetupNodeConstraints(const std::vector<Node*>& nodes,
 
         m_prevNodes   = nodes;
         m_prevIndexes = indexes;
+    }
+}
+
+void TimeMachineGanttView::OnThemeChanged()
+{
+    if (FluThemeUtils::isLightTheme())
+    {
+        m_rightView->setBackgroundColor("#F0F0F0");
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/light/TimeMachineGanttView.qss", this);
+    }
+    else
+    {
+        m_rightView->setBackgroundColor("#202020");
+        FluStyleSheetUitls::setQssByFileName("/resources/qss/dark/TimeMachineGanttView.qss", this);
     }
 }
 
