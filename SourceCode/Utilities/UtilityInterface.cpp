@@ -2,7 +2,7 @@
 #include "DateTimeFormatter.h"
 #include "SettingsToolkit.h"
 #include "SnowflakeGenerator.h"
-#include "TaskCreator.h"
+#include "ThreadTaskCreator.h"
 
 UtilityInterface::UtilityInterface(IRevelationInterface* intf)
     : m_interface(intf)
@@ -14,7 +14,7 @@ UtilityInterface::~UtilityInterface()
     delete m_dateTimeFormatter;
     delete m_settingsToolkit;
     delete m_snowFlakeGenerator;
-    delete m_taskCreator;
+    delete m_threadTaskCreator;
 }
 
 void UtilityInterface::Initialize()
@@ -52,11 +52,11 @@ ISnowflakeGenerator* UtilityInterface::GetSnowflakeGenerator()
     return m_snowFlakeGenerator;
 }
 
-ITaskCreator* UtilityInterface::GetTaskCreator()
+IThreadTaskCreator* UtilityInterface::GetThreadTaskCreator()
 {
-    if (nullptr == m_taskCreator)
+    if (nullptr == m_threadTaskCreator)
     {
-        m_taskCreator = new TaskCreator;
+        m_threadTaskCreator = new ThreadTaskCreator;
     }
-    return m_taskCreator;
+    return m_threadTaskCreator;
 }

@@ -3,7 +3,7 @@
 #include "IDateTimeFormatter.h"
 #include "ISettingsToolkit.h"
 #include "ISnowFlakeGenerator.h"
-#include "ITaskCreator.h"
+#include "IThreadTaskCreator.h"
 
 class IUtilityInterface : public IExtensionInterface
 {
@@ -11,5 +11,5 @@ class IUtilityInterface : public IExtensionInterface
     virtual IDateTimeFormatter*  GetDateTimeFormatter()  = 0;
     virtual ISettingsToolkit*    GetSettingsToolkit()    = 0;
     virtual ISnowflakeGenerator* GetSnowflakeGenerator() = 0;
-    virtual ITaskCreator*        GetTaskCreator()        = 0;
+    virtual IThreadTaskCreator*  GetThreadTaskCreator()  = 0;
 };

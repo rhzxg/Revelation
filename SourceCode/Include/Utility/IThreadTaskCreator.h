@@ -4,7 +4,7 @@
 #include <thread>
 #include <functional>
 
-class ITaskCreator
+class IThreadTaskCreator
 {
   public:
     virtual void RunSyncTask(std::function<void()> task)  = 0;

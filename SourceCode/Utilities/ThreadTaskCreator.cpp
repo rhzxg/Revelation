@@ -1,27 +1,27 @@
-#include "TaskCreator.h"
+#include "ThreadTaskCreator.h"
 
-TaskCreator::TaskCreator()
+ThreadTaskCreator::ThreadTaskCreator()
 {
 }
 
-TaskCreator::~TaskCreator()
+ThreadTaskCreator::~ThreadTaskCreator()
 {
 }
 
-void TaskCreator::RunSyncTask(std::function<void()> task)
+void ThreadTaskCreator::RunSyncTask(std::function<void()> task)
 {
     std::thread syncThread(task);
     syncThread.join();
 }
 
-void TaskCreator::RunAsyncTask(std::function<void()> task)
+void ThreadTaskCreator::RunAsyncTask(std::function<void()> task)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     m_asyncTasks.emplace_back(std::thread(task));
     m_asyncTasks.back().detach();
 }
 
-void TaskCreator::WaitAllAsyncTasksComplete()
+void ThreadTaskCreator::WaitAllAsyncTasksComplete()
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     for (auto& thread : m_asyncTasks)

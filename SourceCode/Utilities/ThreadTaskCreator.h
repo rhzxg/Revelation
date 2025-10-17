@@ -1,11 +1,11 @@
 #pragma once
-#include "Utility/ITaskCreator.h"
+#include "Utility/IThreadTaskCreator.h"
 
-class TaskCreator : public ITaskCreator
+class ThreadTaskCreator : public IThreadTaskCreator
 {
   public:
-    TaskCreator();
-    ~TaskCreator();
+    ThreadTaskCreator();
+    ~ThreadTaskCreator();
 
     virtual void RunSyncTask(std::function<void()> task) override;
     virtual void RunAsyncTask(std::function<void()> task) override;

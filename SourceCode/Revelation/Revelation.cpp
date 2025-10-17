@@ -32,7 +32,7 @@ void Revelation::ReteiveDataFromDatabase()
     }
 
     std::vector<TaskPrototype> tasks;
-    dataPersistenceIntf->RetrieveTasksFromDatabase(tasks);
+    dataPersistenceIntf->GetTaskSerializer()->RetrieveTasks(tasks);
 
     for (const auto& viewPr : m_listViews)
     {
@@ -208,12 +208,12 @@ void Revelation::OnTaskItemReparenting(TaskPrototype task, TaskStatus from, Task
     emit TaskItemReparenting(task);
 
     // change data in database
-    auto taskCreator         = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetTaskCreator();
+    auto threadTaskCreator         = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetThreadTaskCreator();
     auto dataPersistenceIntf = m_interface->GetInterfaceById<IDataPersistenceInterface>("DataPersistence");
-    if (nullptr != taskCreator && nullptr != dataPersistenceIntf)
+    if (nullptr != threadTaskCreator && nullptr != dataPersistenceIntf)
     {
-        taskCreator->RunAsyncTask([=]() {
-            dataPersistenceIntf->InsertOrReplaceTaskInDatabase(task);
+        threadTaskCreator->RunAsyncTask([=]() {
+            dataPersistenceIntf->GetTaskSerializer()->RecordTask(task);
         });
     }
 }
@@ -228,12 +228,12 @@ void Revelation::OnTaskItemEdited(const TaskPrototype& task)
         model->ChangeTaskItem(task);
     }
 
-    auto taskCreator         = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetTaskCreator();
+    auto threadTaskCreator         = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetThreadTaskCreator();
     auto dataPersistenceIntf = m_interface->GetInterfaceById<IDataPersistenceInterface>("DataPersistence");
-    if (nullptr != taskCreator && nullptr != dataPersistenceIntf)
+    if (nullptr != threadTaskCreator && nullptr != dataPersistenceIntf)
     {
-        taskCreator->RunAsyncTask([=]() {
-            dataPersistenceIntf->InsertOrReplaceTaskInDatabase(task);
+        threadTaskCreator->RunAsyncTask([=]() {
+            dataPersistenceIntf->GetTaskSerializer()->RecordTask(task);
         });
     }
 }
@@ -248,12 +248,12 @@ void Revelation::OnTaskItemDeleted(const TaskPrototype& task)
         model->RemoveTaskItem(task);
     }
 
-    auto taskCreator         = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetTaskCreator();
+    auto threadTaskCreator         = m_interface->GetInterfaceById<IUtilityInterface>("Utility")->GetThreadTaskCreator();
     auto dataPersistenceIntf = m_interface->GetInterfaceById<IDataPersistenceInterface>("DataPersistence");
-    if (nullptr != taskCreator && nullptr != dataPersistenceIntf)
+    if (nullptr != threadTaskCreator && nullptr != dataPersistenceIntf)
     {
-        taskCreator->RunAsyncTask([=]() {
-            dataPersistenceIntf->RemoveTaskFromDatabase(task);
+        threadTaskCreator->RunAsyncTask([=]() {
+            dataPersistenceIntf->GetTaskSerializer()->RemoveTask(task);
         });
     }
 }

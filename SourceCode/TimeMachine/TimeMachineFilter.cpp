@@ -77,7 +77,7 @@ void TimeMachineFilter::ReteiveTasksFromDatabase(std::vector<DateToTasks>& dateT
 
         std::string                date = dates[i];
         std::vector<TaskPrototype> tasks;
-        m_dataPersistenceIntf->RetrieveTasksFromDatabase(tasks, date);
+        m_dataPersistenceIntf->GetTaskSerializer()->RetrieveTasks(tasks, date);
 
         if (!tasks.empty())
         {

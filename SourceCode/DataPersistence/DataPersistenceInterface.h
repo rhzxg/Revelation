@@ -1,10 +1,12 @@
 #pragma once
 #include "DataPersistence/IDataPersistenceInterface.h"
+#include "DataPersistence/IDatabase.h"
 #include "IRevelationInterface.h"
 #include "IRevelationDataDefine.h"
 #include <sqlite3.h>
 #include <mutex>
 
+class TaskSerializer;
 class DataPersistenceInterface : public IDataPersistenceInterface
 {
   public:
@@ -14,27 +16,15 @@ class DataPersistenceInterface : public IDataPersistenceInterface
     virtual void Initialize() override;
     virtual void Uninitialize() override;
 
-    virtual void InsertOrReplaceTaskInDatabase(TaskPrototype task) override;
-    virtual void RemoveTaskFromDatabase(TaskPrototype task) override;
-    virtual void RetrieveTasksFromDatabase(std::vector<TaskPrototype>& tasks) override;
-    virtual void RetrieveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& date) override;
-    virtual void RetrieveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& from, const std::string& to) override;
+    virtual ITaskSerializer* GetTaskSerializer() override;
+
+    virtual bool       RegisterDatabase(DatabaseRole role, IDatabase* database) override;
+    virtual IDatabase* GetDatabase(DatabaseRole role) override;
 
   private:
-    void ExecDatabaseCreationRoutine();
+    IRevelationInterface* m_interface = nullptr;
 
-    void CreateDatabaseFolder();
-    void CreateDatabaseByDate();
+    TaskSerializer* m_taskSerialzier = nullptr;
 
-    bool CreateTable();
-    void CollectInheritedRecords();
-
-    void RetrieveTasksHelper(std::vector<TaskPrototype>& tasks, sqlite3* database);
-
-  private:
-    IRevelationInterface* m_revelationIntf = nullptr;
-
-    sqlite3* m_currentDatabase = nullptr;
-
-    std::mutex m_insertMutex;
+    std::unordered_map<DatabaseRole, IDatabase*> m_databases;
 };

@@ -19,8 +19,8 @@ add_library(${PROJECT_NAME} SHARED
             SettingsToolkit.h
 			SnowflakeGenerator.cpp
 			SnowflakeGenerator.h
-            TaskCreator.cpp
-            TaskCreator.h
+            ThreadTaskCreator.cpp
+            ThreadTaskCreator.h
 )
 
 if(MSVC)

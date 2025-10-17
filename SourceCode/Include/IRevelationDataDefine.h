@@ -56,3 +56,24 @@ struct TaskPrototype
 };
 
 using DateToTasks = std::pair<std::string, std::vector<TaskPrototype>>;
+
+enum class TaskRepeatType
+{
+    None = 0,
+    Daily,
+    Weekly,
+    Monthly,
+    Yearly,
+    WeekDay,
+    Weekend,
+};
+
+struct TaskRoutine
+{
+    Uint64         m_id;
+    std::string    m_createTime;
+    TaskRepeatType m_repeatType;
+
+    std::string m_taskTitle;
+    std::string m_taskDesc;
+};

@@ -1,16 +1,13 @@
 #pragma once
 #include "IExtensionInterface.h"
-#include "IRevelationDataDefine.h"
-#include <vector>
+#include "ITaskSerialzer.h"
+#include "IDatabase.h"
 
 class IDataPersistenceInterface : public IExtensionInterface
 {
   public:
-    virtual void InsertOrReplaceTaskInDatabase(TaskPrototype task) = 0;
-    virtual void RemoveTaskFromDatabase(TaskPrototype task)        = 0;
+    virtual ITaskSerializer* GetTaskSerializer() = 0;
 
-    virtual void RetrieveTasksFromDatabase(std::vector<TaskPrototype>& tasks)                         = 0;
-    virtual void RetrieveTasksFromDatabase(std::vector<TaskPrototype>& tasks, const std::string& date) = 0;
-    virtual void RetrieveTasksFromDatabase(std::vector<TaskPrototype>& tasks,
-                                          const std::string& from, const std::string& to)             = 0;
+    virtual bool       RegisterDatabase(DatabaseRole role, IDatabase* database) = 0;
+    virtual IDatabase* GetDatabase(DatabaseRole role)                           = 0;
 };

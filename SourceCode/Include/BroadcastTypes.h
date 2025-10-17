@@ -9,4 +9,5 @@ enum class BroadcastType
     ChangeTheme,           // FluTheme
     ExtInitialized,        // None
     WidgetInitialized,     // None
+    DatabaseCreated,       // None
 };

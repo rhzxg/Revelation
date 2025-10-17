@@ -68,7 +68,7 @@ void RevelationInterface::Initialize()
 void RevelationInterface::Uninitialize()
 {
     // wait all async tasks complete
-    auto taskCreator = GetInterfaceById<IUtilityInterface>("Utility")->GetTaskCreator();
+    auto taskCreator = GetInterfaceById<IUtilityInterface>("Utility")->GetThreadTaskCreator();
     taskCreator->WaitAllAsyncTasksComplete();
 
     for (auto& interfacePair : m_interfaces)
